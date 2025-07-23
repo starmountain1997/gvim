@@ -1,0 +1,6 @@
+{
+    "suggest.noselect": true,
+    "coc.preferences.formatOnSave": true,
+    "python.formatting.provider": "ruff",
+    "coc.preferences.highlight.document.enable": true
+}
