@@ -20,7 +20,16 @@ set number
 
 syntax on
 set cursorline
+
 set nowrap
+if has("autocmd")
+  augroup filetype_settings
+    autocmd!
+    " 当 Vim 识别文件类型为 markdown 或 text 时，执行后续命令
+    autocmd FileType markdown,text setlocal wrap
+  augroup END
+endif
+
 set cursorcolumn
 set mouse=a
 set ruler
