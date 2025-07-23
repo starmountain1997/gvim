@@ -61,3 +61,9 @@ endif
 let g:rainbow_active = 1
 let g:airline_powerline_fonts = 1
 let g:python_highlight_all = 1
+
+let g:coc_preferences = {
+  \ "highlightSymbol": true,       " 高亮当前符号及其引用
+  \ "highlightOnHover": false,     " 关闭 hover 时的临时高亮（避免冲突）
+  \ "signature.enable": true       " 可选：启用函数签名提示
+  \}
