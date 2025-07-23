@@ -11,6 +11,9 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'tpope/vim-commentary'
 Plug 'luochen1990/rainbow'
 Plug 'vim-python/python-syntax'
+Plug 'godlygeek/tabular'
+Plug 'preservim/vim-markdown'
+
 
 
 call plug#end()
