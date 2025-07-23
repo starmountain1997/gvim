@@ -10,9 +10,6 @@ DESIRED_COC_PLUGINS=(
   "coc-pyright"
   "coc-json"
   "coc-pairs"
-  "coc-tsserver"
-  "coc-eslint"
-  # "coc-clangd" # 如果需要 C/C++，可以取消注释
 )
 
 # Vim 配置文件的源路径和目标路径
