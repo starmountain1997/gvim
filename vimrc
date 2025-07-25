@@ -13,6 +13,7 @@ Plug 'luochen1990/rainbow'
 Plug 'vim-python/python-syntax'
 Plug 'godlygeek/tabular'
 Plug 'preservim/vim-markdown'
+Plug 'dominikduda/vim_current_word'
 
 
 
@@ -73,26 +74,6 @@ let g:rainbow_active = 1
 let g:airline_powerline_fonts = 1
 let g:python_highlight_all = 1
 
-" ============================================================================
-" OSC 52 Clipboard Integration for modern terminals (like Windows Terminal)
-" ============================================================================
-if &term =~# '^(screen|tmux|alacritty|kitty|wezterm|iterm)'
-  let s:osc52_file = tempname()
-
-  function! s:OSC52Yank()
-    try
-      call writefile(getreg(''), s:osc52_file)
-      let l:b64_data = system('base64 -w0 ' . shellescape(s:osc52_file))
-
-      if v:shell_error == 0 && !empty(l:b64_data)
-        let l:osc52_sequence = "\<Esc>]52;c;" . l:b64_data . "\<a\>"
-        silent execute 'echoraw l:osc52_sequence'
-      endif
-    finally
-      call delete(s:osc52_file)
-    endtry
-  endfunction
-
-  nnoremap <silent> gy :call <SID>OSC52Yank()<CR>
-  vnoremap <silent> gy :<C-u>call <SID>OSC52Yank()<CR>
-endif
+let g:vim_current_word#highlight_twins = 1    " 高亮相同单词
+let g:vim_current_word#highlight_current_word = 1  " 高亮当前单词
+let g:vim_current_word#highlight_delay = 0    " 无延迟
