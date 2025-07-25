@@ -77,3 +77,5 @@ let g:python_highlight_all = 1
 let g:vim_current_word#highlight_twins = 1    " 高亮相同单词
 let g:vim_current_word#highlight_current_word = 1  " 高亮当前单词
 let g:vim_current_word#highlight_delay = 0    " 无延迟
+hi CurrentWord ctermbg=53 guibg=#5f0000
+hi CurrentWordTwins ctermbg=237 guibg=#3a3a3a
