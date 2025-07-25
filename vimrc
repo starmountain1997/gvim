@@ -20,7 +20,6 @@ call plug#end()
 
 set number
 set relativenumber
-set clipboard=unnamedplus
 
 syntax on
 set cursorline
@@ -49,7 +48,6 @@ set autoindent
 set smartindent
 set autoread
 set nostartofline
-set clipboard=unnamedplus
 set termguicolors     " enable true colors support
 let ayucolor="dark"   " for dark version of theme
 colorscheme ayu
