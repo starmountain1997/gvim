@@ -31,6 +31,8 @@ Plug 'godlygeek/tabular'
 Plug 'preservim/vim-markdown'
 " vim_current_word: 高亮当前光标下的单词以及所有相同的单词
 Plug 'dominikduda/vim_current_word'
+Plug 'NLKNguyen/papercolor-theme'
+
 
 " vim-plug 插件管理器结束
 call plug#end()
@@ -94,6 +96,10 @@ set nostartofline
 
 " 启用终端的真彩色支持
 set termguicolors
+
+set background=dark
+colorscheme PaperColor
+
 
 " 为 coc.nvim 的高亮文本设置特定背景色
 highlight CocHighlightText ctermbg=24 guibg=#005f87
