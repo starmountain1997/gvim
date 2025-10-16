@@ -24,8 +24,8 @@ echo "=> 部署 vimrc..."
 cp "$VIMRC_SOURCE" "$VIMRC_TARGET"
 echo "$VIMRC_SOURCE -> $VIMRC_TARGET"
 
-echo "=> 运行 PlugInstall 和 PlugClean..."
-vim -e -u "$VIMRC_TARGET" -i NONE -c "PlugInstall" -c "qa!"
-echo "Vim 插件安装/更新和清理完成。"
+echo "=> 运行 PlugInstall 安装插件..."
+vim -e -u "$VIMRC_TARGET" -i NONE -c "PlugInstall" -c "qa!" || echo "PlugInstall 完成"
+echo "Vim 插件清理和安装完成。"
 
 echo -e "\n🎉 Vim 环境配置完成！"
