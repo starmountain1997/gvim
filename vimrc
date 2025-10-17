@@ -26,6 +26,10 @@ Plug 'vim-airline/vim-airline'
 
 " --- 文件浏览与管理 ---
 Plug 'preservim/nerdtree'
+Plug 'ryanoasis/vim-devicons'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+
+
 
 " --- 语法与高亮 ---
 Plug 'luochen1990/rainbow'
