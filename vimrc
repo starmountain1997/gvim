@@ -21,8 +21,8 @@ set nostartofline
 call plug#begin()
 
 " --- 主题与外观 ---
+Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 
 " --- 文件浏览与管理 ---
 Plug 'preservim/nerdtree'
@@ -47,6 +47,13 @@ Plug 'prabirshrestha/asyncomplete-lsp.vim'
 
 call plug#end()
 
+" =============================================================================
+" === 主题配置 ===
+" =============================================================================
+
+" 启用 Dracula 主题
+syntax enable
+colorscheme dracula
 
 " =============================================================================
 " === 外观与 UI ===
@@ -55,12 +62,8 @@ call plug#end()
 " --- 颜色与主题 ---
 " 启用终端的真彩色支持
 set termguicolors
-" 设置背景为深色
-set background=dark
 
 " --- 界面元素 ---
-" 开启语法高亮
-syntax on
 " 显示行号
 set number
 " 显示相对行号，便于跳转
@@ -156,10 +159,6 @@ let g:airline_powerline_fonts = 1
 " 启用 rainbow 插件
 let g:rainbow_active = 1
 
-" --- auto-pairs (自动括号配对) ---
-" 插件会自动为括号、引号等符号配对
-" 支持 Fly Mode：快速跳过配对的右括号
-" 支持多字节字符配对（如中文引号）
 
 " --- vim_current_word ---
 " 高亮与当前光标下单词相同的所有单词
@@ -168,17 +167,6 @@ let g:vim_current_word#highlight_twins = 1
 let g:vim_current_word#highlight_current_word = 1
 " 高亮延迟设为 0，立即高亮
 let g:vim_current_word#highlight_delay = 0
-
-" 在加载颜色主题后应用高亮设置，以防被覆盖
-augroup CurrentWordHighlight
-    autocmd!
-    " 为当前单词设置高亮颜色 (红色背景)
-    autocmd ColorScheme * hi CurrentWord ctermbg=53 guibg=#5f0000
-    " 为相同的其他单词设置高亮颜色 (深灰色背景)
-    autocmd ColorScheme * hi CurrentWordTwins ctermbg=237 guibg=#3a3a3a
-augroup END
-
-
 
 
 " vim-lsp-settings 配置语言服务器

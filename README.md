@@ -11,7 +11,7 @@ git clone https://github.com/starmountain1997/gvim.git && (cd gvim && sh install
 | 插件 | 功能 | 使用方法 |
 | --- | --- | --- |
 | [preservim/nerdtree](https://github.com/preservim/nerdtree) | 文件浏览器 | 按 `F1` 切换显示 |
-| [NLKNguyen/papercolor-theme](https://github.com/NLKNguyen/papercolor-theme) | PaperColor 主题 | 当前使用的主题 `colorscheme PaperColor` |
+| [dracula/vim](https://github.com/dracula/vim) | Dracula 主题 | 当前使用的主题 `colorscheme dracula` |
 | [vim-airline/vim-airline](https://github.com/vim-airline/vim-airline) | 精美的状态栏 | 自动启用 |
 | [vim-airline/vim-airline-themes](https://github.com/vim-airline/vim-airline-themes) | Airline 主题集合 | 自动加载 |
 | [tpope/vim-commentary](https://github.com/tpope/vim-commentary) | 快速注释代码 | 在普通模式或可视模式下，使用 `gcc` 注释/取消注释当前行 |
