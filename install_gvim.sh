@@ -39,35 +39,8 @@ echo "=> 检查语言配置: $LANGUAGES"
 
 # 检查是否需要配置 Python 开发环境
 if [[ "$LANGUAGES" == *"python"* ]]; then
-  echo "=> 配置 Python 开发环境..."
-
-  # 检查 uv 是否已安装
-  if ! command -v uv &> /dev/null; then
-    echo "uv 未安装，正在安装..."
-    curl -LsSf https://astral.sh/uv/install.sh | sh
-    echo "uv 已安装。"
-    # 重新加载环境变量
-    export PATH="$HOME/.cargo/bin:$PATH"
-  else
-    echo "uv 已存在，跳过安装。"
-  fi
-
-  # 检查 basedpyright 是否已安装
-  if ! command -v basedpyright &> /dev/null; then
-    echo "basedpyright 未安装，正在安装..."
-    uv tool install basedpyright
-    echo "basedpyright 已安装。"
-  else
-    echo "basedpyright 已存在，跳过安装。"
-  fi
-
-  # 检查 ruff 是否已安装
   if ! command -v ruff &> /dev/null; then
-    echo "ruff 未安装，正在安装..."
-    uv tool install ruff
-    echo "ruff 已安装。"
-  else
-    echo "ruff 已存在，跳过安装。"
+    echo "ruff 未安装，请安装ruff..."
   fi
 fi
 

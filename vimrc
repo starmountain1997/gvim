@@ -177,7 +177,11 @@ augroup END
 
 
 
-" vim-lsp-settings 会自动配置语言服务器，无需手动配置
+" vim-lsp-settings 配置语言服务器
+" 配置使用 Ruff Server 作为 Python 语言服务器
+let g:lsp_settings_servers = {
+            \ 'ruff': {},
+            \ }
 
 " --- 全局 LSP 快捷键映射 ---
 " 这些快捷键会在 LSP 可用时自动生效
