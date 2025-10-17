@@ -21,7 +21,6 @@ set nostartofline
 call plug#begin()
 
 " --- 主题与外观 ---
-Plug 'NLKNguyen/papercolor-theme'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
@@ -35,7 +34,14 @@ Plug 'dominikduda/vim_current_word'
 " --- 编辑辅助 ---
 Plug 'tpope/vim-commentary'
 
-Plug 'dense-analysis/ale'
+
+" --- 代码检查与修复 ---
+Plug 'prabirshrestha/vim-lsp'
+Plug 'mattn/vim-lsp-settings'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+
+
 
 
 call plug#end()
@@ -50,8 +56,6 @@ call plug#end()
 set termguicolors
 " 设置背景为深色
 set background=dark
-" 设置颜色主题
-colorscheme PaperColor
 
 " --- 界面元素 ---
 " 开启语法高亮
@@ -106,11 +110,7 @@ set ignorecase
 " 如果搜索内容包含大写字母，则不忽略大小写（智能大小写）
 set smartcase
 
-" --- 补全设置 ---
-" 设置补全选项，改善补全体验，自动选择第一个补全选项
-set completeopt=menu,menuone,preview,noinsert
-" 设置补全弹窗的最大高度
-set pumheight=10
+
 
 
 " =============================================================================
@@ -152,8 +152,6 @@ let g:NERDTreeShowHidden = 1
 " --- vim-airline ---
 " 启用 powerline 字体，使状态栏显示特殊符号
 let g:airline_powerline_fonts = 1
-" 在 airline 中集成 ALE 状态显示
-let g:airline#extensions#ale#enabled = 1
 
 " --- rainbow (彩虹括号) ---
 " 启用 rainbow 插件
@@ -177,112 +175,40 @@ augroup CurrentWordHighlight
 augroup END
 
 
-" --- ALE 配置 ---
-
-" 启用 ALE 的代码补全功能（必须在 ALE 加载前设置）
-let g:ale_completion_enabled = 1
-" 启用自动导入功能
-let g:ale_completion_autoimport = 1
-
-" 启用 ALE 的代码导航功能（跳转到定义、查找引用等）
-let g:ale_navigation = 1
-
-" ALE Python 最佳实践配置
-" 使用 pyright 进行类型检查，ruff 进行快速语法和代码风格检查
-let g:ale_linters = {
-            \   "python": ["pyright", "ruff"]
-            \ }
-
-" 使用 ruff 作为主要的代码修复和格式化工具
-" ruff_fixer 修复代码问题，ruff_format 进行格式化
-let g:ale_fixers = {
-            \   "python": ["ruff", "ruff_format"]
-            \ }
-
-" 配置 ALE 使用 uv 的 Python 路径
-" 自动检测 uv 管理的 Python 路径
-function! SetupPythonWithUv()
-    " 检查当前目录是否存在 uv 项目或 .venv
-    if filereadable('pyproject.toml') || isdirectory('.venv')
-        " 优先使用 .venv 中的 Python
-        if isdirectory('.venv/bin')
-            let g:ale_python_python_executable = '.venv/bin/python'
-        elseif isdirectory('.venv/Scripts')
-            let g:ale_python_python_executable = '.venv/Scripts/python.exe'
-        endif
-    endif
-endfunction
-
-" 每次进入缓冲区时检查 Python 环境
-autocmd BufEnter *.py call SetupPythonWithUv()
-
-" 全局配置：如果 uv 命令可用，优先使用 uv run python
-if executable('uv')
-    " 配置 ruff 使用 uv 运行，保持详细的规则配置
-    let g:ale_python_ruff_executable = 'uv'
-    let g:ale_python_ruff_format_executable = 'uv'
-    let g:ale_python_ruff_format_options = 'run ruff format'
-
-endif
-
-" 设置错误和警告的符号
-let g:ale_sign_error = '✗'
-let g:ale_sign_warning = '⚠'
-
-" 在命令行中显示错误信息
-let g:ale_echo_msg_error_str = 'E'
-let g:ale_echo_msg_warning_str = 'W'
-let g:ale_echo_msg_format = '[%linter%] [%severity%] %s'
-
-" 优化 ALE 性能和用户体验
-" 在保存时自动修复代码
-let g:ale_fix_on_save = 1
-" 设置延迟，避免频繁检查（毫秒）
-let g:ale_lint_delay = 1000
-" 打开文件时立即检查
-let g:ale_lint_on_enter = 1
-" 在插入模式下不检查，减少干扰
-let g:ale_lint_on_insert_leave = 1
-" 修改文本后延迟检查
-let g:ale_lint_on_text_changed = 'normal'
-
-" Python 特定优化
-" 让 pyright 更专注于类型检查，减少与 ruff 的冲突
-let g:ale_python_pyright_options = '--diagnostic-severity=information'
-" ruff 专注于代码风格和快速检查（忽略行长度限制）
-let g:ale_python_ruff_options = '--select=E,W,F,I'
-" ruff format 配置：使用 ruff format 进行格式化
-let g:ale_python_ruff_format_options = 'run ruff format'
-
-" 智能格式化配置：在 Git 仓库中只处理修改的文件
-function! SmartRuffFormat()
-    " 检查是否在 Git 仓库中
-    if executable('git') && system('git rev-parse --is-inside-work-tree 2>/dev/null') =~# 'true'
-        " 如果文件未被 Git 跟踪，进行完整格式化
-        if system('git ls-files -- ' . expand('%:p')) ==# ''
-            " 完整格式化
-            return 1
-        else
-            " 已跟踪文件也进行格式化（ruff 会处理整个文件）
-            " 这是 ruff 的设计哲学，确保代码风格一致性
-            return 1
-        endif
-    else
-        " 不在 Git 仓库中，正常格式化
-        return 1
-    endif
-endfunction
 
 
-" --- ALE 代码导航快捷键 ---
-" 跳转到定义
-nnoremap <C-]> :ALEGoToDefinition<CR>
-" 查找引用
-nnoremap <C-\> :ALEFindReferences<CR>
-" 返回上一个位置
-nnoremap <C-t> :ALEPopLocation<CR>
-" 查看类型信息
-nnoremap <C-k> :ALEHover<CR>
-" 跳转到实现（C++等语言）
-nnoremap <C-i> :ALEGoToImplementation<CR>
+" vim-lsp-settings 会自动配置语言服务器，无需手动配置
 
+" --- 全局 LSP 快捷键映射 ---
+" 这些快捷键会在 LSP 可用时自动生效
+nmap gd <plug>(lsp-definition)
+nmap gs <plug>(lsp-document-symbol-search)
+nmap gS <plug>(lsp-workspace-symbol-search)
+nmap gr <plug>(lsp-references)
+nmap gi <plug>(lsp-implementation)
+nmap gt <plug>(lsp-type-definition)
+nmap <leader>rn <plug>(lsp-rename)
+nmap [g <plug>(lsp-previous-diagnostic)
+nmap ]g <plug>(lsp-next-diagnostic)
+nmap K <plug>(lsp-hover)
+
+
+" --- 补全设置 ---
+" allow modifying the completeopt variable, or it will
+" be overridden all the time
+let g:asyncomplete_auto_completeopt = 0
+" 启用自动弹出补全框（默认行为）
+let g:asyncomplete_auto_popup = 1
+
+" 设置补全选项：menuone(总是显示菜单)，noinsert(不自动插入文本)
+" preview(显示预览)，移除 noselect 以允许自动选择第一个
+set completeopt=menuone,noinsert,preview
+
+" 补全快捷键配置 (Tab 键保持原生功能，使用上下键选择补全选项)
+" 使用 Enter 确认选择，如果没有选择则选择第一个
+inoremap <expr> <CR> pumvisible() ? (complete_info()['selected'] == -1 ? "\<C-y>\<C-n>" : "\<C-y>") : "\<CR>"
+
+" 自动选择第一个补全选项通过移除 noselect 实现
+
+" 补全完成后关闭预览窗口
+autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
