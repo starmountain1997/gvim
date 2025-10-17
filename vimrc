@@ -93,8 +93,6 @@ set shiftwidth=4
 set expandtab
 " 新行自动缩进
 set autoindent
-" 为 C 语言等风格的语言启用智能缩进
-set smartindent
 
 " --- 换行 ---
 " 默认不自动换行
@@ -185,16 +183,16 @@ let g:lsp_settings_servers = {
 
 " --- 全局 LSP 快捷键映射 ---
 " 这些快捷键会在 LSP 可用时自动生效
-nmap gd <plug>(lsp-definition)
-nmap gs <plug>(lsp-document-symbol-search)
-nmap gS <plug>(lsp-workspace-symbol-search)
-nmap gr <plug>(lsp-references)
-nmap gi <plug>(lsp-implementation)
-nmap gt <plug>(lsp-type-definition)
-nmap <leader>rn <plug>(lsp-rename)
-nmap [g <plug>(lsp-previous-diagnostic)
-nmap ]g <plug>(lsp-next-diagnostic)
-nmap K <plug>(lsp-hover)
+nnoremap gd <plug>(lsp-definition)
+nnoremap gs <plug>(lsp-document-symbol-search)
+nnoremap gS <plug>(lsp-workspace-symbol-search)
+nnoremap gr <plug>(lsp-references)
+nnoremap gi <plug>(lsp-implementation)
+nnoremap gt <plug>(lsp-type-definition)
+nnoremap <leader>rn <plug>(lsp-rename)
+nnoremap [g <plug>(lsp-previous-diagnostic)
+nnoremap ]g <plug>(lsp-next-diagnostic)
+nnoremap K <plug>(lsp-hover)
 
 
 " --- 补全设置 ---
@@ -209,10 +207,8 @@ let g:asyncomplete_auto_popup = 1
 set completeopt=menuone,noinsert,preview
 
 " 补全快捷键配置 (Tab 键保持原生功能，使用上下键选择补全选项)
-" 使用 Enter 确认选择，如果没有选择则选择第一个
-inoremap <expr> <CR> pumvisible() ? (complete_info()['selected'] == -1 ? "\<C-y>\<C-n>" : "\<C-y>") : "\<CR>"
-
-" 自动选择第一个补全选项通过移除 noselect 实现
+" 如果补全菜单可见，使用 Enter 键确认当前高亮选项，否则插入一个换行符
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
 
 " 补全完成后关闭预览窗口
 autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
