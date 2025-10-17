@@ -43,6 +43,9 @@ if [[ "$LANGUAGES" == *"python"* ]]; then
   if ! command -v ruff &> /dev/null; then
     echo "ruff 未安装，请安装ruff..."
   fi
+  if ! command -v pyright &> /dev/null; then
+    echo "pyright 未安装，请安装pyright..."
+  fi
 fi
 
 echo -e "\n🎉 Vim 环境配置完成！"
