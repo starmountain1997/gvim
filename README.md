@@ -23,26 +23,109 @@ git clone https://github.com/starmountain1997/gvim.git && (cd gvim && sh install
 | [prabirshrestha/asyncomplete.vim](https://github.com/prabirshrestha/asyncomplete.vim) | 异步补全框架 | 提供强大的异步代码补全功能 |
 | [prabirshrestha/asyncomplete-lsp.vim](https://github.com/prabirshrestha/asyncomplete-lsp.vim) | LSP 补全集成 | 将 LSP 与 asyncomplete 集成 |
 
-## NERDTree 功能增强说明
+## NERDTree 使用教程
 
-NERDTree 文件浏览器在本配置中进行了以下增强：
+NERDTree 是一个强大的文件系统浏览器，本配置中进行了多项优化和增强。
 
-### 自动打开功能
+### 基本操作
+
+#### 打开和切换
+- **F1** - 切换 NERDTree 显示/隐藏
+- `:NERDTreeToggle` - 同 F1 功能
+- `:NERDTree` - 打开 NERDTree 并聚焦
+- `:NERDTreeFocus` - 将焦点移动到 NERDTree 窗口
+- `q` - 在 NERDTree 窗口中退出（如果是最后一个窗口则退出 Vim）
+
+#### 导航操作
+- `j/k` - 上下移动光标
+- `Enter` - 打开文件/展开目录
+- `o` - 在新窗口中打开文件
+- `t` - 在新标签页中打开文件
+- `i` - 水平分割窗口打开文件
+- `s` - 垂直分割窗口打开文件
+- `p` - 跳转到父节点
+- `P` - 跳转到根节点
+- `Ctrl+w+w` - 在窗口间切换
+
+### 文件操作教程
+
+#### 新增文件/文件夹
+1. **新增文件**：
+   - 移动到目标目录位置
+   - 按 `m` 打开菜单
+   - 按 `a` (add) 添加子节点
+   - 输入文件名（如 `new_file.py`）
+   - 按 Enter 确认
+
+2. **新增文件夹**：
+   - 移动到目标目录位置
+   - 按 `m` 打开菜单
+   - 按 `a` (add) 添加子节点
+   - 输入文件夹名（以 `/` 结尾，如 `new_folder/`）
+   - 按 Enter 确认
+
+#### 删除文件/文件夹
+1. **删除操作**：
+   - 移动到要删除的文件/文件夹
+   - 按 `m` 打开菜单
+   - 按 `d` (delete) 删除
+   - 按 `y` 确认删除，或 `n` 取消
+
+2. **批量删除**：
+   - 可以先标记多个文件，然后批量删除
+
+#### 移动文件/文件夹
+1. **移动操作**：
+   - 移动到要移动的文件/文件夹
+   - 按 `m` 打开菜单
+   - 按 `m` (move/rename) 移动或重命名
+   - 输入新的位置或名称
+   - 按 Enter 确认
+
+2. **复制操作**：
+   - 移动到要复制的文件/文件夹
+   - 按 `m` 打开菜单
+   - 按 `c` (copy) 复制
+   - 输入新的位置或名称
+   - 按 Enter 确认
+
+### 高级功能
+
+#### 搜索和过滤
+- `/` - 搜索文件/目录名
+- `n` - 跳转到下一个搜索结果
+- `N` - 跳转到上一个搜索结果
+- `I` - 切换显示隐藏文件
+- `f` - 切换文件过滤
+- `F` - 切换文件排序
+
+#### 书签功能
+- `B` - 打开书签菜单
+- `:Bookmark <name>` - 为当前位置创建书签
+- `:BookmarkToRoot <name>` - 创建书签并设为根节点
+
+#### 其他实用功能
+- `r` - 刷新当前目录
+- `R` - 刷新根目录
+- `cd` - 将 Vim 当前工作目录设置为 NERDTree 选中目录
+- `CD` - 将 NERDTree 根目录设置为 Vim 当前工作目录
+- `u` - 切换显示上级目录
+
+### 配置增强说明
+
+#### 自动打开功能
 - 启动 Vim 时如果没有指定文件，会自动打开 NERDTree
 - 如果指定了目录作为参数，会自动打开该目录的 NERDTree 视图
 - 当 NERDTree 是最后一个窗口时，会自动退出 Vim
 
-### 键位映射
-- `F1` - 切换 NERDTree 显示/隐藏
-
-### 文件过滤设置
+#### 文件过滤设置
 自动忽略以下文件和目录：
 - `__pycache__/` - Python 缓存目录
 - `.*\.egg-info$` - Python 包信息文件
 - `.claude` - Claude 相关文件
 - 其他常见的临时文件和构建产物
 
-### 显示设置
+#### 显示设置
 - 显示隐藏文件（以点开头的文件）
 - 适配当前使用的颜色主题
 
