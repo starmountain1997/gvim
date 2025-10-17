@@ -173,11 +173,6 @@ let g:vim_current_word#highlight_current_word = 1
 let g:vim_current_word#highlight_delay = 0
 
 
-" vim-lsp-settings 配置语言服务器
-" 配置使用 Ruff Server 作为 Python 语言服务器
-let g:lsp_settings_servers = {
-            \ 'ruff': {},
-            \ }
 
 " --- 全局 LSP 快捷键映射 ---
 " 这些快捷键会在 LSP 可用时自动生效
@@ -197,8 +192,6 @@ nnoremap K <plug>(lsp-hover)
 " allow modifying the completeopt variable, or it will
 " be overridden all the time
 let g:asyncomplete_auto_completeopt = 0
-" 启用自动弹出补全框（默认行为）
-let g:asyncomplete_auto_popup = 1
 
 " 设置补全选项：menuone(总是显示菜单)，noinsert(不自动插入文本)
 " preview(显示预览)，移除 noselect 以允许自动选择第一个
