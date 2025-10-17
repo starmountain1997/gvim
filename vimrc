@@ -33,6 +33,7 @@ Plug 'dominikduda/vim_current_word'
 
 " --- 编辑辅助 ---
 Plug 'tpope/vim-commentary'
+Plug 'jiangmiao/auto-pairs'
 
 
 " --- 代码检查与修复 ---
@@ -154,6 +155,11 @@ let g:airline_powerline_fonts = 1
 " --- rainbow (彩虹括号) ---
 " 启用 rainbow 插件
 let g:rainbow_active = 1
+
+" --- auto-pairs (自动括号配对) ---
+" 插件会自动为括号、引号等符号配对
+" 支持 Fly Mode：快速跳过配对的右括号
+" 支持多字节字符配对（如中文引号）
 
 " --- vim_current_word ---
 " 高亮与当前光标下单词相同的所有单词

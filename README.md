@@ -15,6 +15,7 @@ git clone https://github.com/starmountain1997/gvim.git && (cd gvim && sh install
 | [vim-airline/vim-airline](https://github.com/vim-airline/vim-airline) | 精美的状态栏 | 自动启用 |
 | [vim-airline/vim-airline-themes](https://github.com/vim-airline/vim-airline-themes) | Airline 主题集合 | 自动加载 |
 | [tpope/vim-commentary](https://github.com/tpope/vim-commentary) | 快速注释代码 | 在普通模式或可视模式下，使用 `gcc` 注释/取消注释当前行 |
+| [jiangmiao/auto-pairs](https://github.com/jiangmiao/auto-pairs) | 自动括号配对 | 自动为括号、引号等符号配对，支持 Fly Mode 快速跳过 |
 | [luochen1990/rainbow](https://github.com/luochen1990/rainbow) | 彩虹括号 | 自动为不同层级的括号显示不同颜色 |
 | [dominikduda/vim_current_word](https://github.com/dominikduda/vim_current_word) | 高亮当前单词 | 自动高亮光标下的单词及所有相同单词 |
 | [prabirshrestha/vim-lsp](https://github.com/prabirshrestha/vim-lsp) | LSP 客户端 | 为 Vim 提供语言服务器协议支持 |
@@ -44,6 +45,27 @@ NERDTree 文件浏览器在本配置中进行了以下增强：
 ### 显示设置
 - 显示隐藏文件（以点开头的文件）
 - 适配当前使用的颜色主题
+
+## auto-pairs 自动配对功能说明
+
+auto-pairs 插件提供了智能的括号和引号自动配对功能，大大提升编码效率：
+
+### 核心功能
+- **自动配对**: 输入左括号、左引号时自动插入对应的右符号
+- **智能跳过**: 在配对符号后输入相同符号时自动跳过，避免重复
+- **快速删除**: 删除左符号时自动删除对应的右符号
+- **Fly Mode**: 快速跳过配对的右括号，提升编辑流畅度
+
+### 支持的配对符号
+- **括号类**: `()`, `[]`, `{}`
+- **引号类**: `''`, `""`, `**`
+- **多字符**: `<?php?>`, `<!-- -->`, `""" """`
+- **多字节**: 支持中文引号等 Unicode 字符配对
+
+### 使用技巧
+- **快速跳出**: 在配对的右符号后继续输入即可跳过
+- **换行配对**: 在括号内按回车会自动格式化为多行结构
+- **嵌套支持**: 完美支持多层嵌套的括号和引号
 
 ## vim-lsp Python 开发环境说明
 
