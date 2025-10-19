@@ -32,7 +32,7 @@ echo "$VIMRC_SOURCE -> $VIMRC_TARGET"
 
 echo "=> 运行 PlugInstall 安装插件..."
 # 先安装插件，然后再清理（如果需要的话）
-vim -e -u "$VIMRC_TARGET" -i NONE -c "PlugInstall" -c "qa!"
+vim -u "$VIMRC_TARGET" -i NONE -c "PlugInstall" -c "qa!"
 echo "Vim 插件安装完成。"
 
 # --- 步骤 3: 根据语言配置安装开发工具 ---
@@ -48,4 +48,4 @@ if [[ "$LANGUAGES" == *"python"* ]]; then
   fi
 fi
 
-echo -e "\n🎉 Vim 环境配置完成！"
+printf "\n🎉 Vim 环境配置完成！\n"
