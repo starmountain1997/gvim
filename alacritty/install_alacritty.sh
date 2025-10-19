@@ -44,34 +44,18 @@ CONFIG_DIR="$HOME/.config/alacritty"
 THEMES_DIR="$CONFIG_DIR/themes"
 THEME_FILE="$THEMES_DIR/${THEME_NAME}.toml"
 CONFIG_FILE="$CONFIG_DIR/alacritty.toml"
-THEME_REPO="https://github.com/alacritty/alacritty-theme.git"
 
 echo -e "\033[0;33m创建配置目录: $CONFIG_DIR\033[0m"
-mkdir -p "$CONFIG_DIR"
+mkdir -p "$THEMES_DIR"
 
-echo -e "\033[0;33m设置主题...\033[0m"
-
-# 克隆或更新主题仓库
-if [[ -d "$THEMES_DIR/.git" ]]; then
-    echo -e "\033[0;33m更新主题仓库...\033[0m"
-    cd "$THEMES_DIR"
-    if ! git pull origin master; then
-        echo -e "\033[0;31m错误: 更新主题仓库失败。\033[0m"
-        exit 1
-    fi
-else
-    echo -e "\033[0;33m克隆主题仓库...\033[0m"
-    if ! git clone "$THEME_REPO" "$THEMES_DIR"; then
-        echo -e "\033[0;31m错误: 克隆主题仓库失败。\033[0m"
-        exit 1
-    fi
-fi
+echo -e "\033[0;33m从 submodule 安装主题...\033[0m"
+cp -a "$(dirname "$0")/alacritty-theme/themes/." "$THEMES_DIR/"
 
 # 检查主题是否存在
-if [[ ! -f "$THEMES_DIR/themes/${THEME_NAME}.toml" ]]; then
+if [[ ! -f "$THEMES_DIR/${THEME_NAME}.toml" ]]; then
     echo -e "\033[0;31m错误: 主题 '$THEME_NAME' 未找到。\033[0m"
     echo -e "\033[0;33m可用主题:"
-    ls "$THEMES_DIR/themes" | sed 's/\.toml$//' | head -10
+    ls "$THEMES_DIR" | sed 's/\.toml$//' | head -10
     echo -e "完整列表: https://github.com/alacritty/alacritty-theme\033[0m"
     exit 1
 fi
@@ -82,7 +66,7 @@ echo -e "\033[0;33m创建 alacritty.toml 配置...\033[0m"
 # 创建配置文件
 cat > "$CONFIG_FILE" << EOF
 general.import = [
-  "~/.config/alacritty/themes/${THEME_NAME}.toml"
+  "${CONFIG_DIR}/themes/${THEME_NAME}.toml"
 ]
 
 [font]
