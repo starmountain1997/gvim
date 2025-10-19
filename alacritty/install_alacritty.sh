@@ -11,32 +11,9 @@ if [[ "$1" == "--theme" && -n "$2" ]]; then
     THEME_NAME="$2"
 fi
 
-# 检查字体是否安装
-echo -e "\033[0;33m检查字体: FiraCode Nerd Font Mono...\033[0m"
-
-if [[ "$(uname)" == "Darwin" ]]; then
-    # macOS
-    if ! system_profiler SPFontsDataType | grep -q "FiraCode Nerd Font Mono"; then
-        echo -e "\033[0;31m错误: 字体 'FiraCode Nerd Font Mono' 未安装。\033[0m"
-        echo -e "\033[0;33m请从 https://www.nerdfonts.com/font-downloads 下载安装\033[0m"
-        exit 1
-    fi
-elif [[ "$(uname)" == "Linux" ]]; then
-    # Linux
-    if command -v fc-list &> /dev/null; then
-        if ! fc-list | grep -q "FiraCode Nerd Font Mono"; then
-            echo -e "\033[0;31m错误: 字体 'FiraCode Nerd Font Mono' 未安装。\033[0m"
-            echo -e "\033[0;33m请从 https://www.nerdfonts.com/font-downloads 下载安装\033[0m"
-            exit 1
-        fi
-    else
-        echo -e "\033[0;33m警告: 无法检查字体安装状态，请确保 'FiraCode Nerd Font Mono' 已安装。\033[0m"
-    fi
-else
-    echo -e "\033[0;33m警告: 不支持的操作系统，请确保 'FiraCode Nerd Font Mono' 已安装。\033[0m"
-fi
-
-echo -e "\033[0;32m字体检查通过。\033[0m"
+# 字体提示
+echo -e "\033[0;33m提示: 请确保已安装 'FiraCode Nerd Font Mono' 字体\033[0m"
+echo -e "\033[0;33m下载地址: https://www.nerdfonts.com/font-downloads\033[0m"
 echo -e "\033[0;33m使用主题: $THEME_NAME\033[0m"
 
 # 配置路径
@@ -48,17 +25,18 @@ CONFIG_FILE="$CONFIG_DIR/alacritty.toml"
 echo -e "\033[0;33m创建配置目录: $CONFIG_DIR\033[0m"
 mkdir -p "$THEMES_DIR"
 
-echo -e "\033[0;33m从 submodule 安装主题...\033[0m"
-cp -a "$(dirname "$0")/alacritty-theme/themes/." "$THEMES_DIR/"
-
-# 检查主题是否存在
-if [[ ! -f "$THEMES_DIR/${THEME_NAME}.toml" ]]; then
-    echo -e "\033[0;31m错误: 主题 '$THEME_NAME' 未找到。\033[0m"
+# 检查主题在submodule中是否存在
+SOURCE_THEME="$(dirname "$0")/alacritty-theme/themes/${THEME_NAME}.toml"
+if [[ ! -f "$SOURCE_THEME" ]]; then
+    echo -e "\033[0;31m错误: 主题 '$THEME_NAME' 在 submodule 中未找到。\033[0m"
     echo -e "\033[0;33m可用主题:"
-    ls "$THEMES_DIR" | sed 's/\.toml$//' | head -10
+    ls "$(dirname "$0")/alacritty-theme/themes/" | sed 's/\.toml$//' | head -10
     echo -e "完整列表: https://github.com/alacritty/alacritty-theme\033[0m"
     exit 1
 fi
+
+echo -e "\033[0;33m从 submodule 复制主题文件...\033[0m"
+cp "$SOURCE_THEME" "$THEMES_DIR/"
 
 echo -e "\033[0;32m主题 '$THEME_NAME' 可用。\033[0m"
 echo -e "\033[0;33m创建 alacritty.toml 配置...\033[0m"
