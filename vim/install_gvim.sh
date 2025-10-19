@@ -5,7 +5,7 @@ set -e
 
 # --- 配置 ---
 # Vim 配置文件的源路径和目标路径
-VIMRC_SOURCE="./vimrc"
+VIMRC_SOURCE="$(dirname "$0")/vimrc"
 VIMRC_TARGET="$HOME/.vimrc"
 
 # 语言配置 - 通过命令行参数传入，多个语言用空格分隔

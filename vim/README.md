@@ -3,7 +3,7 @@
 ## 安装
 
 ```bash
-git clone https://github.com/starmountain1997/gvim.git && (cd gvim && sh install_gvim.sh) && rm -rf gvim
+git clone https://github.com/starmountain1997/gvim.git && (cd gvim/vim && sh install_gvim.sh) && rm -rf gvim
 ```
 
 ## 启用的插件及使用方法
