@@ -1,3 +1,6 @@
 general.import = [
   "~/.config/alacritty/themes/dracula.toml"
 ]
+
+[font]
+normal = { family = "FiraCode Nerd Font Mono", style = "Retina" }
