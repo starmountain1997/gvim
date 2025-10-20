@@ -64,10 +64,14 @@ if [[ "$LANGUAGES" == *"python"* ]]; then
     echo -e "${WARN}${RED} ruff 未安装，请手动安装 ruff 以获得最佳体验。${NC}"
   fi
 
-  if command -v pyright &> /dev/null; then
-    echo "$SUCCESS pyright 已安装。"
+  if command -v pyright &> /dev/null || command -v python-lsp-server &> /dev/null; then
+    if command -v pyright &> /dev/null; then
+      echo "$SUCCESS pyright 已安装。"
+    else
+      echo "$SUCCESS python-lsp-server 已安装。"
+    fi
   else
-    echo -e "${WARN}${RED} pyright 未安装，请手动安装 pyright 以获得最佳体验。${NC}"
+    echo -e "${WARN}${RED} pyright 或 python-lsp-server 未安装，请手动安装其中一个以获得最佳体验。${NC}"
   fi
 fi
 
