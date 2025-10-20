@@ -38,6 +38,9 @@ general.import = [
 [font]
 normal = { family = `"FiraCode Nerd Font Mono`", style = `"Retina`" }
 
+[shell]
+program = `"wsl`"
+
 [keyboard]
 bindings = [
   { key = `"C`", mods = `"Control`", action = `"Copy`" },
