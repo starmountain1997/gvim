@@ -38,7 +38,7 @@ general.import = [
 [font]
 normal = { family = `"FiraCode Nerd Font Mono`", style = `"Retina`" }
 
-[shell]
+[terminal.shell]
 program = `"wsl`"
 args = ["--cd", `"~`"]
 
