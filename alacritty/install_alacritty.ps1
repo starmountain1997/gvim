@@ -5,7 +5,7 @@ $ErrorActionPreference = "Stop"
 
 Write-Host "Installing Alacritty with theme: $Theme"
 
-$ConfigDir = "$env:USERPROFILE\.config\alacritty"
+$ConfigDir = "$env:APPDATA\alacritty"
 $ThemesDir = "$ConfigDir\themes"
 $ScriptDir = Split-Path -Parent $PSCommandPath
 if (-not $ScriptDir) { $ScriptDir = Get-Location }
@@ -37,6 +37,13 @@ general.import = [
 
 [font]
 normal = { family = `"FiraCode Nerd Font Mono`", style = `"Retina`" }
+
+[keyboard]
+bindings = [
+  { key = `"C`", mods = `"Control`", action = `"Copy`" },
+  { key = `"V`", mods = `"Control`", action = `"Paste`" },
+  { key = `"C`", mods = `"Control|Shift`", chars = `"\\x03`" }
+]
 "@
 
 Set-Content -Path $ConfigFile -Value $ConfigContent -Encoding UTF8

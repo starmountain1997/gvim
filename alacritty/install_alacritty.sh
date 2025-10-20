@@ -49,6 +49,13 @@ general.import = [
 
 [font]
 normal = { family = "FiraCode Nerd Font Mono", style = "Retina" }
+
+[keyboard]
+bindings = [
+  { key = "C", mods = "Control", action = "Copy" },
+  { key = "V", mods = "Control", action = "Paste" },
+  { key = "C", mods = "Control|Shift", chars = "\x03" }
+]
 EOF
 
 echo -e "\033[0;32mAlacritty 配置完成，主题: ${THEME_NAME}\033[0m"
