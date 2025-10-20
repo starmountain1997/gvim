@@ -47,6 +47,15 @@ general.import = [
   "${CONFIG_DIR}/themes/${THEME_NAME}.toml"
 ]
 
+[window]
+padding.x = 10
+padding.y = 10
+
+decorations = "Buttonless"
+
+opacity = 0.7
+blur = true
+
 [font]
 normal = { family = "FiraCode Nerd Font Mono", style = "Retina" }
 
