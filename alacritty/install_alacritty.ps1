@@ -40,6 +40,7 @@ normal = { family = `"FiraCode Nerd Font Mono`", style = `"Retina`" }
 
 [shell]
 program = `"wsl`"
+args = ["--cd", `"~`"]
 
 [keyboard]
 bindings = [
