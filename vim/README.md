@@ -21,6 +21,7 @@ git clone https://github.com/starmountain1997/gvim.git && (cd gvim/vim && sh ins
 | [vim-airline/vim-airline-themes](https://github.com/vim-airline/vim-airline-themes) | Airline 主题集合 | 自动加载 |
 | [tpope/vim-commentary](https://github.com/tpope/vim-commentary) | 快速注释代码 | 在普通模式或可视模式下，使用 `gcc` 注释/取消注释当前行 |
 | [jiangmiao/auto-pairs](https://github.com/jiangmiao/auto-pairs) | 自动括号配对 | 自动为括号、引号等符号配对，支持 Fly Mode 快速跳过 |
+| [mhinz/vim-signify](https://github.com/mhinz/vim-signify) | Git 版本控制显示 | 在行号旁显示 Git 变化（新增、修改、删除）的标记 |
 | [luochen1990/rainbow](https://github.com/luochen1990/rainbow) | 彩虹括号 | 自动为不同层级的括号显示不同颜色 |
 | [dominikduda/vim_current_word](https://github.com/dominikduda/vim_current_word) | 高亮当前单词 | 自动高亮光标下的单词及所有相同单词 |
 | [prabirshrestha/vim-lsp](https://github.com/prabirshrestha/vim-lsp) | LSP 客户端 | 为 Vim 提供语言服务器协议支持 |
@@ -192,5 +193,49 @@ auto-pairs 插件提供了智能的括号和引号自动配对功能，大大提
 - **手动触发**: 使用 `Ctrl+Space` 手动触发补全
 - **选择确认**: 使用 `Enter` 确认选择，`Esc` 取消补全
 - **导航选择**: 使用 `Tab`/`Shift+Tab` 在补全项之间导航
+
+## vim-signify Git 版本控制功能说明
+
+vim-signify 是一个强大的 Git 版本控制可视化插件，能够在编辑器中直观地显示文件的修改状态：
+
+### 核心功能
+- **变更标记**: 在行号旁显示不同符号表示文件的变更状态
+- **多种 VCS 支持**: 支持 Git、SVV、Mercurial 等多种版本控制系统
+- **实时更新**: 文件保存时自动更新变更标记
+- **差异预览**: 快速查看修改前后的差异
+
+### 标记符号说明
+vim-signify 使用不同符号来表示各种变更状态：
+- **`~`** - 修改的行（Modified）
+- **`+`** - 新增的行（Added）
+- **`-`** - 删除的行（Deleted）
+- **`>`** - 从其他文件修改而来的行（Modified）
+- **`<`** - 修改后将移动到其他文件的行（Modified）
+
+### 基本快捷键
+- **`[c`** - 跳转到上一个变更处
+- **`]c`** - 跳转到下一个变更处
+- **`:SignifyDiff`** - 显示当前文件与版本库的差异
+- **`:SignifyDiffCurrent`** - 显示当前光标所在行的变更
+- **`:SignifyHunkDiff`** - 显示当前代码块的详细差异
+- **`:SignifyFold`** - 折叠未修改的代码，只显示变更部分
+
+### 代码块操作
+- **`:SignifyHunkUndo`** - 撤销当前代码块的修改
+- **`:SignifyHunkAdd`** - 将当前代码块添加到暂存区
+- **`:SignifyHunkPrev`** - 跳转到上一个代码块
+- **`:SignifyHunkNext`** - 跳转到下一个代码块
+
+### 实用功能
+- **自动检测**: 打开文件时自动检测并显示变更状态
+- **状态栏集成**: 在 airline 状态栏中显示变更统计
+- **颜色区分**: 使用不同颜色高亮显示各种变更类型
+- **性能优化**: 对大文件有良好的性能表现
+
+### 使用场景
+1. **代码审查**: 快速定位和理解代码变更
+2. **提交前检查**: 确认要提交的修改内容
+3. **协作开发**: 直观查看团队成员的修改
+4. **调试回滚**: 快速定位问题代码并回滚修改
 
 

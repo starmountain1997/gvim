@@ -38,6 +38,7 @@ Plug 'dominikduda/vim_current_word'
 " --- 编辑辅助 ---
 Plug 'tpope/vim-commentary'
 Plug 'jiangmiao/auto-pairs'
+Plug 'mhinz/vim-signify', { 'tag': 'legacy'  }
 
 
 " --- 代码检查与修复 ---
