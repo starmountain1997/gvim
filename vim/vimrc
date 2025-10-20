@@ -67,6 +67,9 @@ colorscheme dracula
 " --- 颜色与主题 ---
 " 启用终端的真彩色支持
 set termguicolors
+" 与终端一致的透明配置
+hi! Normal guibg=NONE ctermbg=NONE
+
 
 " --- 界面元素 ---
 " 显示行号
