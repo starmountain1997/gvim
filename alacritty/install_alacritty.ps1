@@ -49,13 +49,6 @@ normal = { family = `"FiraCode Nerd Font Mono`", style = `"Retina`" }
 [terminal.shell]
 program = `"wsl`"
 args = ["--cd", `"~`"]
-
-[keyboard]
-bindings = [
-  { key = `"C`", mods = `"Control`", action = `"Copy`" },
-  { key = `"V`", mods = `"Control`", action = `"Paste`" },
-  { key = `"C`", mods = `"Control|Shift`", chars = `"\\x03`" }
-]
 "@
 
 Set-Content -Path $ConfigFile -Value $ConfigContent -Encoding UTF8
