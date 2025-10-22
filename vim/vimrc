@@ -40,6 +40,9 @@ Plug 'tpope/vim-commentary'
 Plug 'jiangmiao/auto-pairs'
 Plug 'mhinz/vim-signify', { 'tag': 'legacy'  }
 
+" --- 会话管理 ---
+Plug 'tpope/vim-obsession'
+
 
 " --- 代码检查与修复 ---
 Plug 'prabirshrestha/vim-lsp'
@@ -207,3 +210,11 @@ inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
 
 " 补全完成后关闭预览窗口
 autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+
+
+" --- vim-obsession (会话管理) ---
+" 自动保存会话，重启 vim 时自动恢复工作状态
+" 如果存在 Session.vim 文件，启动时自动加载会话
+if filereadable(getcwd() . '/Session.vim')
+    source Session.vim
+endif

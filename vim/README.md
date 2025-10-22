@@ -24,6 +24,7 @@ git clone https://github.com/starmountain1997/gvim.git && (cd gvim/vim && sh ins
 | [mhinz/vim-signify](https://github.com/mhinz/vim-signify) | Git 版本控制显示 | 在行号旁显示 Git 变化（新增、修改、删除）的标记 |
 | [luochen1990/rainbow](https://github.com/luochen1990/rainbow) | 彩虹括号 | 自动为不同层级的括号显示不同颜色 |
 | [dominikduda/vim_current_word](https://github.com/dominikduda/vim_current_word) | 高亮当前单词 | 自动高亮光标下的单词及所有相同单词 |
+| [tpope/vim-obsession](https://github.com/tpope/vim-obsession) | 会话管理 | 自动保存和恢复 vim 会话状态，重启后恢复工作环境 |
 | [prabirshrestha/vim-lsp](https://github.com/prabirshrestha/vim-lsp) | LSP 客户端 | 为 Vim 提供语言服务器协议支持 |
 | [mattn/vim-lsp-settings](https://github.com/mattn/vim-lsp-settings) | LSP 自动配置 | 自动检测和配置各种语言服务器 |
 | [prabirshrestha/asyncomplete.vim](https://github.com/prabirshrestha/asyncomplete.vim) | 异步补全框架 | 提供强大的异步代码补全功能 |
@@ -237,5 +238,54 @@ vim-signify 使用不同符号来表示各种变更状态：
 2. **提交前检查**: 确认要提交的修改内容
 3. **协作开发**: 直观查看团队成员的修改
 4. **调试回滚**: 快速定位问题代码并回滚修改
+
+## vim-obsession 会话管理功能说明
+
+vim-obsession 是一个强大的会话管理插件，能够自动保存和恢复你的 vim 工作环境：
+
+### 核心功能
+- **自动会话保存**: 启动会话后自动保存窗口布局、打开的文件、光标位置等状态
+- **会话恢复**: 重启 vim 时自动恢复上次的工作状态
+- **无缝工作流**: 关闭 vim 再重新打开，完全恢复到离开时的状态
+
+### 基本使用方法
+
+#### 启动会话管理
+- **`:Obsess`** - 开始在当前目录跟踪会话（创建 Session.vim 文件）
+- **`:Obsess!`** - 强制开始会话（覆盖现有会话文件）
+
+#### 停止会话管理
+- **`:Obsess!`**（当会话已激活时）- 停止跟踪会话并删除 Session.vim 文件
+
+### 自动恢复机制
+本配置已设置自动恢复功能：
+- 当 vim 启动时，如果当前目录存在 `Session.vim` 文件，会自动加载会话
+- 无需手动执行任何命令，直接恢复到上次的工作状态
+
+### 实际使用场景
+
+#### 项目开发工作流
+1. **开始工作**: 在项目根目录执行 `:Obsess`
+2. **正常开发**: 打开多个文件、分割窗口、调整布局
+3. **结束工作**: 直接关闭 vim，会话状态已自动保存
+4. **继续工作**: 重新打开 vim，自动恢复到之前的状态
+
+#### 多项目切换
+- 每个项目目录可以有独立的会话文件
+- 在不同项目间切换时，各自的工作状态完全独立
+- 无需担心项目间的状态干扰
+
+### 会话保存的内容
+- **文件列表**: 所有打开的文件和标签页
+- **窗口布局**: 分割窗口的大小和位置
+- **光标位置**: 每个文件中的光标位置
+- **跳转历史**: 在文件间的跳转记录
+- **寄存器内容**: 复制粘贴的内容
+- **各种标记**: 手动设置的标记点
+
+### 最佳实践
+1. **项目根目录使用**: 在项目根目录启动会话，便于管理整个项目
+2. **版本控制**: 将 `Session.vim` 添加到 `.gitignore`，避免提交个人工作状态
+3. **定期清理**: 项目完成后使用 `:Obsess!` 停止会话，删除会话文件
 
 
