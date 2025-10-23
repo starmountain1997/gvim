@@ -155,12 +155,34 @@ endif
 " --- NERDTree ---
 " 映射 F1 键来开关 NERDTree (使用nnoremap避免递归映射)
 nnoremap <F1> :NERDTreeToggle<CR>
+" 书签相关快捷键
+nnoremap <leader>bb :Bookmark<space>
+nnoremap <leader>bc :ClearAllBookmarks<CR>
+nnoremap <leader>be :EditBookmarks<CR>
 " 当 NERDTree 是最后一个窗口时，自动退出 Vim
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | call feedkeys(":quit\<CR>:\<BS>") | endif
 " 设置 NERDTree 忽略的文件和文件夹
 let g:NERDTreeIgnore = ['__pycache__', '.*\.egg-info$', '.claude', '.DS_Store']
 " 显示隐藏文件
 let g:NERDTreeShowHidden = 1
+
+" --- NERDTree 书签功能配置 ---
+" 启动时显示书签表格
+let g:NERDTreeShowBookmarks = 1
+" 书签排序方式：1=不区分大小写排序（推荐）
+let g:NERDTreeBookmarksSort = 1
+" 在树中标记已添加书签的节点
+let g:NERDTreeMarkBookmarks = 1
+" 自定义书签文件位置（可选，默认为 ~/.NERDTreeBookmarks）
+" let g:NERDTreeBookmarksFile = '~/.vim/.NERDTreeBookmarks'
+
+" --- NERDTree 自动刷新功能配置 ---
+" 当切换回Vim时自动刷新NERDTree
+autocmd FocusGained * if exists(':NERDTree') | NERDTreeRefresh | endif
+" 当文件改变时自动刷新NERDTree
+autocmd BufWritePost * if exists(':NERDTree') | NERDTreeRefresh | endif
+" 当Vim失去焦点后再获得焦点时刷新NERDTree
+autocmd BufEnter * if exists('t:NERDTreeBufName') && winbufnr(2) != -1 | NERDTreeRefresh | endif
 
 " --- vim-airline ---
 " 启用 powerline 字体，使状态栏显示特殊符号
