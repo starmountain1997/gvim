@@ -107,9 +107,30 @@ NERDTree 是一个强大的文件系统浏览器，本配置中进行了多项�
 - `F` - 切换文件排序
 
 #### 书签功能
-- `B` - 打开书签菜单
-- `:Bookmark <name>` - 为当前位置创建书签
-- `:BookmarkToRoot <name>` - 创建书签并设为根节点
+NERDTree 的书签功能可以让你快速标记和访问常用的文件或目录：
+
+**创建书签**：
+- `:Bookmark <name>` - 为当前位置创建书签（光标所在的文件/目录）
+- `:BookmarkToRoot <name>` - 创建书签并将 NERDTree 根目录设置为该书签位置
+- `m` → `b` - 通过菜单创建书签
+
+**管理书签**：
+- `B` - 打开书签列表菜单
+- 在书签列表中：
+  - `Enter` - 跳转到书签位置
+  - `d` - 删除书签
+  - `m` - 移动/重命名书签
+- `:Bookmark! <name>` - 删除指定名称的书签
+
+**书签文件**：
+- 书签信息保存在 `~/.NERDTreeBookmarks` 文件中
+- 书签是全局的，在所有项目中都可以使用
+- 可以手动编辑书签文件来批量管理
+
+**实用技巧**：
+- 为常用项目目录创建书签，如 `:Bookmark project-main`
+- 为配置文件创建书签，如 `:Bookmark vimrc`
+- 书签名称可以包含空格，但不建议使用特殊字符
 
 #### 其他实用功能
 - `r` - 刷新当前目录
@@ -157,6 +178,51 @@ auto-pairs 插件提供了智能的括号和引号自动配对功能，大大提
 - **换行配对**: 在括号内按回车会自动格式化为多行结构
 - **嵌套支持**: 完美支持多层嵌套的括号和引号
 
+## Vim 终端操作说明
+
+Vim 8.0+ 内置了终端功能，可以在编辑器中直接使用 shell 命令，无需切换窗口：
+
+### 基本终端操作
+
+**打开终端**：
+- `:terminal` 或 `:term` - 在新窗口中打开终端
+- `:terminal <command>` - 直接执行指定命令
+- `:vertical terminal` - 垂直分割窗口打开终端
+- `:terminal ++curwin` - 在当前窗口中打开终端
+
+**终端模式切换**：
+- 在终端窗口中：
+  - `Ctrl+w N` - 从终端模式切换到普通模式（Normal Mode）
+  - `i` 或 `a` - 从普通模式回到终端模式（Terminal Mode）
+  - `Ctrl+w w` - 在窗口间切换
+
+**关闭终端**：
+- 在终端模式下：`exit` 或 `Ctrl+d` - 正常退出终端
+- 在普通模式下：`:q` 或 `:q!` - 关闭终端窗口
+- `Ctrl+w c` - 关闭当前窗口（包括终端）
+
+### 实用技巧
+
+**窗口管理**：
+- `Ctrl+w h/j/k/l` - 在分割窗口间移动光标
+- `Ctrl+w =` - 让所有窗口等大
+- `Ctrl+w +/_` - 增大/减小当前窗口高度
+
+**命令执行**：
+- `:!command` - 执行单个 shell 命令（不打开终端窗口）
+- `:read !command` - 将命令输出插入到当前文件
+
+**终端配置**：
+- 默认使用系统的默认 shell
+- 可以通过 `:set shell=/bin/bash` 修改使用的 shell
+
+### 使用场景
+
+1. **快速测试** - 运行测试脚本而无需离开 vim
+2. **Git 操作** - 执行 git 命令进行版本控制
+3. **编译构建** - 运行编译或构建命令
+4. **文件管理** - 使用 shell 命令进行文件操作
+
 ## vim-lsp Python 开发环境说明
 
 本配置采用 **vim-lsp + vim-lsp-settings** 的组合来提供完整的 Python 开发体验，使用现代的 LSP (Language Server Protocol) 架构：
@@ -177,6 +243,7 @@ auto-pairs 插件提供了智能的括号和引号自动配对功能，大大提
 - **实时诊断**: 编辑时实时显示语法错误和警告
 - **悬停文档**: 按 `K` 键查看函数/类的文档
 - **代码重构**: 支持变量重命名等重构操作
+- **代码格式化**: 支持自动格式化，Python 推荐使用 Ruff
 - **异步处理**: 所有操作都是异步的，保持编辑流畅性
 
 ### 使用方法
@@ -189,11 +256,130 @@ auto-pairs 插件提供了智能的括号和引号自动配对功能，大大提
 - **重命名**: 使用 `<leader>rn` 重命名当前变量/函数
 - **诊断导航**: 使用 `[g` 和 `]g` 在错误/警告之间跳转
 
+#### 代码格式化操作
+- **格式化当前文件**: 使用 `<leader>f` 或执行 `:LspDocumentFormat`
+- **格式化选中范围**: 先在可视模式下选中代码，然后执行 `:LspDocumentRangeFormat`
+- **格式化当前行**: 使用 `:LspFormat`（不选中任何内容时）
+- **保存时自动格式化**: 可在配置中启用保存时自动格式化功能
+
 #### 代码补全
 - **自动补全**: 输入时自动弹出补全建议
 - **手动触发**: 使用 `Ctrl+Space` 手动触发补全
 - **选择确认**: 使用 `Enter` 确认选择，`Esc` 取消补全
 - **导航选择**: 使用 `Tab`/`Shift+Tab` 在补全项之间导航
+
+#### LSP 窗口和列表操作
+
+**引用列表操作 (gr 命令)**：
+- `gr` - 查找所有引用当前对象的位置，会弹出引用列表
+- 在引用列表窗口中：
+  - `Enter` - 跳转到选中的引用位置
+  - `q` 或 `Esc` - 关闭引用列表窗口
+  - `Ctrl+w w` - 切换回主编辑窗口
+  - `Ctrl+w c` - 关闭引用列表窗口
+  - `:q` 或 `:close` - 关闭引用列表窗口
+
+**其他 LSP 窗口关闭**：
+- **诊断窗口**: 按 `Esc` 或 `q` 关闭
+- **悬停文档**: 按 `Esc` 或 `q` 关闭文档窗口
+- **定义窗口**: 按 `Esc` 或 `q` 关闭预览窗口
+- **通用关闭**: `Ctrl+w w` 切换窗口，然后在目标窗口按 `q` 关闭
+
+**快速操作技巧**：
+- 引用列表打开后，按 `Ctrl+w h/j/k/l` 快速在窗口间移动
+- 使用 `:only` 关闭所有其他窗口，只保留当前主编辑窗口
+- 如果窗口卡住，可以尝试 `Ctrl+w q` 强制关闭当前窗口
+
+#### 代码格式化功能
+
+vim-lsp 提供了强大的代码格式化功能，支持多种语言的自动格式化：
+
+**基本格式化命令**：
+- `:LspDocumentFormat` - 格式化整个当前文件
+- `:LspDocumentRangeFormat` - 格式化选中的代码范围（需要先在可视模式下选择）
+- `:LspFormat` - 格式化当前行或选中范围
+
+**快捷键设置**：
+- 本配置中可以自定义快捷键，如 `<leader>f` 格式化当前文件
+- 支持格式化同步和异步两种模式
+
+**格式化配置**：
+- 支持配置格式化选项（缩进、换行等）
+- 可以为不同项目设置不同的格式化规则
+- 支持保存时自动格式化
+
+**Python Ruff 格式化**：
+
+对于 Python 开发，推荐使用 **Ruff** 作为格式化工具，它比 Black 更快且功能更全面：
+
+**安装 Ruff**：
+```bash
+pip install ruff
+# 或者使用 uv（推荐的 Python 包管理器）
+uv add ruff --dev
+```
+
+**Ruff 配置文件**：
+在项目根目录创建 `pyproject.toml` 或 `ruff.toml`：
+
+```toml
+[tool.ruff]
+# 指定目标 Python 版本
+target-version = "py38"
+
+# 行长度限制
+line-length = 88
+
+[tool.ruff.lint]
+# 启用的规则集
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+]
+
+# 忽略的规则
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+]
+
+[tool.ruff.format]
+# 使用双引号
+quote-style = "double"
+# 缩进风格
+indent-style = "space"
+# 行尾风格
+line-ending = "auto"
+```
+
+**使用 Ruff 格式化**：
+- **手动格式化**：在 vim 中按 `<leader>f` 或执行 `:LspDocumentFormat`
+- **命令行格式化**：`ruff format file.py`
+- **批量格式化**：`ruff format .`
+- **检查和格式化**：`ruff check --fix .`
+
+**Ruff vs Black 对比**：
+- **性能**：Ruff 比 Black 快 10-100 倍
+- **功能**：Ruff 同时提供 Linting 和格式化
+- **兼容性**：Ruff 与 Black 高度兼容，可以作为 Black 的替代品
+- **配置**：Ruff 配置更灵活，支持细粒度规则控制
+
+**格式化最佳实践**：
+1. **项目统一**：团队内使用相同的格式化配置
+2. **Git Hook**：在提交前自动运行格式化检查
+3. **IDE 集成**：在 vim/VSCode 等编辑器中启用保存时格式化
+4. **CI/CD**：在持续集成中检查代码格式
+
+**其他语言格式化工具**：
+- **JavaScript/TypeScript**: Prettier
+- **Go**: gofmt
+- **Rust**: rustfmt
+- **JSON/YAML**: Prettier
 
 ## vim-signify Git 版本控制功能说明
 
