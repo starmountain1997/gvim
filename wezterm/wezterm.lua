@@ -4,23 +4,30 @@ local wezterm = require 'wezterm'
 -- This will hold the configuration.
 local config = wezterm.config_builder()
 
--- 基本配置设置
-config.initial_cols = 120
-config.initial_rows = 28
-config.font_size = 10
-config.color_scheme = 'Dracula'
+-- 跨平台配置：Windows 下默认使用 WSL，Linux 下使用本地
+if wezterm.target_triple == 'x86_64-pc-windows-msvc' then
+  -- Windows: 设置默认域为 WSL，并指定默认工作目录为用户 home
+  config.default_domain = 'WSL:Ubuntu'
 
--- 启用滚动条
-config.enable_scroll_bar = true
-config.min_scroll_bar_height = '2cell'
+  -- 配置 WSL 域，确保启动时进入正确的 home 目录
+  config.wsl_domains = {
+    {
+      name = 'WSL:Ubuntu',
+      distribution = 'Ubuntu',
+      default_cwd = '/home/guozr',  -- 直接指定 WSL home 目录
+    },
+  }
+else
+  -- Linux: 使用本地 home 目录
+  config.default_cwd = wezterm.home_dir
+end
 
--- 设置默认工作目录为主目录
-config.default_cwd = wezterm.home_dir
-
--- 设置环境变量
-config.set_environment_variables = {
-  PATH = wezterm.home_dir .. '/.local/bin:' .. os.getenv('PATH'),
-}
+-- 设置环境变量（仅在 Linux 下设置）
+if wezterm.target_triple ~= 'x86_64-pc-windows-msvc' then
+  config.set_environment_variables = {
+    PATH = wezterm.home_dir .. '/.local/bin:' .. os.getenv('PATH'),
+  }
+end
 
 -- 鼠标设置
 config.mouse_bindings = {
@@ -37,6 +44,9 @@ config.font = wezterm.font {
     family = 'FiraCode Nerd Font Mono',
     style = 'Normal',
 }
+
+-- 禁用窗口关闭确认提示
+config.window_close_confirmation = 'NeverPrompt'
 
 -- Finally, return the configuration to wezterm:
 return config
