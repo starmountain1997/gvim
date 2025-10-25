@@ -58,6 +58,14 @@ blur = true
 
 [font]
 normal = { family = "FiraCode Nerd Font Mono", style = "Retina" }
+
+[selection]
+save_to_clipboard = true
+
+[mouse]
+bindings = [
+    { mouse = "Right", action = "Paste" }
+]
 EOF
 
 echo -e "\033[0;32mAlacritty 配置完成，主题: ${THEME_NAME}\033[0m"
