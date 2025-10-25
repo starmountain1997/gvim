@@ -39,11 +39,15 @@ config.mouse_bindings = {
   },
 }
 
+-- 主体设置
+config.color_scheme = 'Catppuccin Mocha'
+
 -- 字体设置
 config.font = wezterm.font {
     family = 'FiraCode Nerd Font Mono',
     style = 'Normal',
 }
+config.font_size = 10
 
 -- 禁用窗口关闭确认提示
 config.window_close_confirmation = 'NeverPrompt'
