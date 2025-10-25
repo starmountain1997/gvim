@@ -109,5 +109,8 @@ config.font_size = 10
 -- 禁用窗口关闭确认提示
 config.window_close_confirmation = 'NeverPrompt'
 
+config.window_decorations = "INTEGRATED_BUTTONS"
+
 -- Finally, return the configuration to wezterm:
 return config
+
