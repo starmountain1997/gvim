@@ -1,6 +1,6 @@
 这是一个wezterm的配置文件夹
 
-在windows平台上，使用 install_wezterm.ps1 来安装配置
+在windows平台上，使用 install_wezterm.ps1 来安装配置（如果我要你测试ps1脚本，记住我们是在wsl中，总有办法可以运行的）
 
 在类linux平台上，使用 install_wezterm.sh 来安装配置
 
