@@ -36,8 +36,8 @@ if wezterm.target_triple == 'x86_64-pc-windows-msvc' then
   }
 
   -- Windows 窗口透明度和背景效果配置
-  config.window_background_opacity = opacity_active  -- 使用动态透明度配置
-  -- config.win32_system_backdrop = 'Mica'
+  config.window_background_opacity = 0 -- 使用动态透明度配置
+  config.win32_system_backdrop = 'Acrylic'
 elseif wezterm.target_triple == 'x86_64-apple-darwin' then
   -- macOS: 使用本地 home 目录
   config.default_cwd = wezterm.home_dir
@@ -57,15 +57,40 @@ if wezterm.target_triple ~= 'x86_64-pc-windows-msvc' then
   }
 end
 
--- 鼠标设置
-config.mouse_bindings = {
-  -- 右键粘贴
-  {
-    event = { Down = { streak = 1, button = 'Right' } },
-    mods = 'NONE',
-    action = wezterm.action.PasteFrom 'Clipboard',
-  },
-}
+-- Windows 平台鼠标和键绑定设置
+if wezterm.target_triple == 'x86_64-pc-windows-msvc' then
+  -- 鼠标设置：右键粘贴
+  config.mouse_bindings = {
+    -- 右键粘贴（仅 Windows）
+    {
+      event = { Down = { streak = 1, button = 'Right' } },
+      mods = 'NONE',
+      action = wezterm.action.PasteFrom 'Clipboard',
+    },
+  }
+
+  -- 键绑定设置
+  config.keys = {
+    -- Ctrl+C 复制（替代默认的中断信号）
+    {
+      key = 'c',
+      mods = 'CTRL',
+      action = wezterm.action.CopyTo 'Clipboard',
+    },
+    -- Ctrl+V 粘贴
+    {
+      key = 'v',
+      mods = 'CTRL',
+      action = wezterm.action.PasteFrom 'Clipboard',
+    },
+    -- Ctrl+Shift+C 发送中断信号（替代原来的 Ctrl+C）
+    {
+      key = 'c',
+      mods = 'CTRL|SHIFT',
+      action = wezterm.action.SendKey { key = 'c', mods = 'CTRL' },
+    },
+  }
+end
 
 -- 主体设置
 config.color_scheme = 'Catppuccin Mocha'
