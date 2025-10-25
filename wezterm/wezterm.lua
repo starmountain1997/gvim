@@ -4,7 +4,19 @@ local wezterm = require 'wezterm'
 -- This will hold the configuration.
 local config = wezterm.config_builder()
 
--- 透明度配置
+-- 基础窗口设置（最先加载）
+config.window_close_confirmation = 'NeverPrompt'
+
+-- 字体渲染设置（核心视觉元素）
+config.font = wezterm.font {
+    family = 'FiraCode Nerd Font Mono',
+    style = 'Normal',
+}
+config.font_size = 10
+
+-- 主题颜色设置（视觉主题）
+config.color_scheme = 'Dracula'
+
 
 -- 跨平台配置：Windows 下默认使用 WSL，Linux 和 macOS 使用本地
 if wezterm.target_triple == 'x86_64-pc-windows-msvc' then
@@ -22,6 +34,7 @@ if wezterm.target_triple == 'x86_64-pc-windows-msvc' then
 
   -- Windows 窗口透明度和背景效果配置
   config.win32_system_backdrop = 'Acrylic'
+  config.window_decorations = "INTEGRATED_BUTTONS"
 
   local opacity_inactive = 0.85  -- 不在焦点时的透明度
   local opacity_active = 1.0     -- 获得焦点时的透明度
@@ -38,31 +51,6 @@ if wezterm.target_triple == 'x86_64-pc-windows-msvc' then
 
       window:set_config_overrides(overrides)
   end)
-
-elseif wezterm.target_triple == 'x86_64-apple-darwin' then
-  -- macOS: 使用本地 home 目录
-  config.default_cwd = wezterm.home_dir
-
-  -- macOS 窗口背景模糊效果配置
-  config.macos_window_background_blur = 20  -- 设置背景模糊半径（值越大模糊效果越明显）
-  config.window_background_opacity = 0.95  -- macOS 下适度的透明度
-else
-  -- Linux: 使用本地 home 目录
-  config.default_cwd = wezterm.home_dir
-
-  -- Linux 透明度配置（如果支持的话）
-  config.window_background_opacity = 0.9  -- Linux 下轻度透明度
-end
-
--- 设置环境变量（在 Linux 和 macOS 下设置）
-if wezterm.target_triple ~= 'x86_64-pc-windows-msvc' then
-  config.set_environment_variables = {
-    PATH = wezterm.home_dir .. '/.local/bin:' .. os.getenv('PATH'),
-  }
-end
-
--- Windows 平台鼠标和键绑定设置
-if wezterm.target_triple == 'x86_64-pc-windows-msvc' then
   -- 鼠标设置：右键粘贴
   config.mouse_bindings = {
     -- 右键粘贴（仅 Windows）
@@ -94,23 +82,34 @@ if wezterm.target_triple == 'x86_64-pc-windows-msvc' then
       action = wezterm.action.SendKey { key = 'c', mods = 'CTRL' },
     },
   }
+ 
+
+elseif wezterm.target_triple == 'x86_64-apple-darwin' then
+  -- macOS: 使用本地 home 目录
+  config.default_cwd = wezterm.home_dir
+
+  -- macOS 窗口背景模糊效果配置
+  config.macos_window_background_blur = 20  -- 设置背景模糊半径（值越大模糊效果越明显）
+  config.window_background_opacity = 0.95  -- macOS 下适度的透明度
+else
+  -- Linux: 使用本地 home 目录
+  config.default_cwd = wezterm.home_dir
+
+  -- Linux 透明度配置（如果支持的话）
+  config.window_background_opacity = 0.9  -- Linux 下轻度透明度
 end
 
--- 主题设置
-config.color_scheme = 'Dracula'
+-- 设置环境变量（在 Linux 和 macOS 下设置）
+if wezterm.target_triple ~= 'x86_64-pc-windows-msvc' then
+  config.set_environment_variables = {
+    PATH = wezterm.home_dir .. '/.local/bin:' .. os.getenv('PATH'),
+  }
+end
 
--- 字体设置
-config.font = wezterm.font {
-    family = 'FiraCode Nerd Font Mono',
-    style = 'Normal',
-}
-config.font_size = 10
+-- Windows 平台特定设置（键绑定补充）
+if wezterm.target_triple == 'x86_64-pc-windows-msvc' then
+end
 
--- 禁用窗口关闭确认提示
-config.window_close_confirmation = 'NeverPrompt'
-
-config.window_decorations = "INTEGRATED_BUTTONS"
-
--- Finally, return the configuration to wezterm:
+-- 返回配置（最后执行）
 return config
 
