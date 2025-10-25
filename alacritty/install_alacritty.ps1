@@ -36,11 +36,11 @@ general.import = [
 ]
 
 [window]
-padding.x = 10
-padding.y = 10
+# padding.x = 10
+# padding.y = 10
 
-decorations = "Buttonless"
-opacity = 0.95
+decorations = "Full"
+opacity = 0.7
 blur = true
 
 [font]
@@ -56,6 +56,10 @@ save_to_clipboard = true
 [mouse]
 bindings = [
     { mouse = `"Right`", action = `"Paste`" }
+]
+
+[keyboard]
+bindings = [
 ]
 "@
 

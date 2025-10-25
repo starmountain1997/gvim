@@ -66,6 +66,16 @@ save_to_clipboard = true
 bindings = [
     { mouse = "Right", action = "Paste" }
 ]
+
+[keyboard]
+bindings = [
+    # 解绑可能与终端复用器冲突的快捷键
+    { key = "T", mods = "Control", action = "None" },
+    { key = "W", mods = "Control", action = "None" },
+    { key = "H", mods = "Control", action = "None" },
+    { key = "L", mods = "Control", action = "None" },
+    { key = "P", mods = "Control", action = "None" }
+]
 EOF
 
 echo -e "\033[0;32mAlacritty 配置完成，主题: ${THEME_NAME}\033[0m"
