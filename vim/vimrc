@@ -40,6 +40,9 @@ Plug 'tpope/vim-commentary'
 Plug 'jiangmiao/auto-pairs'
 Plug 'mhinz/vim-signify', { 'tag': 'legacy'  }
 
+" --- 系统剪贴板支持 ---
+Plug 'ojroques/vim-oscyank'
+
 " --- 会话管理 ---
 Plug 'tpope/vim-obsession'
 
@@ -222,6 +225,31 @@ inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
 
 " 补全完成后关闭预览窗口
 autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+
+
+" --- vim-oscyank (系统剪贴板支持) ---
+" 设置无限制长度，允许复制大量文本
+let g:oscyank_max_length = 0
+" 禁用成功复制的消息
+let g:oscyank_silent = 1
+
+" 在剪贴板不可用的情况下自动复制到系统剪贴板
+if (!has('nvim') && !has('clipboard_working'))
+    " 检查这些寄存器：无名寄存器("")、选择寄存器("+")、剪贴板寄存器("*")
+    let s:VimOSCYankPostRegisters = ['', '+', '*']
+    " 在复制(y)和删除(d)操作时都触发
+    let s:VimOSCYankOperators = ['y', 'd']
+    function! s:VimOSCYankPostCallback(event)
+        if index(s:VimOSCYankPostRegisters, a:event.regname) != -1
+            \ && index(s:VimOSCYankOperators, a:event.operator) != -1
+            call OSCYankRegister(a:event.regname == '' ? '"' : a:event.regname)
+        endif
+    endfunction
+    augroup VimOSCYankPost
+        autocmd!
+        autocmd TextYankPost * call s:VimOSCYankPostCallback(v:event)
+    augroup END
+endif
 
 
 " --- vim-obsession (会话管理) ---

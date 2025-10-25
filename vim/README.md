@@ -27,6 +27,7 @@ git clone https://github.com/starmountain1997/gvim.git && (cd gvim/vim && sh ins
 | [mattn/vim-lsp-settings](https://github.com/mattn/vim-lsp-settings) | LSP 自动配置 |
 | [prabirshrestha/asyncomplete.vim](https://github.com/prabirshrestha/asyncomplete.vim) | 异步补全框架 |
 | [prabirshrestha/asyncomplete-lsp.vim](https://github.com/prabirshrestha/asyncomplete-lsp.vim) | LSP 补全集成 |
+| [ojroques/vim-oscyank](https://github.com/ojroques/vim-oscyank) | 终端系统剪贴板支持 |
 
 ## Vim 原生功能说明
 
@@ -425,3 +426,93 @@ vim-obsession 是一个强大的会话管理插件，能够自动保存和恢复
 1. **项目根目录使用**: 在项目根目录启动会话，便于管理整个项目
 2. **版本控制**: 将 `Session.vim` 添加到 `.gitignore`，避免提交个人工作状态
 3. **定期清理**: 项目完成后使用 `:Obsess!` 停止会话，删除会话文件
+
+### vim-oscyank 终端剪贴板功能说明
+
+vim-oscyank 是一个强大的终端剪贴板插件，通过 OSC 52 转义序列实现 vim 与系统剪贴板的无缝集成，特别适用于 SSH 远程连接和容器环境。
+
+#### 核心功能
+- **自动复制**: 执行复制操作时自动将内容复制到系统剪贴板
+- **无长度限制**: 支持复制大量文本，不受默认长度限制
+- **终端兼容**: 支持大多数现代终端（iTerm2、Alacritty、Kitty、WezTerm 等）
+- **SSH 友好**: 通过 SSH 连接时也能正常使用系统剪贴板
+
+#### 工作原理
+vim-oscyank 使用 OSC 52 转义序列，这是终端的标准协议：
+1. vim 将要复制的内容编码为 base64
+2. 通过 OSC 52 序列发送给终端
+3. 终端将内容设置到系统剪贴板
+4. 可以在任何支持 OSC 52 的终端中使用
+
+#### 配置说明
+本配置已按照官方最佳实践进行优化：
+- `g:oscyank_max_length = 0` - 无长度限制，支持复制大量文本
+- `g:oscyank_silent = 1` - 禁用成功复制的消息提示
+- 智能自动触发：仅在剪贴板不可用时自动启用 OSC52 复制
+- 多寄存器支持：支持无名寄存器("")、选择寄存器("+")、剪贴板寄存器("*")
+- 操作类型支持：复制(y)和删除(d)操作都会触发自动复制
+
+#### 使用方法
+
+##### 自动复制（推荐）
+- **普通模式复制**: 使用 `yy` 复制当前行，内容自动进入系统剪贴板
+- **可视模式复制**: 使用 `v` 选择文本后按 `y`，内容自动进入系统剪贴板
+- **motion 复制**: 使用 `y$`、`yG` 等命令，内容自动进入系统剪贴板
+
+##### 手动复制
+如果需要手动控制复制到系统剪贴板：
+- `:OSCYankReg "` - 将默认寄存器内容复制到系统剪贴板
+- `:OSCYankReg "a` - 将寄存器 a 的内容复制到系统剪贴板
+- `:OSCYank` - 复制选中的文本到系统剪贴板
+
+#### 终端兼容性
+
+##### 完全支持的终端
+- **iTerm2** (macOS) - 需要在 Preferences > General > Selection 中启用 "Applications in terminal may access clipboard"
+- **Alacritty** - 开箱即用
+- **Kitty** - 开箱即用
+- **WezTerm** - 开箱即用
+- **Terminal.app** (macOS) - 部分支持，可能有长度限制
+
+##### 需要配置的终端
+- **GNOME Terminal**: 需要启用 OSC 52 支持
+- **Konsole**: 需要在配置中启用相关选项
+- **xterm**: 支持，但可能有长度限制
+
+##### SSH 使用场景
+vim-oscyank 特别适用于 SSH 远程开发：
+1. 在本地终端中 SSH 连接到远程服务器
+2. 在远程服务器上使用 vim 编辑文件
+3. 复制的内容会通过 OSC 52 序列传输到本地终端
+4. 内容自动进入本地系统的剪贴板
+
+#### 故障排除
+
+##### 复制不生效
+1. **检查终端支持**: 确认使用的终端支持 OSC 52
+2. **检查长度限制**: 某些终端对 OSC 52 序列长度有限制
+3. **SSH 配置**: 确保 SSH 连接允许转义序列通过
+
+##### 手动测试
+在 vim 中执行以下命令测试：
+```vim
+:echo OSCYankPost('test copy')
+```
+如果 'test copy' 出现在系统剪贴板中，说明配置正常。
+
+##### 常见问题
+- **Tmux**: 需要在 `~/.tmux.conf` 中添加 `set -g allow-passthrough on`
+- **Screen**: 可能需要额外配置才能支持 OSC 52
+- **Windows Terminal**: 支持度有限，建议使用 WSL2 + 现代终端组合
+
+#### 性能优化
+- **大文本复制**: 对于超大文本，复制可能需要一些时间
+- **网络延迟**: SSH 使用时，复制速度受网络延迟影响
+- **终端性能**: 某些终端处理 OSC 52 序列的性能较差
+
+#### 替代方案
+如果 vim-oscyank 无法正常工作，可以考虑：
+1. **本地开发**: 使用系统原生的剪贴板支持 (`+` 寄存器)
+2. **X11**: 在 Linux 桌面环境中使用 `xclip` 或 `xsel`
+3. **Mac**: 在 macOS 中使用 `pbcopy` 和 `pbpaste`
+4. **Windows**: 在 Windows 中使用 `clip.exe`
