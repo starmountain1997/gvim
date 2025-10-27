@@ -53,6 +53,8 @@ Plug 'mattn/vim-lsp-settings'
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
 
+" --- 代码调试 ---
+Plug 'puremourning/vimspector'
 
 
 
@@ -258,3 +260,6 @@ endif
 if filereadable(getcwd() . '/Session.vim')
     source Session.vim
 endif
+
+" --- viminspector ---
+let g:vimspector_enable_mappings = 'HUMAN'

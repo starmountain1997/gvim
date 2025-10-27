@@ -27,6 +27,7 @@ git clone https://github.com/starmountain1997/gvim.git && (cd gvim/vim && sh ins
 | [mattn/vim-lsp-settings](https://github.com/mattn/vim-lsp-settings) | LSP 自动配置 |
 | [prabirshrestha/asyncomplete.vim](https://github.com/prabirshrestha/asyncomplete.vim) | 异步补全框架 |
 | [prabirshrestha/asyncomplete-lsp.vim](https://github.com/prabirshrestha/asyncomplete-lsp.vim) | LSP 补全集成 |
+| [puremourning/vimspector](https://github.com/puremourning/vimspector) | 现代化调试器支持 |
 | [ojroques/vim-oscyank](https://github.com/ojroques/vim-oscyank) | 终端系统剪贴板支持 |
 
 ## Vim 原生功能说明
@@ -516,3 +517,126 @@ vim-oscyank 特别适用于 SSH 远程开发：
 2. **X11**: 在 Linux 桌面环境中使用 `xclip` 或 `xsel`
 3. **Mac**: 在 macOS 中使用 `pbcopy` 和 `pbpaste`
 4. **Windows**: 在 Windows 中使用 `clip.exe`
+
+### vimspector 调试器功能说明
+
+vimspector 是一个现代化的 Vim 调试器插件，支持多种语言的调试，提供类似 IDE 的调试体验。
+
+#### 核心功能
+- **多语言支持**: 支持 Python、JavaScript、Node.js、Go、Rust、C/C++ 等多种语言
+- **可视化调试**: 提供断点、变量查看、调用栈等完整的调试界面
+- **灵活配置**: 支持自定义调试器配置和启动参数
+- **实时交互**: 支持执行期间修改变量值和表达式求值
+
+#### 基本操作
+
+##### 调试会话控制 (HUMAN 映射)
+- **F5** - 开始/继续调试
+- **F3** - 停止调试
+- **F4** - 重启调试
+- **F6** - 暂停调试
+- **F9** - 在当前行设置/取消断点
+- **<leader>F9** - 在当前行设置条件断点
+- **F8** - 添加函数断点
+- **<leader>F8** - 运行到光标
+- **F10** - 单步跳过 (Step Over)
+- **F11** - 单步进入 (Step Into)
+- **F12** - 单步跳出 (Step Out)
+
+##### 窗口和界面
+- **变量窗口**: 显示当前作用域的所有变量和对象
+- **监视窗口**: 可以添加表达式来监视其值的变化
+- **调用栈窗口**: 显示函数调用链
+- **输出窗口**: 显示调试输出和程序输出
+
+#### Python 调试配置
+
+vimspector 会自动检测 Python 环境并配置调试器。基本调试配置：
+
+```json
+{
+  "configurations": {
+    "Python: Run File": {
+      "adapter": "debugpy",
+      "configuration": {
+        "type": "python",
+        "request": "launch",
+        "program": "${file}",
+        "console": "integratedTerminal",
+        "cwd": "${workspaceFolder}"
+      }
+    },
+    "Python: Django": {
+      "adapter": "debugpy",
+      "configuration": {
+        "type": "python",
+        "request": "launch",
+        "program": "${workspaceFolder}/manage.py",
+        "args": ["runserver"],
+        "console": "integratedTerminal",
+        "cwd": "${workspaceFolder}"
+      }
+    }
+  }
+}
+```
+
+#### 实际使用流程
+
+##### 基本调试流程
+1. **打开文件**: 在 vim 中打开要调试的 Python 文件
+2. **设置断点**: 在想要暂停的行按 F9 设置断点
+3. **开始调试**: 按 F5 开始调试会话
+4. **单步执行**: 使用 F10/F11 逐步执行代码
+5. **查看变量**: 在变量窗口中查看当前变量值
+6. **继续执行**: 按 F5 继续到下一个断点或程序结束
+
+##### 高级调试技巧
+- **条件断点**: 使用 <leader>F9 设置只在特定条件满足时触发的断点
+- **函数断点**: 使用 F8 为特定函数设置断点
+- **运行到光标**: 使用 <leader>F8 让程序运行到当前光标位置暂停
+- **变量监视**: 在监视窗口添加表达式来跟踪复杂对象的变化
+- **临时求值**: 在调试过程中执行 Python 表达式查看结果
+- **堆栈导航**: 在调用栈窗口中查看函数调用链
+
+#### 支持的语言和调试器
+
+vimspector 支持的主要语言：
+- **Python**: debugpy (基于 pydevd)
+- **JavaScript/Node.js**: node-debug2
+- **Go**: delve
+- **Rust**: lldb 或 codelldb
+- **C/C++**: gdb 或 lldb
+- **Java**: java-debug
+- **PHP**: xdebug
+
+#### 配置文件位置
+
+调试配置文件通常保存在：
+- 项目根目录: `.vimspector.json`
+- 用户配置: `~/.vim/vimspector/`
+- 当前目录: `./.vimspector.json`
+
+#### 故障排除
+
+##### 调试器启动失败
+1. **检查语言服务器**: 确保相应的调试器已安装
+2. **验证配置文件**: 检查 `.vimspector.json` 语法是否正确
+3. **环境变量**: 确保 PATH 包含调试器可执行文件
+
+##### 断点不生效
+1. **检查文件路径**: 确保文件路径与配置中的路径匹配
+2. **代码可执行**: 确保代码是可执行的（语法正确）
+3. **调试模式**: 某些调试器需要特定的调试标志
+
+##### 变量显示异常
+1. **刷新变量**: 尝试刷新变量窗口
+2. **作用域问题**: 检查变量是否在当前作用域内
+3. **调试器版本**: 更新到最新版本的调试器适配器
+
+#### 性能优化
+
+- **禁用不必要的功能**: 在配置中关闭不需要的调试功能
+- **使用条件断点**: 减少不必要的断点触发
+- **合理设置监视**: 避免监视过多的复杂表达式
+- **及时清理**: 调试结束后及时停止调试会话
