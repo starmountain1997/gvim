@@ -66,7 +66,17 @@ call plug#end()
 
 " 启用 Dracula 主题
 syntax enable
-colorscheme dracula
+" 确保终端支持足够的颜色
+if !has('gui_running') && &t_Co < 256
+    set t_Co=256
+endif
+" 尝试加载 Dracula 主题，如果失败则使用默认主题
+try
+    colorscheme dracula
+catch /^Vim\%((\a\+)\)\=:E185/
+    colorscheme default
+    echo "Dracula theme not found, using default theme"
+endtry
 
 " =============================================================================
 " === 外观与 UI ===
@@ -74,7 +84,12 @@ colorscheme dracula
 
 " --- 颜色与主题 ---
 " 启用终端的真彩色支持
-set termguicolors
+if has('termguicolors')
+    set termguicolors
+else
+    " 如果不支持真彩色，使用256色模式
+    set t_Co=256
+endif
 " 与终端一致的透明配置
 hi! Normal guibg=NONE ctermbg=NONE
 
