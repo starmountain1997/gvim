@@ -73,6 +73,13 @@ if [[ "$LANGUAGES" == *"python"* ]]; then
   else
     echo -e "${WARN}${RED} pyright 或 python-lsp-server 未安装，请手动安装其中一个以获得最佳体验。${NC}"
   fi
+
+  echo "$INFO 正在检查 Python 调试工具..."
+  if command -v debugpy &> /dev/null; then
+    echo "$SUCCESS debugpy 已安装。"
+  else
+    echo -e "${WARN}${RED} debugpy 未安装，请手动安装 debugpy 以启用调试功能。${NC}"
+  fi
 fi
 
 echo -e "\n$PARTY Vim 环境配置完成！$PARTY\n"
