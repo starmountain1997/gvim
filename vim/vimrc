@@ -35,6 +35,9 @@ Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'luochen1990/rainbow'
 Plug 'dominikduda/vim_current_word'
 
+" --- 上下文显示 (滚动时冻结函数声明) ---
+Plug 'wellle/context.vim'
+
 " --- 编辑辅助 ---
 Plug 'tpope/vim-commentary'
 Plug 'jiangmiao/auto-pairs'
@@ -210,6 +213,17 @@ let g:vim_current_word#highlight_twins = 1
 let g:vim_current_word#highlight_current_word = 1
 " 高亮延迟设为 0，立即高亮
 let g:vim_current_word#highlight_delay = 0
+
+
+" --- context.vim (上下文显示) ---
+" 启用 context.vim 插件
+let g:context_enabled = 1
+" 设置上下文显示的最大行数
+let g:context_max_lines = 10
+" 设置上下文显示的最小行数
+let g:context_min_lines = 1
+" 在文件类型中启用 context.vim (支持多种编程语言)
+let g:context_filetype_blacklist = []
 
 
 

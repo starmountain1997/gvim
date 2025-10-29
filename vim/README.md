@@ -22,6 +22,7 @@ git clone https://github.com/starmountain1997/gvim.git && (cd gvim/vim && sh ins
 | [tpope/vim-commentary](https://github.com/tpope/vim-commentary) | 快速注释代码 |
 | [luochen1990/rainbow](https://github.com/luochen1990/rainbow) | 彩虹括号 |
 | [dominikduda/vim_current_word](https://github.com/dominikduda/vim_current_word) | 高亮当前单词 |
+| [wellle/context.vim](https://github.com/wellle/context.vim) | 上下文显示（滚动时冻结函数声明） |
 | [tpope/vim-obsession](https://github.com/tpope/vim-obsession) | 会话管理 |
 | [prabirshrestha/vim-lsp](https://github.com/prabirshrestha/vim-lsp) | LSP 客户端 |
 | [mattn/vim-lsp-settings](https://github.com/mattn/vim-lsp-settings) | LSP 自动配置 |
@@ -640,3 +641,130 @@ vimspector 支持的主要语言：
 - **使用条件断点**: 减少不必要的断点触发
 - **合理设置监视**: 避免监视过多的复杂表达式
 - **及时清理**: 调试结束后及时停止调试会话
+
+### context.vim 上下文显示功能说明
+
+context.vim 是一个智能上下文显示插件，能够在滚动代码时保持函数声明、类定义、循环语句等代码结构始终可见，完美解决了长函数或类阅读时迷失上下文的问题。
+
+#### 核心功能
+- **冻结上下文**: 滚动时自动在顶部显示当前所在的函数、类、循环等结构
+- **嵌套显示**: 支持多层嵌套结构的显示（如类→方法→循环→条件）
+- **动态更新**: 根据光标位置实时更新显示的上下文内容
+- **多语言支持**: 支持 Python、JavaScript、C/C++、Java 等多种编程语言
+
+#### 工作原理
+context.vim 通过以下方式实现上下文冻结：
+1. **语法分析**: 使用 Vim 的语法解析器识别代码结构
+2. **上下文提取**: 自动提取当前光标所在位置的父级代码块
+3. **窗口管理**: 在编辑区域顶部创建独立的上下文显示区域
+4. **实时同步**: 滚动时动态更新上下文内容
+
+#### 配置说明
+本配置已优化 context.vim 的设置：
+- `g:context_enabled = 1` - 启用 context.vim 插件
+- `g:context_max_lines = 10` - 最多显示 10 行上下文内容
+- `g:context_min_lines = 1` - 至少显示 1 行上下文内容
+- `g:context_filetype_blacklist = []` - 所有文件类型都启用上下文显示
+
+#### 显示内容类型
+
+根据编程语言不同，context.vim 会显示不同的上下文信息：
+
+##### Python 语言显示内容
+- **类定义**: `class Calculator:`
+- **函数定义**: `def add(self, num):`
+- **方法定义**: 类中的各种方法
+- **循环语句**: `for item in items:`
+- **条件语句**: `if condition:`
+- **异常处理**: `try:`, `except:`
+- **上下文管理器**: `with open(file) as f:`
+
+##### 其他语言支持
+- **JavaScript**: function, class, if/else, for/while, try/catch
+- **C/C++**: 函数定义, 类定义, if/else, for/while, switch
+- **Java**: 类定义, 方法定义, if/else, for/while, try/catch
+
+#### 实际使用效果
+
+##### 长函数阅读
+当阅读一个包含 100+ 行的长函数时：
+- 函数声明会始终显示在顶部
+- 可以清楚知道当前正在查看哪个函数
+- 即使滚动到函数末尾也不会失去上下文
+
+##### 嵌套结构导航
+在包含多层嵌套的复杂代码中：
+```python
+class DataProcessor:
+    def process_data(self, data):
+        for item in data:
+            if item.is_valid():
+                try:
+                    # 光标在此处时，上方会显示：
+                    # class DataProcessor:
+                    #   def process_data(self, data):
+                    #     for item in data:
+                    #       if item.is_valid():
+                    #         try:
+                    result = self.transform(item)
+                except Exception as e:
+                    self.handle_error(e)
+```
+
+#### 使用场景
+
+##### 代码审查
+- **大文件审查**: 审查长文件时不会迷失在代码结构中
+- **复杂逻辑理解**: 快速理解复杂嵌套逻辑的层次结构
+- **Bug 定位**: 在复杂代码中定位问题时更容易理解上下文
+
+##### 学习新代码
+- **框架源码阅读**: 阅读框架源码时保持清晰的类层次结构
+- **算法理解**: 理解复杂算法时始终保持函数签名可见
+- **设计模式识别**: 更容易识别和理解设计模式的实现
+
+##### 日常开发
+- **长函数维护**: 维护遗留的长函数时提高可读性
+- **重构操作**: 重构复杂代码结构时保持方向感
+- **调试辅助**: 调试复杂逻辑时快速定位问题所在层次
+
+#### 性能优化
+
+context.vim 针对性能进行了优化：
+- **增量解析**: 只解析可见区域附近的代码结构
+- **缓存机制**: 缓存已解析的语法结构，减少重复计算
+- **延迟更新**: 滚动停止后再更新上下文，避免频繁刷新
+
+#### 配置调优
+
+如果需要根据个人喜好调整配置：
+
+```vim
+" 增加最大显示行数（适用于超大屏幕）
+let g:context_max_lines = 15
+
+" 减少最小显示行数（节省屏幕空间）
+let g:context_min_lines = 1
+
+" 在特定文件类型中禁用（如配置文件）
+let g:context_filetype_blacklist = ['json', 'yaml', 'markdown']
+```
+
+#### 故障排除
+
+##### 上下文不显示
+1. **检查文件类型**: 确保当前文件类型受支持
+2. **语法检查**: 确保代码语法正确，无语法错误
+3. **插件加载**: 确认插件已正确安装和加载
+
+##### 显示异常
+1. **重新加载**: 使用 `:ContextReset` 重置上下文显示
+2. **检查配置**: 确认配置参数设置合理
+3. **更新插件**: 确保使用最新版本的 context.vim
+
+#### 最佳实践
+1. **合理设置行数**: 根据屏幕大小调整 `g:context_max_lines`
+2. **配合折叠功能**: 与 Vim 的折叠功能结合使用，效果更佳
+3. **快捷键绑定**: 可以绑定快捷键快速切换上下文显示
+
+context.vim 通过智能的上下文显示，大大提升了阅读和理解复杂代码的效率，是处理大型项目和遗留代码的必备工具。
