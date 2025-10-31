@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  vllm-ascend:
+    build: .
+    image: vllm-guozr:latest
+    container_name: vllm-guozr
+    privileged: true
+    network_mode: host
+    shm_size: 128g
+    command: bash
+
+    # 昇腾设备映射 - 使用数组形式更清晰
+    devices:
+      - "/dev/davinci_manager:/dev/davinci_manager"
+      - "/dev/hisi_hdc:/dev/hisi_hdc"
+      - "/dev/davinci0:/dev/davinci0"
+      - "/dev/davinci1:/dev/davinci1"
+      - "/dev/davinci2:/dev/davinci2"
+      - "/dev/davinci3:/dev/davinci3"
+      - "/dev/davinci4:/dev/davinci4"
+      - "/dev/davinci5:/dev/davinci5"
+      - "/dev/davinci6:/dev/davinci6"
+      - "/dev/davinci7:/dev/davinci7"
+      - "/dev/devmm_svm:/dev/devmm_svm"
+
+    # 卷挂载配置
+    volumes:
+      - "/usr/local/Ascend/driver:/usr/local/Ascend/driver:ro"
+      - "/usr/local/sbin:/usr/local/sbin:ro"
+      - "/home:/home"
+
+    
+    # 保持容器运行
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
