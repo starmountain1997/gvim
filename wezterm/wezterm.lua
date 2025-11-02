@@ -35,22 +35,7 @@ if wezterm.target_triple == 'x86_64-pc-windows-msvc' then
   -- Windows 窗口透明度和背景效果配置
   config.win32_system_backdrop = 'Acrylic'
   config.window_decorations = "INTEGRATED_BUTTONS"
-
-  local opacity_inactive = 0.85  -- 不在焦点时的透明度
-  local opacity_active = 1.0     -- 获得焦点时的透明度
-
-  -- 窗口焦点变化事件：动态切换透明度
-  wezterm.on('window-focus-changed', function(window, pane)
-      local overrides = window:get_config_overrides() or {}
-
-      if window:is_focused() then
-          overrides.window_background_opacity = opacity_active
-      else
-          overrides.window_background_opacity = opacity_inactive
-      end
-
-      window:set_config_overrides(overrides)
-  end)
+  config.window_background_opacity = 0.75  -- Windows 下统一的透明度，无论窗口是否活动
   -- 鼠标设置：右键粘贴
   config.mouse_bindings = {
     -- 右键粘贴（仅 Windows）
