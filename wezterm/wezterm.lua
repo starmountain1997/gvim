@@ -9,7 +9,7 @@ config.window_close_confirmation = 'NeverPrompt'
 
 -- 字体渲染设置（核心视觉元素）
 config.font = wezterm.font {
-    family = 'SarasaTermSlabSC',
+    family = 'Sarasa Term Slab SC',
     style = 'Normal',
 }
 config.font_size = 10
