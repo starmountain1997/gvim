@@ -33,7 +33,7 @@ if wezterm.target_triple == 'x86_64-pc-windows-msvc' then
   }
 
   -- Windows 窗口透明度和背景效果配置
-  config.win32_system_backdrop = 'Acrylic'
+  config.win32_system_backdrop = 'Auto'
   config.window_decorations = "INTEGRATED_BUTTONS"
   config.window_background_opacity = 0.75  -- Windows 下统一的透明度，无论窗口是否活动
   -- 鼠标设置：右键粘贴
