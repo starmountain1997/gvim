@@ -240,6 +240,14 @@ nnoremap [g <plug>(lsp-previous-diagnostic)
 nnoremap ]g <plug>(lsp-next-diagnostic)
 nnoremap K <plug>(lsp-hover)
 
+" --- LSP 诊断显示配置 ---
+" 启用 LSP 诊断系统
+let g:lsp_diagnostics_enabled = 1
+" 在光标移动时，在命令行显示当前行的诊断信息
+let g:lsp_diagnostics_echo_cursor = 1
+" 禁用行内虚拟文本显示（避免代码中的干扰性文本）
+let g:lsp_diagnostics_virtual_text_enabled = 0
+
 
 " --- 补全设置 ---
 " allow modifying the completeopt variable, or it will
@@ -292,3 +300,34 @@ endif
 
 " --- viminspector ---
 let g:vimspector_enable_mappings = 'HUMAN'
+
+" --- 终端窗口自动清理配置 ---
+" 确保在退出或关闭缓冲区时正确处理终端窗口，避免终端进程悬停
+augroup TermCloseOnQuit
+  autocmd!
+  " 当终端缓冲区被删除时，确保进程被正确终止
+  autocmd BufWinLeave term://* if &buftype == 'terminal' | call s:kill_terminal() | endif
+  " 当Vim退出时，确保所有终端进程被正确清理
+  autocmd VimLeavePre * call s:cleanup_terminals()
+augroup END
+
+" 终止当前终端进程
+function! s:kill_terminal()
+  if exists('b:terminal_job_id')
+    silent! call jobstop(b:terminal_job_id)
+  endif
+endfunction
+
+" 安全清理终端函数：只清理终端缓冲区，不影响其他文件
+function! s:cleanup_terminals()
+  for buf in getbufinfo()
+    if buf.name =~# '^term://'
+      " 终止终端进程
+      if getbufvar(buf.bufnr, 'terminal_job_id', 0) != 0
+        silent! call jobstop(getbufvar(buf.bufnr, 'terminal_job_id'))
+      endif
+      " 删除缓冲区
+      silent! execute 'bdelete!' buf.bufnr
+    endif
+  endfor
+endfunction
