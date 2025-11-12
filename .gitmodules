@@ -1,3 +1,6 @@
 [submodule "alacritty/alacritty-theme"]
 	path = alacritty/alacritty-theme
 	url = https://github.com/alacritty/alacritty-theme.git
+[submodule "claude/kingkongshot_prompts"]
+	path = claude/kingkongshot_prompts
+	url = https://github.com/kingkongshot/prompts.git
