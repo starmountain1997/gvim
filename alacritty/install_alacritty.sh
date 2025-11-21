@@ -38,6 +38,7 @@ cp "$SOURCE_THEME" "$THEMES_DIR/"
 cp "$SCRIPT_DIR/alacritty-linux.toml" "$CONFIG_DIR/alacritty.toml"
 
 # 更新配置文件中的主题名称
-sed -i "s/dracula.toml/${THEME_NAME}.toml/" "$CONFIG_DIR/alacritty.toml"
+sed -i.bak "s/dracula.toml/${THEME_NAME}.toml/" "$CONFIG_DIR/alacritty.toml"
+rm -f "$CONFIG_DIR/alacritty.toml.bak"
 
 echo -e "\033[0;32mAlacritty 配置完成，主题: ${THEME_NAME}\033[0m"
