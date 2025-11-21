@@ -30,9 +30,10 @@ Copy-Item $SourceTheme $TargetTheme -Force
 Copy-Item "$ScriptDir\alacritty-windows.toml" $ConfigFile -Force
 
 # Update theme name in config file
-$ConfigContent = Get-Content -Path $ConfigFile -Raw
+$ConfigContent = Get-Content -Path $ConfigFile -Raw -Encoding UTF8
 $ConfigContent = $ConfigContent -replace 'dracula\.toml', "$Theme.toml"
-Set-Content -Path $ConfigFile -Value $ConfigContent -Encoding UTF8
+$Utf8NoBomEncoding = New-Object System.Text.UTF8Encoding $false
+[System.IO.File]::WriteAllText($ConfigFile, $ConfigContent, $Utf8NoBomEncoding)
 
 Write-Host "Alacritty configured successfully!" -ForegroundColor Green
 Write-Host "Config file: $ConfigFile" -ForegroundColor Cyan
