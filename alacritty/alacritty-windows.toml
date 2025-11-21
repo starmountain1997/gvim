@@ -1,0 +1,43 @@
+# Alacritty Windows 配置
+# 通过 install_alacritty.ps1 安装
+
+# 导入主题文件
+general.import = [
+  "~/AppData/Roaming/alacritty/themes/dracula.toml"
+]
+
+[window]
+# padding.x = 10
+# padding.y = 10
+decorations = "Full"
+opacity = 0.7
+blur = true
+
+[font]
+normal = { family = "FiraCode Nerd Font Mono", style = "Retina" }
+
+# Windows 特定配置：默认启动 WSL
+[terminal.shell]
+program = "wsl"
+args = ["--cd", "~"]
+
+[selection]
+save_to_clipboard = true
+
+[mouse]
+bindings = [
+    { mouse = "Right", action = "Paste" }
+]
+
+[keyboard]
+bindings = [
+    # 与 WezTerm Windows 保持一致的复制粘贴键位
+    # Ctrl+C 复制（替代默认的中断信号）
+    { key = "C", mods = "Control", action = "Copy" },
+
+    # Ctrl+V 粘贴
+    { key = "V", mods = "Control", action = "Paste" },
+
+    # Ctrl+Shift+C 发送中断信号（替代原来的 Ctrl+C）
+    { key = "C", mods = "Control|Shift", chars = "\u0003" }
+]

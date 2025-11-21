@@ -1,0 +1,40 @@
+# Alacritty Linux 配置
+# 通过 install_alacritty.sh 安装
+
+# 导入主题文件
+general.import = [
+  "~/.config/alacritty/themes/dracula.toml"
+]
+
+[window]
+padding.x = 10
+padding.y = 10
+decorations = "Buttonless"
+opacity = 0.7
+blur = true
+
+[font]
+normal = { family = "FiraCode Nerd Font Mono", style = "Retina" }
+
+[selection]
+save_to_clipboard = true
+
+[mouse]
+bindings = [
+    { mouse = "Right", action = "Paste" }
+]
+
+[keyboard]
+bindings = [
+    # 解绑可能与终端复用器冲突的快捷键
+    { key = "T", mods = "Control", action = "None" },
+    { key = "W", mods = "Control", action = "None" },
+    { key = "H", mods = "Control", action = "None" },
+    { key = "L", mods = "Control", action = "None" },
+    { key = "P", mods = "Control", action = "None" },
+
+    # 与 WezTerm 保持一致的复制粘贴键位（Linux）
+    # 注意：Linux 下通常不覆盖 Ctrl+C（中断信号），因为这是标准行为
+    # 只保留 Ctrl+V 粘贴功能
+    { key = "V", mods = "Control", action = "Paste" }
+]
