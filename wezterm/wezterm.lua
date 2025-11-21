@@ -9,10 +9,11 @@ config.window_close_confirmation = 'NeverPrompt'
 
 -- 字体渲染设置（核心视觉元素）
 config.font = wezterm.font {
-    family = 'Sarasa Term Slab SC',
+    -- family = 'Sarasa Term Slab SC',
+    family = 'Fira Code',
     style = 'Normal',
 }
-config.font_size = 10
+config.font_size = 12
 
 -- 主题颜色设置（视觉主题）
 config.color_scheme = 'Dracula'
@@ -21,7 +22,6 @@ config.color_scheme = 'Dracula'
 config.tab_max_width = 25  -- 固定标签页最大宽度（字符数）
 config.tab_min_width = 25  -- 固定标签页最小宽度（字符数），实现固定宽度
 config.use_fancy_tab_bar = true  -- 使用现代样式的标签栏
-config.hide_tab_bar_if_only_one_tab = false  -- 即使只有一个标签页也显示标签栏
 
 
 -- 跨平台配置：Windows 下默认使用 WSL，Linux 和 macOS 使用本地
