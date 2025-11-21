@@ -6,20 +6,26 @@ general.import = [
   "~/AppData/Roaming/alacritty/themes/dracula.toml"
 ]
 
+# 环境变量
+[env]
+TERM = "xterm-256color"
+
 [window]
 # padding.x = 10
 # padding.y = 10
 decorations = "Full"
 opacity = 0.7
 blur = true
+dynamic_padding = true
+dynamic_title = true
 
 [font]
 normal = { family = "FiraCode Nerd Font Mono", style = "Retina" }
 
-# Windows 特定配置：默认启动 WSL
-[terminal.shell]
-program = "wsl"
-args = ["--cd", "~"]
+[terminal]
+osc52 = "OnlyCopy"
+shell.program = "wsl"
+shell.args = ["--cd", "~"]
 
 [selection]
 save_to_clipboard = true
