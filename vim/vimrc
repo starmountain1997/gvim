@@ -293,8 +293,9 @@ endif
 
 " --- vim-obsession (会话管理) ---
 " 自动保存会话，重启 vim 时自动恢复工作状态
-" 如果存在 Session.vim 文件，启动时自动加载会话
-if filereadable(getcwd() . '/Session.vim')
+" 如果存在 Session.vim 文件且未通过 -S 参数加载，启动时自动加载会话
+" 避免与 vim -S Session.vim 命令重复加载导致配置冲突
+if filereadable(getcwd() . '/Session.vim') && !v:this_session
     source Session.vim
 endif
 
