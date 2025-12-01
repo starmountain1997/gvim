@@ -19,8 +19,6 @@ config.font_size = 12
 config.color_scheme = 'Dracula'
 
 -- 标签页设置（固定标签页长度）
-config.tab_max_width = 25  -- 固定标签页最大宽度（字符数）
-config.tab_min_width = 25  -- 固定标签页最小宽度（字符数），实现固定宽度
 config.use_fancy_tab_bar = true  -- 使用现代样式的标签栏
 
 
