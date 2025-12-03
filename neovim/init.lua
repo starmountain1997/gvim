@@ -11,6 +11,18 @@ vim.g.loaded_netrwPlugin = 1
 -- 启用 24-bit 真彩色支持，提供更好的颜色显示
 vim.opt.termguicolors = true
 
+-- 启用鼠标支持，允许在终端中使用鼠标
+vim.opt.mouse = "a"
+
+-- 显示相对行号，便于跳转
+vim.opt.relativenumber = true
+
+-- 高亮显示当前行
+vim.opt.cursorline = true
+
+-- 高亮显示当前列
+vim.opt.cursorcolumn = true
+
 -- 设置 leader 键为空格键，这是 Neovim 社区的标准配置
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
