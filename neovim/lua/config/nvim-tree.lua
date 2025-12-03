@@ -28,7 +28,7 @@ require("nvim-tree").setup({
       -- Python 相关
       "__pycache__",
       ".ruff_cache",
-      ".*\\.egg-info$",  -- Python 包信息目录
+      "%.egg-info",  -- Python 包信息目录
 
       -- 版本控制
       ".git",
@@ -39,10 +39,9 @@ require("nvim-tree").setup({
       "Session.vim",  -- Vim 会话文件
 
       -- Vim/Neovim 临时文件
-      "*.swp",
-      ".*\\.swp$",
-      ".*\\.swo$",
-      ".*\\.swn$",
+      "%.swp",
+      "%.swo",
+      "%.swn",
 
       -- Python 开发工具
       "uv.lock",  -- uv 包管理器锁文件

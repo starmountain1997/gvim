@@ -43,7 +43,6 @@ require("lazy").setup({
         "netrw", "netrwPlugin",           -- 禁用 netrw (已有 nvim-tree)
         "getscript", "getscriptPlugin",   -- 老旧脚本支持
         "vimball", "vimballPlugin",       -- 老旧包管理
-        -- "matchit",                     -- 警告：不要禁用 matchit，% 跳转全靠它
       },
     },
   },
