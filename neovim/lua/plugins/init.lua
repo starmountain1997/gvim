@@ -36,4 +36,10 @@ return {
     "nvim-tree/nvim-web-devicons",
     lazy = true,  -- 懒加载，当 nvim-tree 需要时才加载
   },
+  {
+    'numToStr/Comment.nvim',
+    opts = {
+        -- add any options here
+  }
+}
 }
