@@ -1,12 +1,11 @@
 -- =============================================================================
 -- === lazy.nvim 插件管理器配置 ===
 -- =============================================================================
--- 这是 lazy.nvim 的配置模块，负责初始化插件管理器并加载插件列表
 
 -- 定义 lazy.nvim 的安装路径
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
--- 如果 lazy.nvim 不存在，则自动克隆安装
+-- 自动安装 lazy.nvim (引导逻辑)
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = "https://github.com/folke/lazy.nvim.git"
   local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
@@ -20,8 +19,6 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
     os.exit(1)
   end
 end
-
--- 将 lazy.nvim 添加到运行时路径
 vim.opt.rtp:prepend(lazypath)
 
 -- 配置 lazy.nvim
@@ -31,67 +28,23 @@ require("lazy").setup({
     { import = "plugins" },
   },
 
-  -- 安装配置
-  install = {
-    -- 启动时自动安装缺失的插件
-    missing = true,
-    -- 安装插件时使用的颜色主题
-    colorscheme = { "habamax" },
-  },
+  -- 安装时的配色
+  install = { colorscheme = { "habamax" } },
 
-  -- 插件更新检查
-  checker = {
-    enabled = true,      -- 启用自动更新检查
-    frequency = 3600,    -- 每3600秒（1小时）检查一次
-  },
+  -- 自动检查更新
+  checker = { enabled = true },
 
-  -- 性能配置
+  -- 性能优化：禁用不需要的内置插件
   performance = {
     rtp = {
-      -- 禁用一些不常用的内置插件以提升性能
       disabled_plugins = {
-        "2html_plugin",
-        "getscript",
-        "getscriptPlugin",
-        "gzip",
-        "logipat",
-        "netrw",
-        "netrwPlugin",
-        "netrwSettings",
-        "netrwFileHandlers",
-        "matchit",
-        "tar",
-        "tarPlugin",
-        "rrhelper",
-        "spellfile_plugin",
-        "vimball",
-        "vimballPlugin",
-        "zip",
-        "zipPlugin",
+        "gzip", "zipPlugin", "tarPlugin", -- 压缩文件支持 (如不需要可禁用)
+        "tohtml", "tutor",                -- 转换HTML和教程
+        "netrw", "netrwPlugin",           -- 禁用 netrw (已有 nvim-tree)
+        "getscript", "getscriptPlugin",   -- 老旧脚本支持
+        "vimball", "vimballPlugin",       -- 老旧包管理
+        -- "matchit",                     -- 警告：不要禁用 matchit，% 跳转全靠它
       },
     },
   },
-
-  -- UI 配置
-  ui = {
-    -- 使用自定义边框
-    border = "rounded",
-    -- 图标配置
-    icons = {
-      cmd = "⌘",
-      config = "🛠",
-      event = "📅",
-      ft = "📂",
-      init = "⚙",
-      keys = "🗝",
-      plugin = "🔌",
-      runtime = "💻",
-      source = "📄",
-      start = "🚀",
-      task = "📌",
-      lazy = "💤 ",
-    },
-  },
 })
-
-print("✅ lazy.nvim 插件管理器已加载")
