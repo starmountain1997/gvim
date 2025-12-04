@@ -8,7 +8,9 @@ RUN yes | sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/
     sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/' $HOME/.zshrc && \
     sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="random"/' $HOME/.zshrc && \
     echo "source /usr/local/Ascend/ascend-toolkit/set_env.sh" >> $HOME/.zshrc && \
-    echo "source /usr/local/Ascend/nnal/atb/set_env.sh" >> $HOME/.zshrc
+    echo "source /usr/local/Ascend/nnal/atb/set_env.sh" >> $HOME/.zshrc && \
+    echo "alias set_proxy=\"export http_proxy=http://127.0.0.1:7897 && export https_proxy=http://127.0.0.1:7897\"" >> $HOME/.zshrc && \
+    echo "alias unset_proxy=\"unset http_proxy && unset https_proxy\"" >> $HOME/.zshrc
 
 RUN pip install --upgrade pip && \
     yes | pip uninstall vllm vllm-ascend && \
