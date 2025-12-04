@@ -13,7 +13,8 @@ RUN yes | sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/
     echo "source /usr/local/Ascend/ascend-toolkit/set_env.sh" >> $HOME/.zshrc && \
     echo "source /usr/local/Ascend/nnal/atb/set_env.sh" >> $HOME/.zshrc && \
     echo "alias set_proxy=\"export http_proxy=http://127.0.0.1:7897 && export https_proxy=http://127.0.0.1:7897\"" >> $HOME/.zshrc && \
-    echo "alias unset_proxy=\"unset http_proxy && unset https_proxy\"" >> $HOME/.zshrc
+    echo "alias unset_proxy=\"unset http_proxy && unset https_proxy\"" >> $HOME/.zshrc && \
+    echo 'export PATH="$HOME/.local/bin:$PATH"' >> $HOME/.zshrc
 
 RUN pip install --upgrade pip && \
     yes | pip uninstall vllm vllm-ascend && \
