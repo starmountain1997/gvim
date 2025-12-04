@@ -5,7 +5,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: vllm-glm45v
+    image: g-vllm-ascend
+    container_name: ${CONTAINER_NAME:-vllm-guozr}
     privileged: true
     network_mode: host
     stdin_open: true
