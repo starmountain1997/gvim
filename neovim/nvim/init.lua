@@ -24,4 +24,7 @@ vim.opt.expandtab = true      -- 将 Tab 转换为空格
 vim.opt.softtabstop = 4       -- 编辑时 Tab 行为 like 4 个空格
 vim.opt.smartindent = true    -- 智能缩进
 
+-- 按键映射
+vim.keymap.set("i", "jk", "<Esc>", { desc = "使用 jk 退出插入模式" })
+
 require("config.lazy")
