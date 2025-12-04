@@ -22,4 +22,7 @@ return {
       },
     })
   end,
+  keys = {
+    { "<C-n>", "<cmd>NvimTreeToggle<cr>", desc = "Toggle NvimTree" }
+  }
 }
