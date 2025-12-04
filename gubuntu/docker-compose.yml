@@ -36,4 +36,5 @@ services:
       - /usr/local/Ascend/driver/version.info:/usr/local/Ascend/driver/version.info
       - /etc/ascend_install.info:/etc/ascend_install.info
       - /home:/home
+      - /home/guozr/.ssh:/root/.ssh:ro
 
