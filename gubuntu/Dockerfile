@@ -1,25 +1,49 @@
-FROM quay.io/ascend/vllm-ascend:v0.11.0rc0
+FROM quay.io/ascend/vllm-ascend:v0.11.0rc3
 
-RUN apt update && apt install -y zsh curl && \
-    chmod 600 /root/.ssh/id_ed25519 && \
-    chmod 644 /root/.ssh/id_ed25519.pub && \
-    chmod 644 /root/.ssh/known_hosts
+# 安装基础系统工具 - 变化频率最低，放在前面
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        zsh \
+        curl \
+        git \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN yes | sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" && \
-    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions && \
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting && \
-    sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/' $HOME/.zshrc && \
-    sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="random"/' $HOME/.zshrc && \
-    echo "source /usr/local/Ascend/ascend-toolkit/set_env.sh" >> $HOME/.zshrc && \
-    echo "source /usr/local/Ascend/nnal/atb/set_env.sh" >> $HOME/.zshrc && \
-    echo "alias set_proxy=\"export http_proxy=http://127.0.0.1:7897 && export https_proxy=http://127.0.0.1:7897\"" >> $HOME/.zshrc && \
-    echo "alias unset_proxy=\"unset http_proxy && unset https_proxy\"" >> $HOME/.zshrc && \
-    echo 'export PATH="$HOME/.local/bin:$PATH"' >> $HOME/.zshrc
+# 安装 Oh My Zsh - 独立层，便于调试
+RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
-RUN pip install --upgrade pip && \
-    yes | pip uninstall vllm vllm-ascend && \
-    pip config set global.index-url https://mirrors.aliyun.com/pypi/simple && \
-    pip config set global.extra-index-url "https://download.pytorch.org/whl/cpu/ https://mirrors.huaweicloud.com/ascend/repos/pypi" && \
-    curl -fsSL https://claude.ai/install.sh | bash && \
-    git config --global user.name "guozr" && \
+# 安装 Zsh 插件 - 独立层，可以单独更新
+RUN git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions && \
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+
+# 配置 Zsh 主题和插件
+RUN sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/' $HOME/.zshrc && \
+    sed -i 's/ZSH_THEME=\"robbyrussell\"/ZSH_THEME=\"random\"/' $HOME/.zshrc
+
+# 添加环境变量配置 - 独立层，便于修改环境配置
+RUN echo "source /usr/local/Ascend/ascend-toolkit/set_env.sh" >> $HOME/.zshrc && \
+    echo "source /usr/local/Ascend/nnal/atb/set_env.sh" >> $HOME/.zshrc
+
+# 添加代理别名 - 独立层，便于修改代理设置
+RUN echo "alias set_proxy=\"export http_proxy=http://127.0.0.1:7897 && export https_proxy=http://127.0.0.1:7897\"" >> $HOME/.zshrc && \
+    echo "alias unset_proxy=\"unset http_proxy && unset https_proxy\"" >> $HOME/.zshrc
+
+# 添加本地 bin 目录到 PATH
+RUN echo 'export PATH="$HOME/.local/bin:$PATH"' >> $HOME/.zshrc
+
+# 升级 pip 并配置镜像源 - Python 相关独立层
+RUN pip install --upgrade pip
+
+# 卸载不需要的包 - 独立层，便于控制依赖
+RUN yes | pip uninstall vllm vllm-ascend || true
+
+# 配置 pip 镜像源 - 网络相关独立配置
+RUN pip config set global.index-url https://mirrors.aliyun.com/pypi/simple && \
+    pip config set global.extra-index-url "https://download.pytorch.org/whl/cpu/ https://mirrors.huaweicloud.com/ascend/repos/pypi"
+
+# 安装 Claude CLI - 工具安装独立层
+RUN curl -fsSL https://claude.ai/install.sh | bash
+
+# 配置 Git 用户信息 - 配置独立层
+RUN git config --global user.name "guozr" && \
     git config --global user.email "guozr1997@hotmail.com"
