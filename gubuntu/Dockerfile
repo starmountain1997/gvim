@@ -13,4 +13,5 @@ RUN yes | sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/
 RUN pip install --upgrade pip && \
     yes | pip uninstall vllm vllm-ascend && \
     pip config set global.index-url https://mirrors.aliyun.com/pypi/simple && \
-    pip config set global.extra-index-url "https://download.pytorch.org/whl/cpu/ https://mirrors.huaweicloud.com/ascend/repos/pypi"
+    pip config set global.extra-index-url "https://download.pytorch.org/whl/cpu/ https://mirrors.huaweicloud.com/ascend/repos/pypi" && \
+    curl -fsSL https://claude.ai/install.sh | bash
