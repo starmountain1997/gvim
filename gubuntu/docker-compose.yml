@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  vllm-glm45v:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vllm-glm45v
+    privileged: true
+    network_mode: host
+    stdin_open: true
+    tty: true
+    command: zsh
+    restart: unless-stopped
+    shm_size: 128g
+
+    devices:
+      - "/dev/davinci0:/dev/davinci0"
+      - "/dev/davinci1:/dev/davinci1"
+      - "/dev/davinci2:/dev/davinci2"
+      - "/dev/davinci3:/dev/davinci3"
+      - "/dev/davinci4:/dev/davinci4"
+      - "/dev/davinci5:/dev/davinci5"
+      - "/dev/davinci6:/dev/davinci6"
+      - "/dev/davinci7:/dev/davinci7"
+      - "/dev/davinci_manager:/dev/davinci_manager"
+      - "/dev/devmm_svm:/dev/devmm_svm"
+      - "/dev/hisi_hdc:/dev/hisi_hdc"
+
+    volumes:
+      - /usr/local/dcmi:/usr/local/dcmi
+      - /usr/local/bin/npu-smi:/usr/local/bin/npu-smi
+      - /usr/local/Ascend/driver/lib64/:/usr/local/Ascend/driver/lib64/
+      - /usr/local/Ascend/driver/version.info:/usr/local/Ascend/driver/version.info
+      - /etc/ascend_install.info:/etc/ascend_install.info
+      - /home:/home
+
+    environment:
+      - IMAGE=vllm-ascend:v0.11.0rc0-local
+      - NAME=vllm-glm45v
