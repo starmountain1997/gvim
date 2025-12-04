@@ -1,11 +1,10 @@
 version: '3.8'
 
 services:
-  vllm-glm45v:
+  g-vllm-ascend:
     build:
       context: .
       dockerfile: Dockerfile
-    image: g-vllm-ascend
     container_name: ${CONTAINER_NAME:-vllm-guozr}
     privileged: true
     network_mode: host
@@ -28,6 +27,8 @@ services:
       - "/dev/devmm_svm:/dev/devmm_svm"
       - "/dev/hisi_hdc:/dev/hisi_hdc"
 
+    working_dir: /home/guozr
+
     volumes:
       - /usr/local/dcmi:/usr/local/dcmi
       - /usr/local/bin/npu-smi:/usr/local/bin/npu-smi
@@ -36,6 +37,3 @@ services:
       - /etc/ascend_install.info:/etc/ascend_install.info
       - /home:/home
 
-    environment:
-      - IMAGE=vllm-ascend:v0.11.0rc0-local
-      - NAME=vllm-glm45v
