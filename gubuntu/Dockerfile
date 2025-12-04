@@ -10,5 +10,6 @@ RUN yes | sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/
     echo "source /usr/local/Ascend/ascend-toolkit/set_env.sh" >> $HOME/.zshrc && \
     echo "source /usr/local/Ascend/nnal/atb/set_env.sh" >> $HOME/.zshrc
 
-RUN pip config set global.index-url https://mirrors.aliyun.com/pypi/simple && \
+RUN pip install --upgrade pip && \
+    pip config set global.index-url https://mirrors.aliyun.com/pypi/simple && \
     pip config set global.extra-index-url "https://download.pytorch.org/whl/cpu/ https://mirrors.huaweicloud.com/ascend/repos/pypi"
