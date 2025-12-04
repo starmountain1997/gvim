@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# install_neovim.sh - ÷ nvim Mn‡ö0 ~/.config/nvim
-
 mkdir -p ~/.config
+rm -rf ~/.config/nvim
 cp -r nvim ~/.config/
