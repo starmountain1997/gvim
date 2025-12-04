@@ -1,9 +1,5 @@
 FROM quay.io/ascend/vllm-ascend:v0.11.0rc0
 
-COPY .ssh/id_ed25519 /root/.ssh/id_ed25519
-COPY .ssh/id_ed25519.pub /root/.ssh/id_ed25519.pub
-COPY .ssh/known_hosts /root/.ssh/known_hosts
-
 RUN apt update && apt install -y zsh curl && \
     chmod 600 /root/.ssh/id_ed25519 && \
     chmod 644 /root/.ssh/id_ed25519.pub && \
@@ -23,4 +19,6 @@ RUN pip install --upgrade pip && \
     yes | pip uninstall vllm vllm-ascend && \
     pip config set global.index-url https://mirrors.aliyun.com/pypi/simple && \
     pip config set global.extra-index-url "https://download.pytorch.org/whl/cpu/ https://mirrors.huaweicloud.com/ascend/repos/pypi" && \
-    curl -fsSL https://claude.ai/install.sh | bash
+    curl -fsSL https://claude.ai/install.sh | bash && \
+    git config --global user.name "guozr" && \
+    git config --global user.email "guozr1997@hotmail.com"
