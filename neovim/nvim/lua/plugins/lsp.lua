@@ -82,9 +82,7 @@ return {
         },
       })
 
-      -- 应用配置
-      require("lspconfig")["pyright"].setup {}
-      require("lspconfig")["ruff"].setup {}
+      -- 应用配置 - vim.lsp.config 会自动处理服务器启动
       
       -- 禁用Ruff的悬停提示，让Pyright处理
       vim.api.nvim_create_autocmd("LspAttach", {
