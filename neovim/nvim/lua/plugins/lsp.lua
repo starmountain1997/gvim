@@ -4,10 +4,8 @@ return {
     'neovim/nvim-lspconfig',
     event = { 'BufReadPre', 'BufNewFile' },
     config = function()
-      local lspconfig = require('lspconfig')
-
-      -- Configure pylsp
-      lspconfig.pylsp.setup({
+      -- Configure pylsp using new vim.lsp.config API
+      vim.lsp.config('pylsp', {
         settings = {
           pylsp = {
             -- Disable pylsp linting and formatting in favor of Ruff
@@ -27,21 +25,17 @@ return {
             },
           },
         },
-        capabilities = vim.lsp.protocol.make_client_capabilities(),
       })
 
-      -- Configure Ruff LSP
-      lspconfig.ruff.setup({
-        init_options = {
-          settings = {
-            -- Ruff language server settings go here
-            lineLength = 80,
-            lint = {
-              extendSelect = { 'I' },
-            },
+      -- Configure Ruff LSP using new vim.lsp.config API
+      vim.lsp.config('ruff', {
+        settings = {
+          -- Ruff language server settings go here
+          lineLength = 80,
+          lint = {
+            extendSelect = { 'I' },
           },
         },
-        capabilities = vim.lsp.protocol.make_client_capabilities(),
       })
 
       -- Disable hover capability from Ruff when used with pylsp
