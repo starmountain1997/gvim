@@ -4,6 +4,9 @@ local wezterm = require 'wezterm'
 -- This will hold the configuration.
 local config = wezterm.config_builder()
 
+-- 设置终端类型为 xterm-256color 以获得最佳兼容性
+config.term = "xterm-256color"
+
 -- 基础窗口设置（最先加载）
 config.window_close_confirmation = 'NeverPrompt'
 

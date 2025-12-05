@@ -14,3 +14,5 @@ if (-not (Test-Path $ConfigDir)) {
 Copy-Item "wezterm.lua" "$ConfigDir\wezterm.lua" -Force
 
 Write-Host "WezTerm configuration installed!"
+Write-Host ""
+Write-Host "Note: The configuration includes TERM='xterm-256color' for optimal SSH compatibility."

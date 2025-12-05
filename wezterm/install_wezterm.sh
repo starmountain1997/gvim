@@ -11,3 +11,5 @@ mkdir -p "$CONFIG_DIR"
 cp wezterm.lua "$CONFIG_DIR/"
 
 echo "WezTerm configuration installed!"
+echo ""
+echo "Note: The configuration includes TERM='xterm-256color' for optimal SSH compatibility."
