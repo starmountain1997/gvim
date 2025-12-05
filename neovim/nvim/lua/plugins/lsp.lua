@@ -21,7 +21,7 @@ return {
               pylint = { enabled = false },
               yapf = { enabled = false },
               rope_autoimport = { enabled = false },  -- 禁用自动导入
-              rope_completion = { enabled = false },   -- 禁用补全
+              rope_completion = { enabled = true },    -- 启用补全
             },
           },
         },
@@ -52,6 +52,15 @@ return {
           end
         end,
         desc = 'LSP: Disable hover capability from Ruff (use pylsp instead)',
+      })
+
+      -- Enable LSP servers for Python files
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = 'python',
+        callback = function()
+          vim.lsp.enable({ 'pylsp', 'ruff' })
+        end,
+        desc = 'LSP: Enable pylsp and ruff for Python files',
       })
     end,
   },
