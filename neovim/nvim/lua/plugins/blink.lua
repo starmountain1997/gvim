@@ -14,5 +14,10 @@ return {
         },
       },
     },
+    -- Configure key mappings
+    keymap = {
+      ['<CR>'] = { 'accept', 'fallback' },
+      ['<C-y>'] = { 'select_and_accept' },
+    },
   },
 }
