@@ -10,12 +10,71 @@
 ./install_neovim.sh
 ```
 
+**前置要求**：
+在运行安装脚本之前，请确保已安装必要的编译工具：
+```bash
+sudo apt install build-essential
+```
+
 该脚本会：
 - 创建 `~/.config` 目录
 - 清理旧的 nvim 配置
 - 复制当前配置到 `~/.config/nvim`
 
 ## 插件特性
+
+### blink.cmp 自动补全
+
+项目集成了 blink.cmp 作为代码自动补全插件。
+
+#### 编译要求
+
+**重要**：blink.cmp 需要使用 Rust 编译，在安装前需要先安装必要的编译工具：
+
+```bash
+sudo apt install build-essential
+```
+
+#### 安装 Rust nightly
+
+由于 blink.cmp 需要使用 Rust nightly 版本编译，请按照以下步骤安装 Rust 工具链：
+
+1. **安装 Rust**（如果尚未安装）：
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+2. **按照提示完成安装**：
+   - 输入 `1` 选择默认安装
+   - 安装完成后，重新加载环境变量：
+```bash
+source ~/.cargo/env
+```
+
+3. **安装并切换到 nightly 工具链**：
+```bash
+rustup toolchain install nightly
+rustup default nightly
+```
+
+4. **验证安装**：
+```bash
+rustc --version
+cargo --version
+```
+
+确保显示的版本包含 `nightly` 字样。
+
+5. **（可选）同时保留 stable 工具链**：
+如果你想要同时使用 stable 和 nightly，可以：
+```bash
+rustup toolchain install stable
+rustup default stable
+# 在需要时切换到 nightly
+rustup override set nightly  # 在项目目录中设置
+```
+
+确保你的开发环境已正确配置好 Rust nightly 工具链。
 
 ### nvim-tree 文件浏览器
 
