@@ -169,6 +169,32 @@ nvim/
 3. 按 `g?` 查看完整的快捷键帮助
 4. 使用 `/` 搜索文件，按 `<C-c>` 取消搜索
 
+## 插件管理
+
+### 插件存储位置
+
+lazy.nvim 会将所有下载的插件存储在 `~/.local/share/nvim/lazy/` 目录下。
+
+当您首次运行 Neovim 时，lazy.nvim 会自动：
+1. 读取 `lua/plugins/` 目录下的配置文件
+2. 下载配置的插件到 `~/.local/share/nvim/lazy/` 目录
+3. 每个插件都会有自己的子目录，以插件名命名
+
+示例插件目录结构：
+```
+~/.local/share/nvim/lazy/
+├── nvim-tree.lua/
+├── catppuccin/
+├── blink.cmp/
+└── ...
+```
+
+### 插件管理操作
+
+如果需要重新安装插件或清理插件缓存：
+1. 删除 `~/.local/share/nvim/lazy/` 目录
+2. 重新启动 Neovim，lazy.nvim 会重新下载所有插件
+
 ## 更新配置
 
 修改配置文件后，重启 Neovim 即可生效。如果修改了插件配置，可能需要重新运行安装脚本。
