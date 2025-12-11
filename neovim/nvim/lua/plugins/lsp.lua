@@ -172,10 +172,21 @@ return {
       })
       
       -- 按键映射
-      vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
-      vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, {})
-      vim.keymap.set("n", "<leader>gr", vim.lsp.buf.references, {})
-      vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, {})
+      vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, { desc = "Go to definition" })
+      vim.keymap.set("n", "<leader>gr", vim.lsp.buf.references, { desc = "Find references" })
+      vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "Code actions" })
+      -- 手动悬停快捷键（Neovim LSP没有默认映射，需要自己配置）
+      vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Show hover documentation" })
+      -- 其他常用LSP映射
+      vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
+      vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Rename symbol" })
+      vim.keymap.set("n", "<leader>D", vim.lsp.buf.type_definition, { desc = "Type definition" })
+      vim.keymap.set("n", "<leader>ds", vim.lsp.buf.document_symbol, { desc = "Document symbols" })
+      vim.keymap.set("n", "<leader>ws", vim.lsp.buf.workspace_symbol, { desc = "Workspace symbols" })
+
+      -- 移除自动悬停功能，使用 K 键手动触发
+      -- 恢复默认的 updatetime 设置
+      vim.o.updatetime = 4000
 
       -- 添加 LSP 状态检查命令
       vim.api.nvim_create_user_command('LspInfo', function()
