@@ -169,6 +169,47 @@ nvim/
 3. 按 `g?` 查看完整的快捷键帮助
 4. 使用 `/` 搜索文件，按 `<C-c>` 取消搜索
 
+## Python 开发环境配置
+
+### LSP 服务器安装
+
+本配置使用 `python-lsp-server` (pylsp) 和 `ruff` 作为 Python 语言服务器。在开始 Python 开发前，需要在每个项目的虚拟环境中安装这些工具：
+
+```bash
+# 在项目目录中创建虚拟环境
+uv venv
+
+# 激活虚拟环境
+source .venv/bin/activate
+
+# 安装开发依赖
+uv add ruff python-lsp-server --dev
+```
+
+**注意**：
+- `python-lsp-server` 会自动安装 `jedi` 作为依赖，无需单独安装
+- 需要在启动 nvim 之前激活虚拟环境，这样配置才能找到正确的工具路径
+- 每个项目都需要在自己的虚拟环境中安装这些工具
+
+### 使用方式
+
+1. **启动前激活虚拟环境**：
+   ```bash
+   source /path/to/your/project/.venv/bin/activate
+   nvim
+   ```
+
+2. **LSP 功能分工**：
+   - **pylsp**：负责代码补全、定义跳转、悬停提示等核心功能
+   - **ruff**：负责代码检查(linting)和快速格式化
+
+3. **主要快捷键**：
+   - `K`：显示悬停文档
+   - `<leader>gd`：跳转到定义
+   - `<leader>gr`：查找引用
+   - `<leader>ca`：代码操作
+   - `<leader>ff`：格式化文件
+
 ## 插件管理
 
 ### 插件存储位置
