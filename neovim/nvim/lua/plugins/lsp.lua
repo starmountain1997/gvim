@@ -30,23 +30,22 @@ return {
         filetypes = { "python" },
         settings = {
           pylsp = {
+            configurationSources = {"pycodestyle", "pyflakes"},
             plugins = {
-              -- 禁用 pylsp 的格式化插件，让 ruff 处理格式化
-              autopep8 = { enabled = false },
-              black = { enabled = false },
-              yapf = { enabled = false },
-              -- 启用其他有用的插件
               jedi_completion = { enabled = true },
               jedi_definition = { enabled = true },
               jedi_hover = { enabled = true },
               jedi_references = { enabled = true },
               jedi_signature_help = { enabled = true },
               jedi_symbols = { enabled = true },
-              mccabe = { enabled = true },
               pycodestyle = { enabled = true },
-              pydocstyle = { enabled = true },
               pyflakes = { enabled = true },
+              pydocstyle = { enabled = true },
+              mccabe = { enabled = true },
               rope_completion = { enabled = true },
+              autopep8 = { enabled = false },
+              black = { enabled = false },
+              yapf = { enabled = false },
             }
           }
         }
