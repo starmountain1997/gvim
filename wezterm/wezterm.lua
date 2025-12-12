@@ -4,6 +4,12 @@ local wezterm = require 'wezterm'
 -- This will hold the configuration.
 local config = wezterm.config_builder()
 
+-- ==================== 通用设置（所有平台共享）====================
+
+-- Enable native Wayland support for better integration and performance
+-- Disabled due to DRM sync object issues on current system
+config.enable_wayland = false
+
 -- 设置终端类型为 xterm-256color 以获得最佳兼容性
 config.term = "xterm-256color"
 
@@ -16,13 +22,18 @@ config.font = wezterm.font {
     family = 'Fira Code',
     style = 'Normal',
 }
-config.font_size = 12
+config.font_size = 12.0
 
 -- 主题颜色设置（视觉主题）
 config.color_scheme = 'Dracula'
 
 -- 标签页设置（固定标签页长度）
 config.use_fancy_tab_bar = true  -- 使用现代样式的标签栏
+
+-- 通用透明度设置（所有平台）
+config.window_background_opacity = 0.75
+
+-- ==================== 平台特定设置 ====================
 
 
 -- 跨平台配置：Windows 下默认使用 WSL，Linux 和 macOS 使用本地
@@ -39,10 +50,10 @@ if wezterm.target_triple == 'x86_64-pc-windows-msvc' then
     },
   }
 
-  -- Windows 窗口透明度和背景效果配置
+  -- Windows 窗口背景效果配置
   config.win32_system_backdrop = 'Auto'
-  config.window_decorations = "INTEGRATED_BUTTONS"
-  config.window_background_opacity = 0.75  -- Windows 下统一的透明度，无论窗口是否活动
+  config.window_decorations = "FULL"  -- 显示标题栏和窗口控制按钮
+  -- 透明度已在通用设置中统一配置
   -- 鼠标设置：右键粘贴
   config.mouse_bindings = {
     -- 右键粘贴（仅 Windows）
@@ -82,13 +93,15 @@ elseif wezterm.target_triple == 'x86_64-apple-darwin' then
 
   -- macOS 窗口背景模糊效果配置
   config.macos_window_background_blur = 20  -- 设置背景模糊半径（值越大模糊效果越明显）
-  config.window_background_opacity = 0.95  -- macOS 下适度的透明度
+  -- 透明度已在通用设置中统一配置
 else
   -- Linux: 使用本地 home 目录
   config.default_cwd = wezterm.home_dir
 
-  -- Linux 透明度配置（如果支持的话）
-  config.window_background_opacity = 0.9  -- Linux 下轻度透明度
+  -- 透明度已在通用设置中统一配置
+
+  -- Linux 窗口装饰设置
+  config.window_decorations = "NONE"  -- 显示标题栏和窗口控制按钮
 end
 
 -- 设置环境变量（在 Linux 和 macOS 下设置）
