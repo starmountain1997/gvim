@@ -35,6 +35,31 @@ config.window_background_opacity = 0.75
 
 -- ==================== 平台特定设置 ====================
 
+-- Windows 和 Linux 共享的键绑定和鼠标设置
+if wezterm.target_triple ~= 'x86_64-apple-darwin' then
+  -- Windows 和 Linux 键绑定设置
+  config.keys = {
+    -- Ctrl+C 复制（替代默认的中断信号）
+    {
+      key = 'c',
+      mods = 'CTRL',
+      action = wezterm.action.CopyTo 'Clipboard',
+    },
+    -- Ctrl+V 粘贴
+    {
+      key = 'v',
+      mods = 'CTRL',
+      action = wezterm.action.PasteFrom 'Clipboard',
+    },
+    -- Ctrl+Shift+C 发送中断信号（替代原来的 Ctrl+C）
+    {
+      key = 'c',
+      mods = 'CTRL|SHIFT',
+      action = wezterm.action.SendKey { key = 'c', mods = 'CTRL' },
+    }
+  }
+end
+
 
 -- 跨平台配置：Windows 下默认使用 WSL，Linux 和 macOS 使用本地
 if wezterm.target_triple == 'x86_64-pc-windows-msvc' then
@@ -54,37 +79,7 @@ if wezterm.target_triple == 'x86_64-pc-windows-msvc' then
   config.win32_system_backdrop = 'Auto'
   config.window_decorations = "FULL"  -- 显示标题栏和窗口控制按钮
   -- 透明度已在通用设置中统一配置
-  -- 鼠标设置：右键粘贴
-  config.mouse_bindings = {
-    -- 右键粘贴（仅 Windows）
-    {
-      event = { Down = { streak = 1, button = 'Right' } },
-      mods = 'NONE',
-      action = wezterm.action.PasteFrom 'Clipboard',
-    },
-  }
-
-  -- 键绑定设置
-  config.keys = {
-    -- Ctrl+C 复制（替代默认的中断信号）
-    {
-      key = 'c',
-      mods = 'CTRL',
-      action = wezterm.action.CopyTo 'Clipboard',
-    },
-    -- Ctrl+V 粘贴
-    {
-      key = 'v',
-      mods = 'CTRL',
-      action = wezterm.action.PasteFrom 'Clipboard',
-    },
-    -- Ctrl+Shift+C 发送中断信号（替代原来的 Ctrl+C）
-    {
-      key = 'c',
-      mods = 'CTRL|SHIFT',
-      action = wezterm.action.SendKey { key = 'c', mods = 'CTRL' },
-    },
-  }
+  -- 键绑定和鼠标绑定已在上面统一配置
  
 
 elseif wezterm.target_triple == 'x86_64-apple-darwin' then
@@ -101,7 +96,7 @@ else
   -- 透明度已在通用设置中统一配置
 
   -- Linux 窗口装饰设置
-  config.window_decorations = "NONE"  -- 显示标题栏和窗口控制按钮
+  config.window_decorations = "NONE"
 end
 
 -- 设置环境变量（在 Linux 和 macOS 下设置）
