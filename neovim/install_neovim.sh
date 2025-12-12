@@ -29,6 +29,32 @@ print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
+# Function to check if a command exists
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+# Function to check and install Prettier
+check_prettier() {
+    if ! command_exists prettier; then
+        print_warning "Prettier not found. Installing Prettier globally via npm..."
+        if command_exists npm; then
+            npm install -g prettier
+            if command_exists prettier; then
+                print_status "Prettier installed successfully!"
+            else
+                print_error "Failed to install Prettier. Please install it manually with: npm install -g prettier"
+                return 1
+            fi
+        else
+            print_error "npm not found. Please install Node.js and npm first, then install Prettier with: npm install -g prettier"
+            return 1
+        fi
+    else
+        print_status "Prettier is already installed"
+    fi
+}
+
 # Check if source directory exists
 if [ ! -d "$NVIM_SOURCE_DIR" ]; then
     print_error "Source nvim directory not found at: $NVIM_SOURCE_DIR"
@@ -36,6 +62,9 @@ if [ ! -d "$NVIM_SOURCE_DIR" ]; then
 fi
 
 print_status "Starting Neovim configuration installation..."
+
+# Check and install Prettier
+check_prettier
 
 # Clean up old configuration
 if [ -d "$NVIM_TARGET_DIR" ]; then
