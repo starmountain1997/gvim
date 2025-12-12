@@ -1,190 +1,153 @@
--- 安装必要的插件
+-- 使用 Mason 管理的 LSP 服务器
 return {
   {
     "neovim/nvim-lspconfig",
     lazy = false,
+    dependencies = {
+      "williamboman/mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
+    },
     config = function()
-      -- blink.cmp LSP能力配置
+      -- 获取 Mason 管理的 LSP 服务器路径
+      local mason_path = vim.fn.stdpath("data") .. "/mason/bin/"
+
+      -- LSP 能力配置
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities.textDocument.completion.completionItem.snippetSupport = true
       capabilities = vim.tbl_deep_extend('force', capabilities, require('blink.cmp').get_lsp_capabilities())
       capabilities.offsetEncoding = { 'utf-16' }
 
-      -- 配置LSP服务器（使用新的 vim.lsp.config API）
+      -- 通用 LSP 按键映射
+      local on_attach = function(client, bufnr)
+        -- 基本 LSP 按键映射
+        vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, { buffer = bufnr, desc = "Go to definition" })
+        vim.keymap.set("n", "<leader>gr", vim.lsp.buf.references, { buffer = bufnr, desc = "Find references" })
+        vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { buffer = bufnr, desc = "Code actions" })
+        vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "Show hover documentation" })
+        vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { buffer = bufnr, desc = "Go to implementation" })
+        vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { buffer = bufnr, desc = "Rename symbol" })
+        vim.keymap.set("n", "<leader>D", vim.lsp.buf.type_definition, { buffer = bufnr, desc = "Type definition" })
+        vim.keymap.set("n", "<leader>ds", vim.lsp.buf.document_symbol, { buffer = bufnr, desc = "Document symbols" })
+        vim.keymap.set("n", "<leader>ws", vim.lsp.buf.workspace_symbol, { buffer = bufnr, desc = "Workspace symbols" })
 
-      -- pyright配置：提供更好的类型检查和性能
-      vim.lsp.config("pyright", {
+        -- 格式化快捷键
+        vim.keymap.set("n", "<leader>ff", function()
+          vim.lsp.buf.format({ async = false })
+        end, { buffer = bufnr, desc = "Format file" })
+      end
+
+      -- 配置 pylsp (Python Language Server) - minimal 配置
+      vim.lsp.config("pylsp", {
         capabilities = capabilities,
-        cmd = { "pyright-langserver", "--stdio" },
+        cmd = { mason_path .. "pylsp" },
         filetypes = { "python" },
-        -- 超时设置可以更短，因为pyright启动更快
-        timeout = 15000,  -- 15秒超时
-        flags = {
-          debounce_text_changes = 150,  -- 文本变化防抖时间（毫秒）
-          allow_incremental_sync = true,  -- 允许增量同步
-        },
+        root_dir = vim.fs.root(0, {
+          ".git",
+          "pyproject.toml",
+          "setup.py",
+          "setup.cfg",
+          "requirements.txt",
+          ".gitignore"
+        }),
         settings = {
-          python = {
-            analysis = {
-              autoSearchPaths = true,
-              useLibraryCodeForTypes = true,
-              diagnosticMode = "workspace",
-              -- 优化性能的配置
-              typeCheckingMode = "basic",  -- 或 "strict" 更严格
-              autoImportCompletions = true,
+          pylsp = {
+            plugins = {
+              -- 启用 jedi 进行补全和定义跳转
+              jedi = {
+                enabled = true,
+              },
+              -- 启用 autopep8 进行格式化
+              autopep8 = {
+                enabled = true,
+              },
+              -- 启用 flake8 进行代码检查
+              flake8 = {
+                enabled = true,
+                maxLineLength = 88,
+              },
             },
           },
         },
-        on_attach = function(client, bufnr)
-          -- 不再自动格式化，交给用户手动触发
-        end,
       })
 
-      -- Ruff配置：主要提供代码检查和快速格式化
+      -- 配置 ruff (快速代码检查和格式化)
       vim.lsp.config("ruff", {
         capabilities = capabilities,
-        cmd = { "ruff", "server", "--preview" },  -- 使用虚拟环境中的ruff
-        filetypes = { "python" },  -- 只处理Python文件
-        init_options = {
-          settings = {
-            -- Ruff的优化配置
-            lineLength = 88,
-            organizeImports = true,
-            fixAll = true,
-            codeAction = {
-              disableRuleComment = {
-                enable = true,
-                minLines = 3,
-              },
-              fix = {
-                enable = true,
-              },
-              lint = {
-                enable = true,
-                preview = true,
-              },
+        cmd = { mason_path .. "ruff", "server", "--preview" },
+        filetypes = { "python" },
+        root_dir = vim.fs.root(0, {
+          ".git",
+          "pyproject.toml",
+          "setup.py",
+          "setup.cfg",
+          "requirements.txt",
+          ".gitignore"
+        }),
+        settings = {
+          -- 基本配置
+          lineLength = 88,
+          organizeImports = true,
+          fixAll = true,
+          -- 代码操作配置
+          codeAction = {
+            disableRuleComment = {
+              enable = true,
+              minLines = 3,
             },
-            -- 忽略一些常见的规则，减少干扰
+            fix = {
+              enable = true,
+            },
             lint = {
-              ignore = {
-                "E501",  -- 行过长
-                "E402",  -- 模块级别导入不在文件顶部
-                "E701",  -- 多语句在同一行
-                "E702",  -- 多语句在同一行（分号）
-                "W291",  -- 行尾空白
-                "W293",  -- 行尾空白
-              },
+              enable = true,
+              preview = true,
+            },
+          },
+          -- 忽略一些常见的规则，减少干扰
+          lint = {
+            ignore = {
+              "E501",  -- 行过长
+              "E402",  -- 模块级别导入不在文件顶部
+              "E701",  -- 多语句在同一行
+              "E702",  -- 多语句在同一行（分号）
+              "W291",  -- 行尾空白
+              "W293",  -- 行尾空白
             },
           },
         },
       })
 
-      -- 自动启动 LSP 服务器（新版本需要手动设置）
+      -- 自动启动 LSP 服务器
       vim.api.nvim_create_autocmd("FileType", {
         group = vim.api.nvim_create_augroup('lsp_auto_start', { clear = true }),
         pattern = { "python" },
         callback = function(args)
-          local buf = args.buf
-          -- 启动 pyright
-          vim.lsp.start({
-            name = "pyright",
-            cmd = { "pyright-langserver", "--stdio" },
-            filetypes = { "python" },
-            root_dir = vim.fs.root(buf, {'.git', 'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', 'pyrightconfig.json', '.gitignore'}),
-            capabilities = capabilities,
-            timeout = 15000,  -- 15秒超时
-            flags = {
-              debounce_text_changes = 150,  -- 文本变化防抖时间（毫秒）
-              allow_incremental_sync = true,  -- 允许增量同步
-            },
-            settings = {
-              python = {
-                analysis = {
-                  autoSearchPaths = true,
-                  useLibraryCodeForTypes = true,
-                  diagnosticMode = "workspace",
-                  typeCheckingMode = "basic",
-                  autoImportCompletions = true,
-                },
-              },
-            },
-            on_attach = function(client, bufnr)
-              -- 不再自动格式化，交给用户手动触发
-            end,
+          -- 自动启动 pylsp
+          vim.lsp.enable("pylsp", {
+            bufnr = args.buf,
+            on_attach = on_attach,
           })
 
-          -- 启动 ruff
-          vim.lsp.start({
-            name = "ruff",
-            cmd = { "ruff", "server", "--preview" },
-            filetypes = { "python" },
-            root_dir = vim.fs.root(buf, {'.git', 'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', 'pyrightconfig.json', '.gitignore'}),
-            capabilities = capabilities,
-            init_options = {
-              settings = {
-                lineLength = 88,
-                organizeImports = true,
-                fixAll = true,
-                codeAction = {
-                  disableRuleComment = {
-                    enable = true,
-                    minLines = 3,
-                  },
-                  fix = {
-                    enable = true,
-                  },
-                  lint = {
-                    enable = true,
-                    preview = true,
-                  },
-                },
-                lint = {
-                  ignore = {
-                    "E501",
-                    "E402",
-                    "E701",
-                    "E702",
-                    "W291",
-                    "W293",
-                  },
-                },
-              },
-            },
+          -- 自动启动 ruff
+          vim.lsp.enable("ruff", {
+            bufnr = args.buf,
+            on_attach = on_attach,
           })
         end,
         desc = 'Auto start LSP for Python files',
       })
 
-      -- 禁用Ruff的悬停提示，让pyright处理
+      -- 禁用 Ruff 的悬停提示，让 pylsp 处理
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup('lsp_attach_disable_ruff_hover', { clear = true }),
         callback = function(args)
           local client = vim.lsp.get_client_by_id(args.data.client_id)
-          if client == nil then
-            return
-          end
-          if client.name == 'ruff' then
-            -- 禁用Ruff的悬停提示，让pyright处理
+          if client and client.name == 'ruff' then
             client.server_capabilities.hoverProvider = false
           end
         end,
         desc = 'LSP: Disable hover capability from Ruff',
       })
-      
-      -- 按键映射
-      vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, { desc = "Go to definition" })
-      vim.keymap.set("n", "<leader>gr", vim.lsp.buf.references, { desc = "Find references" })
-      vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "Code actions" })
-      -- 手动悬停快捷键（Neovim LSP没有默认映射，需要自己配置）
-      vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Show hover documentation" })
-      -- 其他常用LSP映射
-      vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
-      vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Rename symbol" })
-      vim.keymap.set("n", "<leader>D", vim.lsp.buf.type_definition, { desc = "Type definition" })
-      vim.keymap.set("n", "<leader>ds", vim.lsp.buf.document_symbol, { desc = "Document symbols" })
-      vim.keymap.set("n", "<leader>ws", vim.lsp.buf.workspace_symbol, { desc = "Workspace symbols" })
 
-      -- 移除自动悬停功能，使用 K 键手动触发
       -- 恢复默认的 updatetime 设置
       vim.o.updatetime = 4000
 
@@ -194,25 +157,7 @@ return {
         for _, client in ipairs(vim.lsp.get_active_clients({ bufnr = 0 })) do
           print(string.format('  - %s: %s (id: %d)', client.name, client.config.cmd[1], client.id))
         end
-
-        -- 显示 pylsp 进程状态
-        local handle = io.popen('ps aux | grep pylsp | grep -v grep')
-        if handle then
-          local output = handle:read('*a')
-          handle:close()
-          if output and output ~= '' then
-            print('\npylsp processes:')
-            print(vim.trim(output))
-          else
-            print('\nNo pylsp processes found')
-          end
-        end
       end, {})
-
-      -- 格式化快捷键
-      vim.keymap.set("n", "<leader>ff", function()
-        vim.lsp.buf.format({ async = false })
-      end, { desc = "Format file" })
     end,
   },
 }
