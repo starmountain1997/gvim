@@ -79,6 +79,10 @@ return {
           ".gitignore"
         }),
         settings = {
+          -- 启用格式化
+          format = {
+            enabled = true,
+          },
           -- 基本配置
           lineLength = 88,
           organizeImports = true,
