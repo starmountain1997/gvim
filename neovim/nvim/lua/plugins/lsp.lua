@@ -1,4 +1,4 @@
--- 使用 Mason 管理的 LSP 服务器
+-- LSP 配置 - 使用 Mason 自动管理
 return {
   {
     "neovim/nvim-lspconfig",
@@ -8,9 +8,6 @@ return {
       "williamboman/mason-lspconfig.nvim",
     },
     config = function()
-      -- 获取 Mason 管理的 LSP 服务器路径
-      local mason_path = vim.fn.stdpath("data") .. "/mason/bin/"
-
       -- LSP 能力配置
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities.textDocument.completion.completionItem.snippetSupport = true
@@ -36,10 +33,9 @@ return {
         end, { buffer = bufnr, desc = "Format file" })
       end
 
-      -- 配置 pylsp (Python Language Server) - minimal 配置
+      -- 配置 pylsp (Python Language Server) - Mason 会自动处理路径
       vim.lsp.config("pylsp", {
         capabilities = capabilities,
-        cmd = { mason_path .. "pylsp" },
         filetypes = { "python" },
         root_dir = vim.fs.root(0, {
           ".git",
@@ -70,10 +66,9 @@ return {
         },
       })
 
-      -- 配置 ruff (快速代码检查和格式化)
+      -- 配置 ruff (快速代码检查和格式化) - Mason 会自动处理路径
       vim.lsp.config("ruff", {
         capabilities = capabilities,
-        cmd = { mason_path .. "ruff", "server", "--preview" },
         filetypes = { "python" },
         root_dir = vim.fs.root(0, {
           ".git",
@@ -116,24 +111,14 @@ return {
         },
       })
 
-      -- 自动启动 LSP 服务器
-      vim.api.nvim_create_autocmd("FileType", {
-        group = vim.api.nvim_create_augroup('lsp_auto_start', { clear = true }),
-        pattern = { "python" },
+      -- 设置全局 on_attach，供 mason-lspconfig 自动启动的服务器使用
+      vim.api.nvim_create_autocmd("LspAttach", {
+        group = vim.api.nvim_create_augroup('lsp_attach_keymaps', { clear = true }),
         callback = function(args)
-          -- 自动启动 pylsp
-          vim.lsp.enable("pylsp", {
-            bufnr = args.buf,
-            on_attach = on_attach,
-          })
-
-          -- 自动启动 ruff
-          vim.lsp.enable("ruff", {
-            bufnr = args.buf,
-            on_attach = on_attach,
-          })
+          -- 应用按键映射
+          on_attach(nil, args.buf)
         end,
-        desc = 'Auto start LSP for Python files',
+        desc = 'LSP: Apply key mappings on attach',
       })
 
       -- 禁用 Ruff 的悬停提示，让 pylsp 处理

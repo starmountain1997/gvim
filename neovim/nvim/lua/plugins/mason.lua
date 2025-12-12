@@ -2,17 +2,15 @@ return {
   {
     "williamboman/mason.nvim",
     lazy = false,
-    config = function()
-      require("mason").setup()
-    end,
+    opts = {},
   },
   {
     "williamboman/mason-lspconfig.nvim",
     lazy = false,
-    config = function()
-      require("mason-lspconfig").setup({
-        ensure_installed = { "pylsp", "ruff" }
-      })
-    end,
+    dependencies = { "williamboman/mason.nvim" },
+    opts = {
+      ensure_installed = { "pylsp", "ruff" },
+      automatic_enable = true,
+    },
   },
 }
