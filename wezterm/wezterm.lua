@@ -77,7 +77,7 @@ if wezterm.target_triple == 'x86_64-pc-windows-msvc' then
 
   -- Windows 窗口背景效果配置
   config.win32_system_backdrop = 'Auto'
-  config.window_decorations = "FULL"  -- 显示标题栏和窗口控制按钮
+  config.window_decorations = "NONE"  -- 无边框窗口
   -- 透明度已在通用设置中统一配置
   -- 键绑定和鼠标绑定已在上面统一配置
  
