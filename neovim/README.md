@@ -27,6 +27,27 @@
 - 依赖: nvim-web-devicons (文件图标)
 - 配置文件: `nvim/lua/plugins/nvim-tree.lua`
 
+### 5. nvim-lspconfig
+- 功能: LSP (Language Server Protocol) 支持和 Inlay Hints
+- Python LSP 服务器:
+  - **basedpyright**: 提供类型检查、代码补全、inlay hints
+  - **ruff**: 提供代码检查和格式化
+- Inlay Hints 功能:
+  - 变量类型提示 (`variableTypes`)
+  - 函数返回类型提示 (`functionReturnTypes`)
+  - 调用参数名称提示 (`callArgumentNames`)
+- 自动启用: 在支持的 LSP 服务器连接时自动启用 inlay hints
+- 配置文件: `nvim/lua/plugins/lsp.lua`
+- 依赖安装:
+  ```bash
+  # 使用 uv 安装 (推荐)
+  uv tool install basedpyright
+  uv tool install ruff
+
+  # 或使用 pip
+  pip install basedpyright ruff
+  ```
+
 ## 基础配置
 
 - 行号显示: 启用行号和相对行号
@@ -67,5 +88,6 @@ nvim/
         ├── treesitter.lua      # Treesitter 配置
         ├── conform.lua         # 格式化配置
         ├── render-markdown.lua # Markdown 渲染配置
-        └── nvim-tree.lua       # 文件浏览器配置
+        ├── nvim-tree.lua       # 文件浏览器配置
+        └── lsp.lua             # LSP 和 Inlay Hints 配置
 ```

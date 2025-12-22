@@ -20,7 +20,7 @@ dynamic_padding = true
 dynamic_title = true
 
 [font]
-normal = { family = "FiraCode Nerd Font Mono", style = "Normal" }
+normal = { family = "FiraCode", style = "Normal" }
 
 [terminal]
 osc52 = "OnlyCopy"
