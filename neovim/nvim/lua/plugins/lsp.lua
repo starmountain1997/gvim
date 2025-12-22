@@ -1,9 +1,7 @@
--- LSP configuration with basedpyright and ruff
+-- LSP configuration with basedpyright and ruff using vim.lsp.config
 return {
   'neovim/nvim-lspconfig',
   config = function()
-    local lspconfig = require('lspconfig')
-
     -- Enable inlay hints when LSP attaches
     vim.api.nvim_create_autocmd('LspAttach', {
       group = vim.api.nvim_create_augroup('UserLspConfig', {}),
@@ -15,23 +13,35 @@ return {
       end,
     })
 
-    -- Configure basedpyright with inlay hints
-    lspconfig.basedpyright.setup({
-      settings = {
-        basedpyright = {
-          analysis = {
-            inlayHints = {
-              variableTypes = true,
-              callArgumentNames = true,
-              functionReturnTypes = true,
-              genericTypes = false,
+    -- Configure LSP servers using the new vim.lsp.config API
+    local lsps = {
+      {
+        "basedpyright",
+        {
+          settings = {
+            basedpyright = {
+              analysis = {
+                inlayHints = {
+                  variableTypes = true,
+                  callArgumentNames = true,
+                  functionReturnTypes = true,
+                  genericTypes = false,
+                },
+              },
             },
           },
         },
       },
-    })
+      { "ruff" },  -- Use default configuration for ruff
+    }
 
-    -- Configure ruff for linting and formatting
-    lspconfig.ruff.setup({})
+    -- Enable all configured LSP servers
+    for _, lsp in pairs(lsps) do
+      local name, config = lsp[1], lsp[2]
+      if config then
+        vim.lsp.config(name, config)
+      end
+      vim.lsp.enable(name)
+    end
   end,
 }
