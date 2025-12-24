@@ -13,11 +13,15 @@ return {
       end,
     })
 
+    -- Get capabilities from nvim-cmp for LSP completion
+    local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
     -- Configure LSP servers using the new vim.lsp.config API
     local lsps = {
       {
         "basedpyright",
         {
+          capabilities = capabilities,
           settings = {
             basedpyright = {
               analysis = {
@@ -32,7 +36,7 @@ return {
           },
         },
       },
-      { "ruff" },  -- Use default configuration for ruff
+      { "ruff", { capabilities = capabilities } },
     }
 
     -- Enable all configured LSP servers

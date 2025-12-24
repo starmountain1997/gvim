@@ -48,6 +48,17 @@
   pip install basedpyright ruff
   ```
 
+### 6. nvim-cmp
+- 功能: 代码自动补全引擎
+- 补全源:
+  - **LSP**: 从 LSP 服务器获取智能补全 (`cmp-nvim-lsp`)
+  - **Buffer**: 当前缓冲区文本补全 (`cmp-buffer`)
+  - **Path**: 文件路径补全 (`cmp-path`)
+- Snippet 引擎: 使用 Neovim 原生 `vim.snippet.expand` (需要 nvim 0.10+)
+- 行为: 补全菜单自动选中第一项，按回车确认
+- 快捷键: `<CR>` 确认选中的补全项
+- 配置文件: `nvim/lua/plugins/cmp.lua`
+
 ## 基础配置
 
 - 行号显示: 启用行号和相对行号
@@ -89,5 +100,6 @@ nvim/
         ├── conform.lua         # 格式化配置
         ├── render-markdown.lua # Markdown 渲染配置
         ├── nvim-tree.lua       # 文件浏览器配置
-        └── lsp.lua             # LSP 和 Inlay Hints 配置
+        ├── lsp.lua             # LSP 和 Inlay Hints 配置
+        └── cmp.lua             # 代码补全配置
 ```
