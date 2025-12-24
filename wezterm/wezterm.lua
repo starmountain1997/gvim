@@ -7,8 +7,11 @@ local config = wezterm.config_builder()
 -- ==================== 通用设置（所有平台共享）====================
 
 -- Enable native Wayland support for better integration and performance
--- Disabled due to DRM sync object issues on current system
-config.enable_wayland = false
+-- Required for proper IME (fcitx5/rime) support on Wayland
+config.enable_wayland = true
+
+-- Enable IME (Input Method Editor) support for fcitx5/rime
+config.use_ime = true
 
 -- 设置终端类型为 xterm-256color 以获得最佳兼容性
 config.term = "xterm-256color"
@@ -96,13 +99,16 @@ else
   -- 透明度已在通用设置中统一配置
 
   -- Linux 窗口装饰设置
-  config.window_decorations = "NONE"
+  config.window_decorations = "RESIZE"
 end
 
 -- 设置环境变量（在 Linux 和 macOS 下设置）
 if wezterm.target_triple ~= 'x86_64-pc-windows-msvc' then
   config.set_environment_variables = {
     PATH = wezterm.home_dir .. '/.local/bin:' .. os.getenv('PATH'),
+    -- Fix for NVIDIA Wayland DRM syncobj protocol error
+    -- See: https://github.com/wezterm/wezterm/issues/6998
+    __NV_DISABLE_EXPLICIT_SYNC = '1',
   }
 end
 
