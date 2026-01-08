@@ -46,16 +46,11 @@ RUN pip config set global.index-url https://mirrors.aliyun.com/pypi/simple && \
     pip config set global.extra-index-url "https://download.pytorch.org/whl/cpu/ https://mirrors.huaweicloud.com/ascend/repos/pypi"
 
 # 安装 Claude CLI - 工具安装独立层
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash && \
-    export NVM_DIR="$HOME/.nvm" && \
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && \
-    nvm install 24 && \
-    nvm use 24 && \
-    corepack enable && \
-    corepack prepare yarn@stable --activate && \
-    yarn global add @anthropic-ai/claude-code && \
-    echo 'export NVM_DIR="$HOME/.nvm"' >> $HOME/.zshrc && \
-    echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $HOME/.zshrc
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+RUN \. "$HOME/.nvm/nvm.sh"
+RUN nvm install 24
+RUN corepack enable yarn
+RUN yes | yarn global add @anthropic-ai/claude-code
 
 # 配置 Git 用户信息 - 配置独立层
 RUN git config --global user.name "guozr" && \
