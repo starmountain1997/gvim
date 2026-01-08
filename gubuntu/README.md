@@ -49,3 +49,10 @@ docker compose -p myproject2 up -d
 - 需要宿主机已安装昇腾驱动和相关组件
 - 容器需要privileged权限和host网络模式
 - 映射了所有昇腾NPU设备到容器内
+
+
+## 运行
+
+```
+\. "$HOME/.nvm/nvm.sh"
+```

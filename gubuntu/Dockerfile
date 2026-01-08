@@ -61,3 +61,5 @@ RUN . $NVM_DIR/nvm.sh && corepack enable yarn && yes | yarn global add @anthropi
 # 配置 Git 用户信息 - 配置独立层
 RUN git config --global user.name "guozr" && \
     git config --global user.email "guozr1997@hotmail.com"
+
+RUN pip install ruff pyright
