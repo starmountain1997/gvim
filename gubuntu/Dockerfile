@@ -45,16 +45,18 @@ RUN yes | pip uninstall vllm vllm-ascend || true
 RUN pip config set global.index-url https://mirrors.aliyun.com/pypi/simple && \
     pip config set global.extra-index-url "https://download.pytorch.org/whl/cpu/ https://mirrors.huaweicloud.com/ascend/repos/pypi"
 
-ENV NVM_DIR ~/.nvm
+ENV NVM_DIR /root/.nvm
 ENV NODE_VERSION 24
 
 
 # 安装 Claude CLI - 工具安装独立层
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash \
     && . $NVM_DIR/nvm.sh \
-    && nvm install $NODE_VERSION
-RUN $NVM_DIR/versions/node/v24.12.0/bin/corepack enable yarn
-RUN yes | $NVM_DIR/versions/node/v24.12.0/bin/yarn global add @anthropic-ai/claude-code
+    && nvm install $NODE_VERSION \
+    && nvm alias default $NODE_VERSION \
+    && nvm use default
+
+RUN . $NVM_DIR/nvm.sh && corepack enable yarn && yes | yarn global add @anthropic-ai/claude-code
 
 # 配置 Git 用户信息 - 配置独立层
 RUN git config --global user.name "guozr" && \
