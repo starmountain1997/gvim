@@ -1,6 +1,10 @@
-FROM quay.io/ascend/vllm-ascend:v0.11.0rc3
+FROM quay.m.daocloud.io/ascend/vllm-ascend:v0.13.0rc1
 
-# 安装基础系统工具 - 变化频率最低，放在前面
+ENV http_proxy=http://127.0.0.1:6152
+ENV https_proxy=http://127.0.0.1:6152
+ENV HTTP_PROXY=http://127.0.0.1:6152
+ENV HTTPS_PROXY=http://127.0.0.1:6152
+# 将代理设置传递给构建过程和容器运行时
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         zsh \
@@ -25,7 +29,7 @@ RUN echo "source /usr/local/Ascend/ascend-toolkit/set_env.sh" >> $HOME/.zshrc &&
     echo "source /usr/local/Ascend/nnal/atb/set_env.sh" >> $HOME/.zshrc
 
 # 添加代理别名 - 独立层，便于修改代理设置
-RUN echo "alias set_proxy=\"export http_proxy=http://127.0.0.1:7897 && export https_proxy=http://127.0.0.1:7897\"" >> $HOME/.zshrc && \
+RUN echo "alias set_proxy=\"export http_proxy=http://127.0.0.1:6152 && export https_proxy=http://127.0.0.1:6152\"" >> $HOME/.zshrc && \
     echo "alias unset_proxy=\"unset http_proxy && unset https_proxy\"" >> $HOME/.zshrc
 
 # 添加本地 bin 目录到 PATH
@@ -42,7 +46,16 @@ RUN pip config set global.index-url https://mirrors.aliyun.com/pypi/simple && \
     pip config set global.extra-index-url "https://download.pytorch.org/whl/cpu/ https://mirrors.huaweicloud.com/ascend/repos/pypi"
 
 # 安装 Claude CLI - 工具安装独立层
-RUN curl -fsSL https://claude.ai/install.sh | bash
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash && \
+    export NVM_DIR="$HOME/.nvm" && \
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && \
+    nvm install 24 && \
+    nvm use 24 && \
+    corepack enable && \
+    corepack prepare yarn@stable --activate && \
+    yarn global add @anthropic-ai/claude-code && \
+    echo 'export NVM_DIR="$HOME/.nvm"' >> $HOME/.zshrc && \
+    echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $HOME/.zshrc
 
 # 配置 Git 用户信息 - 配置独立层
 RUN git config --global user.name "guozr" && \

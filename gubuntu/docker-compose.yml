@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: ${CONTAINER_NAME:-vllm-guozr}
+      network: host
     privileged: true
     network_mode: host
     stdin_open: true
