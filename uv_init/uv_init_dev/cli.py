@@ -27,6 +27,7 @@ def main(
     3. 创建 .claude 目录和 config.json
     4. 复制 CLAUDE.md.bat -> CLAUDE.md
     5. 创建软链接 GEMINI.md -> CLAUDE.md
+    6. 复制 format_all.sh 到项目根目录
     """
     cwd = Path.cwd()
 
@@ -68,5 +69,13 @@ def main(
     if gemini_md.exists():
         gemini_md.unlink()
     gemini_md.symlink_to("CLAUDE.md")
+
+    # 6. 复制 format_all.sh
+    format_all_sh = Path(__file__).parent.parent / "format_all.sh"
+    if format_all_sh.exists():
+        typer.echo("=== Copying format_all.sh ===")
+        target = cwd / "format_all.sh"
+        target.write_text(format_all_sh.read_text())
+        target.chmod(0o755)
 
     typer.echo("=== Done! ===")
