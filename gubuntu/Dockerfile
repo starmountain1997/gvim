@@ -40,6 +40,7 @@ RUN pip install --upgrade pip
 
 # 卸载不需要的包 - 独立层，便于控制依赖
 RUN yes | pip uninstall vllm vllm-ascend || true
+RUN VLLM_TARGET_DEVICE=empty pip install -v git+https://github.com/vllm-project/vllm.git@dc917cceb877dfd13f98c538c4c96158047d98bd
 
 # 配置 pip 镜像源 - 网络相关独立配置
 RUN pip config set global.index-url https://mirrors.aliyun.com/pypi/simple && \
