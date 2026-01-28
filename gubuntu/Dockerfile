@@ -53,4 +53,4 @@ RUN git config --global user.name "guozr" && \
     git config --global user.email "guozr1997@hotmail.com" \
     git config pull.rebase true
 
-RUN pip install ruff pyright
+RUN pip install ruff python-lsp-server
