@@ -51,6 +51,6 @@ RUN curl -fsSL https://claude.ai/install.sh | bash
 # 配置 Git 用户信息 - 配置独立层
 RUN git config --global user.name "guozr" && \
     git config --global user.email "guozr1997@hotmail.com" && \
-    git config pull.rebase true
+    git config --global pull.rebase true
 
 RUN pip install ruff python-lsp-server
