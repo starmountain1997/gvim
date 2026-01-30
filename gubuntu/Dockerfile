@@ -39,7 +39,7 @@ RUN echo 'export PATH="$HOME/.local/bin:$PATH"' >> $HOME/.zshrc
 RUN pip install --upgrade pip
 
 # 卸载不需要的包 - 独立层，便于控制依赖
-RUN yes | pip uninstall vllm vllm-ascend || true
+RUN pip uninstall -y vllm vllm-ascend
 RUN VLLM_TARGET_DEVICE=empty pip install -v git+https://github.com/vllm-project/vllm.git@dc917cceb877dfd13f98c538c4c96158047d98bd
 
 # 配置 pip 镜像源 - 网络相关独立配置
