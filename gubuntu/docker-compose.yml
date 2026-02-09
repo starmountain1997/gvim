@@ -30,10 +30,11 @@ services:
     working_dir: /home/guozr
 
     volumes:
+      - /usr/local/Ascend/driver:/usr/local/Ascend/driver
       - /usr/local/dcmi:/usr/local/dcmi
       - /usr/local/bin/npu-smi:/usr/local/bin/npu-smi
-      - /usr/local/Ascend/driver/lib64/:/usr/local/Ascend/driver/lib64/
-      - /usr/local/Ascend/driver/version.info:/usr/local/Ascend/driver/version.info
       - /etc/ascend_install.info:/etc/ascend_install.info
+      - /usr/local/sbin:/usr/local/sbin
       - /home:/home
+      - /usr/share/zoneinfo/Shanghai:/etc/localtime
 
