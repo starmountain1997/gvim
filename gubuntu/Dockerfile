@@ -1,4 +1,4 @@
-FROM quay.m.daocloud.io/ascend/vllm-ascend:v0.14.0rc1
+FROM quay.m.daocloud.io/ascend/vllm-ascend:v0.13.0rc1
 
 ENV http_proxy=http://127.0.0.1:6152
 ENV https_proxy=http://127.0.0.1:6152
