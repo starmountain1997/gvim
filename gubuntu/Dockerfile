@@ -51,8 +51,6 @@ RUN pip uninstall -y vllm vllm-ascend
 RUN pip config set global.index-url https://mirrors.aliyun.com/pypi/simple && \
     pip config set global.extra-index-url "https://download.pytorch.org/whl/cpu/ https://mirrors.huaweicloud.com/ascend/repos/pypi"
 
-RUN curl -fsSL https://claude.ai/install.sh | bash
-
 # 配置 Git 用户信息 - 配置独立层
 RUN git config --global user.name "guozr" && \
     git config --global user.email "guozr1997@hotmail.com" && \
@@ -65,5 +63,12 @@ RUN mkdir -p ~/.ssh && \
     echo "    User git" >> ~/.ssh/config && \
     echo "    ProxyCommand ncat --proxy-type http --proxy 127.0.0.1:6152 %h %p" >> ~/.ssh/config && \
     chmod 600 ~/.ssh/config
+
+# 生成 SSH 密钥对（ed25519 类型，更安全且更快）
+RUN ssh-keygen -t ed25519 -C "guozr-ds" -f ~/.ssh/id_ed25519 -N "" && \
+    chmod 600 ~/.ssh/id_ed25519 && \
+    chmod 644 ~/.ssh/id_ed25519.pub && \
+    echo "=== SSH Public Key (add to GitHub) ===" && \
+    cat ~/.ssh/id_ed25519.pub
 
 RUN pip install ruff python-lsp-server
