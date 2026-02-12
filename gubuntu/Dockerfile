@@ -1,9 +1,14 @@
-FROM quay.m.daocloud.io/ascend/vllm-ascend:v0.13.0rc1
+FROM quay.m.daocloud.io/ascend/vllm-ascend:v0.14.0rc1
 
 ENV http_proxy=http://127.0.0.1:6152
 ENV https_proxy=http://127.0.0.1:6152
 ENV HTTP_PROXY=http://127.0.0.1:6152
 ENV HTTPS_PROXY=http://127.0.0.1:6152
+
+# 配置 TUNA Jammy ports 源
+RUN sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports|g' /etc/apt/sources.list && \
+    sed -i 's|http://archive.ubuntu.com/ubuntu|https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports|g' /etc/apt/sources.list
+
 # 将代理设置传递给构建过程和容器运行时
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -40,7 +45,6 @@ RUN pip install --upgrade pip
 
 # 卸载不需要的包 - 独立层，便于控制依赖
 RUN pip uninstall -y vllm vllm-ascend
-RUN VLLM_TARGET_DEVICE=empty pip install -v git+https://github.com/vllm-project/vllm.git@v0.15.0
 
 # 配置 pip 镜像源 - 网络相关独立配置
 RUN pip config set global.index-url https://mirrors.aliyun.com/pypi/simple && \
