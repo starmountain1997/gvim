@@ -15,6 +15,7 @@ RUN apt-get update && \
         zsh \
         curl \
         git \
+        ncat \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -56,5 +57,13 @@ RUN curl -fsSL https://claude.ai/install.sh | bash
 RUN git config --global user.name "guozr" && \
     git config --global user.email "guozr1997@hotmail.com" && \
     git config --global pull.rebase true
+
+# 配置 SSH - 使用代理访问 GitHub
+RUN mkdir -p ~/.ssh && \
+    echo "Host github.com" >> ~/.ssh/config && \
+    echo "    Hostname github.com" >> ~/.ssh/config && \
+    echo "    User git" >> ~/.ssh/config && \
+    echo "    ProxyCommand ncat --proxy-type http --proxy 127.0.0.1:6152 %h %p" >> ~/.ssh/config && \
+    chmod 600 ~/.ssh/config
 
 RUN pip install ruff python-lsp-server
