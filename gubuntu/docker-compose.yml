@@ -37,5 +37,5 @@ services:
       - /usr/local/sbin:/usr/local/sbin
       - /home:/home
       - /usr/share/zoneinfo/Shanghai:/etc/localtime
-      - /home/guozr/.ssh:/root/.ssh:ro
+      - /home/jiaozeyu/.ssh:/root/.ssh:ro
 
