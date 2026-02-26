@@ -2,20 +2,16 @@
 
 set -e
 
-MIRROR_BASE="https://xget.xi-xu.me/gh"
+MIRROR_REPO="https://gitee.com/starmountain1997/skills.git"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SKILLS_REPO="$SCRIPT_DIR/third_party/skills"
 OPENCODE_SKILLS_DIR="$HOME/.config/opencode/skills"
 SKILL_NAME="${1:-skill-creator}"
-SKILLS_REPO_URL="https://github.com/anthropics/skills"
 
 if [ ! -d "$SKILLS_REPO" ]; then
-    echo "Skills repository not found at $SKILLS_REPO"
-    echo "Cloning from mirror: $MIRROR_BASE/anthropics/skills"
-    
-    GIT_MIRROR_URL="$MIRROR_BASE/anthropics/skills"
-    git clone --depth 1 "$GIT_MIRROR_URL" "$SKILLS_REPO"
+    echo "Cloning skills repository from mirror: $MIRROR_REPO"
+    git clone --depth 1 "$MIRROR_REPO" "$SKILLS_REPO"
 fi
 
 SOURCE_DIR="$SKILLS_REPO/skills/$SKILL_NAME"
