@@ -4,3 +4,6 @@
 [submodule "claude/kingkongshot_prompts"]
 	path = claude/kingkongshot_prompts
 	url = https://github.com/kingkongshot/prompts.git
+[submodule "opencode/third_party/skills"]
+	path = opencode/third_party/skills
+	url = https://github.com/anthropics/skills.git
