@@ -1,9 +1,9 @@
-FROM quay.m.daocloud.io/ascend/vllm-ascend:v0.13.0rc1
+FROM quay.io/ascend/cann:8.5.0-910b-ubuntu22.04-py3.11
 
-ENV http_proxy=http://127.0.0.1:6152
-ENV https_proxy=http://127.0.0.1:6152
-ENV HTTP_PROXY=http://127.0.0.1:6152
-ENV HTTPS_PROXY=http://127.0.0.1:6152
+ENV http_proxy=http://127.0.0.1:7890
+ENV https_proxy=http://127.0.0.1:7890
+ENV HTTP_PROXY=http://127.0.0.1:7890
+ENV HTTPS_PROXY=http://127.0.0.1:7890
 
 # 配置 TUNA Jammy ports 源
 RUN sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports|g' /etc/apt/sources.list && \
@@ -35,7 +35,7 @@ RUN echo "source /usr/local/Ascend/ascend-toolkit/set_env.sh" >> $HOME/.zshrc &&
     echo "source /usr/local/Ascend/nnal/atb/set_env.sh" >> $HOME/.zshrc
 
 # 添加代理别名 - 独立层，便于修改代理设置
-RUN echo "alias set_proxy=\"export http_proxy=http://127.0.0.1:6152 && export https_proxy=http://127.0.0.1:6152\"" >> $HOME/.zshrc && \
+RUN echo "alias set_proxy=\"export http_proxy=http://127.0.0.1:7890 && export https_proxy=http://127.0.0.1:7890\"" >> $HOME/.zshrc && \
     echo "alias unset_proxy=\"unset http_proxy && unset https_proxy\"" >> $HOME/.zshrc
 
 # 添加本地 bin 目录到 PATH
@@ -61,7 +61,7 @@ RUN mkdir -p ~/.ssh && \
     echo "Host github.com" >> ~/.ssh/config && \
     echo "    Hostname github.com" >> ~/.ssh/config && \
     echo "    User git" >> ~/.ssh/config && \
-    echo "    ProxyCommand ncat --proxy-type http --proxy 127.0.0.1:6152 %h %p" >> ~/.ssh/config && \
+    echo "    ProxyCommand ncat --proxy-type http --proxy 127.0.0.1:7890 %h %p" >> ~/.ssh/config && \
     chmod 600 ~/.ssh/config
 
 # 生成 SSH 密钥对（ed25519 类型，更安全且更快）
@@ -72,3 +72,8 @@ RUN ssh-keygen -t ed25519 -C "guozr-ds" -f ~/.ssh/id_ed25519 -N "" && \
     cat ~/.ssh/id_ed25519.pub
 
 RUN pip install ruff python-lsp-server
+
+
+# 安装 Claude 和 OpenCode CLI 工具 - 独立层，便于管理第三方工具
+RUN curl -fsSL https://claude.ai/install.sh | bash
+RUN curl -fsSL https://opencode.ai/install | bash
