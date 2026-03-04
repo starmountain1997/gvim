@@ -4,55 +4,51 @@
 
 ## 文件说明
 
-- `Dockerfile`: 基于quay.io/ascend/vllm-ascend:v0.13.0rc1构建
-- `docker-compose.yml`: Docker Compose配置文件，包含昇腾NPU设备映射
+- `Dockerfile`: 基于 quay.io/ascend/cann:8.5.0-910b-ubuntu22.04-py3.11 构建
+- 预装工具: zsh + Oh My Zsh、Claude CLI、OpenCode CLI、ruff、python-lsp-server
 
 ## 使用方法
 
-### 构建并启动服务
+### 构建镜像
 
 ```bash
-docker-compose up -d --build
+docker build -t vllm-ascend .
 ```
 
 ### 进入容器
 
 ```bash
-docker-compose exec vllm-glm45v bash
+docker run -it vllm-ascend zsh
 ```
 
-### 停止服务
+### 代理配置
+
+容器内使用以下别名管理代理:
 
 ```bash
-docker-compose down
+set_proxy   # 开启代理
+unset_proxy # 关闭代理
 ```
 
-### 同时运行多个容器
+## 预装工具
 
-如果需要同时运行多个容器实例，需要修改 `docker-compose.yml`，注释掉或删除 `container_name` 行：
+| 工具 | 说明 |
+|------|------|
+| zsh | 带 Oh My Zsh、zsh-autosuggestions、zsh-syntax-highlighting |
+| Claude CLI | AI 编程助手 |
+| OpenCode CLI | OpenCode AI 编程助手 |
+| ruff | Python linter |
+| python-lsp-server | Python LSP 服务器 |
 
-```yaml
-# container_name: ${CONTAINER_NAME:-vllm-guozr}
-```
+## SSH 配置
 
-然后使用不同的项目名称启动：
+容器内已配置 Git SSH:
 
-```bash
-docker compose -p myproject1 up -d
-docker compose -p myproject2 up -d
-```
-
-这样每个容器会自动命名为 `myproject1-g-vllm-ascend-1`、`myproject2-g-vllm-ascend-1` 等，互不冲突。
+- 自动使用代理连接 GitHub
+- 已生成 ed25519 SSH 密钥对
+- 公钥在容器启动时显示
 
 ## 注意事项
 
-- 需要宿主机已安装昇腾驱动和相关组件
-- 容器需要privileged权限和host网络模式
-- 映射了所有昇腾NPU设备到容器内
-
-
-## 运行
-
-```
-\. "$HOME/.nvm/nvm.sh"
-```
+- 容器需要privileged权限和host网络模式（如需访问NPU设备）
+- 代理默认端口: 7890
