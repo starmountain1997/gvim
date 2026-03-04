@@ -36,8 +36,8 @@ RUN echo "source /usr/local/Ascend/ascend-toolkit/set_env.sh" >> $HOME/.zshrc &&
     echo "source /usr/local/Ascend/nnal/atb/set_env.sh" >> $HOME/.zshrc
 
 # 添加代理别名 - 独立层，便于修改代理设置
-RUN echo "alias set_proxy=\"export http_proxy=http://127.0.0.1:7890 && export https_proxy=http://127.0.0.1:7890\"" >> $HOME/.zshrc && \
-    echo "alias unset_proxy=\"unset http_proxy && unset https_proxy\"" >> $HOME/.zshrc
+RUN echo "alias set_proxy=\"export http_proxy=http://127.0.0.1:7890 && export https_proxy=http://127.0.0.1:7890 && export HTTP_PROXY=http://127.0.0.1:7890 && export HTTPS_PROXY=http://127.0.0.1:7890 && git config --global http.proxy http://127.0.0.1:7890 && git config --global https.proxy http://127.0.0.1:7890\"" >> $HOME/.zshrc && \
+    echo "alias unset_proxy=\"unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY && git config --global --unset http.proxy && git config --global --unset https.proxy\"" >> $HOME/.zshrc
 
 # 添加本地 bin 目录到 PATH
 RUN echo 'export PATH="$HOME/.local/bin:$PATH"' >> $HOME/.zshrc
@@ -55,6 +55,8 @@ RUN pip config set global.index-url https://mirrors.aliyun.com/pypi/simple && \
 # 配置 Git 用户信息 - 配置独立层
 RUN git config --global user.name "guozr" && \
     git config --global user.email "guozr1997@hotmail.com" && \
+    git config --global http.proxy http://127.0.0.1:7890 && \
+    git config --global https.proxy http://127.0.0.1:7890 && \
     git config --global pull.rebase true
 
 # 配置 SSH - 使用代理访问 GitHub
