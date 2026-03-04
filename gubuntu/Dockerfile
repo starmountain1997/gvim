@@ -16,6 +16,7 @@ RUN apt-get update && \
         curl \
         git \
         ncat \
+        openssh-client \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
