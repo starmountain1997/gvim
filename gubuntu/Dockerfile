@@ -1,22 +1,26 @@
 FROM quay.io/ascend/cann:8.5.0-910b-ubuntu22.04-py3.11
 
-ENV http_proxy=http://127.0.0.1:7890
-ENV https_proxy=http://127.0.0.1:7890
-ENV HTTP_PROXY=http://127.0.0.1:7890
-ENV HTTPS_PROXY=http://127.0.0.1:7890
+ARG PROXY_PORT=6152
+ENV PROXY_PORT=${PROXY_PORT}
+ENV http_proxy=http://127.0.0.1:${PROXY_PORT}
+ENV https_proxy=http://127.0.0.1:${PROXY_PORT}
+ENV HTTP_PROXY=http://127.0.0.1:${PROXY_PORT}
+ENV HTTPS_PROXY=http://127.0.0.1:${PROXY_PORT}
+ENV LANG=zh_CN.UTF-8
 
 # 配置 TUNA Jammy ports 源
 RUN sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports|g' /etc/apt/sources.list && \
     sed -i 's|http://archive.ubuntu.com/ubuntu|https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports|g' /etc/apt/sources.list
 
 # 将代理设置传递给构建过程和容器运行时
-RUN apt-get update 
-RUN apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
         zsh \
         curl \
         git \
         ncat \
         openssh-client \
+        locales \
+    && localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.UTF-8 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -36,7 +40,7 @@ RUN echo "source /usr/local/Ascend/ascend-toolkit/set_env.sh" >> $HOME/.zshrc &&
     echo "source /usr/local/Ascend/nnal/atb/set_env.sh" >> $HOME/.zshrc
 
 # 添加代理别名 - 独立层，便于修改代理设置
-RUN echo "alias set_proxy=\"export http_proxy=http://127.0.0.1:7890 && export https_proxy=http://127.0.0.1:7890 && export HTTP_PROXY=http://127.0.0.1:7890 && export HTTPS_PROXY=http://127.0.0.1:7890 && git config --global http.proxy http://127.0.0.1:7890 && git config --global https.proxy http://127.0.0.1:7890\"" >> $HOME/.zshrc && \
+RUN echo "alias set_proxy=\"export http_proxy=http://127.0.0.1:${PROXY_PORT} && export https_proxy=http://127.0.0.1:${PROXY_PORT} && export HTTP_PROXY=http://127.0.0.1:${PROXY_PORT} && export HTTPS_PROXY=http://127.0.0.1:${PROXY_PORT} && git config --global http.proxy http://127.0.0.1:${PROXY_PORT} && git config --global https.proxy http://127.0.0.1:${PROXY_PORT}\"" >> $HOME/.zshrc && \
     echo "alias unset_proxy=\"unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY && git config --global --unset http.proxy && git config --global --unset https.proxy\"" >> $HOME/.zshrc
 
 # 添加本地 bin 目录到 PATH
@@ -55,8 +59,8 @@ RUN pip config set global.index-url https://mirrors.aliyun.com/pypi/simple && \
 # 配置 Git 用户信息 - 配置独立层
 RUN git config --global user.name "guozr" && \
     git config --global user.email "guozr1997@hotmail.com" && \
-    git config --global http.proxy http://127.0.0.1:7890 && \
-    git config --global https.proxy http://127.0.0.1:7890 && \
+    git config --global http.proxy http://127.0.0.1:${PROXY_PORT} && \
+    git config --global https.proxy http://127.0.0.1:${PROXY_PORT} && \
     git config --global pull.rebase true
 
 # 配置 SSH - 使用代理访问 GitHub
@@ -64,7 +68,7 @@ RUN mkdir -p ~/.ssh && \
     echo "Host github.com" >> ~/.ssh/config && \
     echo "    Hostname github.com" >> ~/.ssh/config && \
     echo "    User git" >> ~/.ssh/config && \
-    echo "    ProxyCommand ncat --proxy-type http --proxy 127.0.0.1:7890 %h %p" >> ~/.ssh/config && \
+    echo "    ProxyCommand ncat --proxy-type http --proxy 127.0.0.1:${PROXY_PORT} %h %p" >> ~/.ssh/config && \
     chmod 600 ~/.ssh/config
 
 # 生成 SSH 密钥对（ed25519 类型，更安全且更快）
