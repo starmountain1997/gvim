@@ -15,10 +15,18 @@ echo -e "\033[0;33m提示: 请确保已安装 'FiraCode Nerd Font Mono' 字体\0
 echo -e "\033[0;33m下载地址: https://www.nerdfonts.com/font-downloads\033[0m"
 echo -e "\033[0;33m使用主题: $THEME_NAME\033[0m"
 
+# 检查并初始化 submodule（如未拉取）
+SCRIPT_DIR="$(dirname "$0")"
+if [[ -d "$SCRIPT_DIR/alacritty-theme/.git" ]]; then
+    if [[ ! -f "$SCRIPT_DIR/alacritty-theme/themes/dracula.toml" ]]; then
+        echo -e "\033[0;33m正在初始化 submodule...\\033[0m"
+        git submodule update --init --recursive
+    fi
+fi
+
 # 路径定义
 CONFIG_DIR="$HOME/.config/alacritty"
 THEMES_DIR="$CONFIG_DIR/themes"
-SCRIPT_DIR="$(dirname "$0")"
 
 echo -e "\033[0;33m创建配置目录: $CONFIG_DIR\033[0m"
 mkdir -p "$THEMES_DIR"
@@ -35,7 +43,7 @@ fi
 
 echo -e "\033[0;33m复制主题和配置文件...\033[0m"
 cp "$SOURCE_THEME" "$THEMES_DIR/"
-cp "$SCRIPT_DIR/alacritty-linux.toml" "$CONFIG_DIR/alacritty.toml"
+cp "$SCRIPT_DIR/alacritty.toml" "$CONFIG_DIR/alacritty.toml"
 
 # 更新配置文件中的主题名称
 sed -i.bak "s/dracula.toml/${THEME_NAME}.toml/" "$CONFIG_DIR/alacritty.toml"
