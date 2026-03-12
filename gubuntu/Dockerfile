@@ -94,6 +94,7 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | b
     nvm alias default 24 && \
     nvm use default && \
     corepack enable yarn && \
+    yarn config set registry https://registry.npmmirror.com && \
     yarn global add @google/gemini-cli \
     yarn global add @anthropic-ai/claude-code \
     yarn global add opencode-ai
