@@ -88,7 +88,7 @@ RUN curl -fsSL https://claude.ai/install.sh | bash
 RUN curl -fsSL https://opencode.ai/install | bash
 
 # 安装 nvm、Node.js 和 Yarn
-ENV NVM_DIR="$HOME/.nvm"
+ENV NVM_DIR="/root/.nvm"
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash && \
     . "$NVM_DIR/nvm.sh" && \
     nvm install 24 && \

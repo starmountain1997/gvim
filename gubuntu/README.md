@@ -13,6 +13,7 @@
 
 ```bash
 docker build -t vllm-ascend .
+docker compose -p quant up -d --build --force-recreate
 ```
 
 ### 进入容器
