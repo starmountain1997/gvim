@@ -115,5 +115,8 @@ RUN git clone https://github.com/vllm-project/vllm.git $HOME/ASCEND-REPO/vllm &&
 
 # 安装 vllm-ascend
 RUN git clone https://github.com/vllm-project/vllm-ascend.git $HOME/ASCEND-REPO/vllm-ascend && \
-    cd $HOME/ASCEND-REPO/vllm-ascend && pip install -v -e .
+    cd $HOME/ASCEND-REPO/vllm-ascend && \
+    git remote rename origin upstream && \
+    git remote add origin git@github.com:starmountain1997/vllm-ascend.git && \
+    pip install -v -e .
 
