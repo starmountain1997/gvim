@@ -94,9 +94,8 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | b
     nvm install 24 && \
     nvm alias default 24 && \
     nvm use default && \
-    corepack enable yarn
-
-RUN yarn global add @google/gemini-cli
+    corepack enable yarn && \
+    yarn global add @google/gemini-cli
 
 # 安装 aisbench benchmark
 RUN mkdir -p $HOME/ASCEND-REPO && \
