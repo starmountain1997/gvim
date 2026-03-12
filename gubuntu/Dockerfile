@@ -1,4 +1,4 @@
-FROM quay.io/ascend/vllm-ascend:v0.16.0rc1
+FROM ad3ce5f108ed
 
 ARG PROXY_PORT=6152
 ENV PROXY_PORT=${PROXY_PORT}
