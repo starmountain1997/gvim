@@ -36,4 +36,4 @@ services:
       - /etc/ascend_install.info:/etc/ascend_install.info
       - /usr/local/sbin:/usr/local/sbin
       - /home:/home
-      - /usr/share/zoneinfo/Shanghai:/etc/localtime
+      - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime
