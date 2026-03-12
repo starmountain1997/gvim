@@ -1,4 +1,4 @@
-FROM ad3ce5f108ed
+FROM swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:8.5.1-910b-ubuntu22.04-py3.11 
 
 ARG PROXY_PORT=6152
 ENV PROXY_PORT=${PROXY_PORT}
