@@ -7,6 +7,7 @@ ENV https_proxy=http://127.0.0.1:${PROXY_PORT}
 ENV HTTP_PROXY=http://127.0.0.1:${PROXY_PORT}
 ENV HTTPS_PROXY=http://127.0.0.1:${PROXY_PORT}
 ENV LANG=zh_CN.UTF-8
+ENV TZ=Asia/Shanghai
 
 # 配置 TUNA Jammy ports 源
 RUN sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports|g' /etc/apt/sources.list && \
@@ -21,6 +22,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         openssh-client \
         locales \
     && localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.UTF-8 \
+    && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
