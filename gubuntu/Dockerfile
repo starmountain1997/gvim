@@ -1,4 +1,4 @@
-FROM quay.io/ascend/cann:8.5.0-910b-ubuntu22.04-py3.11
+FROM quay.io/ascend/vllm-ascend:v0.16.0rc1
 
 ARG PROXY_PORT=6152
 ENV PROXY_PORT=${PROXY_PORT}
@@ -54,6 +54,9 @@ RUN pip install --upgrade pip
 # 卸载不需要的包 - 独立层，便于控制依赖
 RUN pip uninstall -y vllm vllm-ascend
 
+# 多次运行
+RUN pip uninstall -y vllm vllm-ascend
+
 # 配置 pip 镜像源 - 网络相关独立配置
 RUN pip config set global.index-url https://mirrors.aliyun.com/pypi/simple && \
     pip config set global.extra-index-url "https://download.pytorch.org/whl/cpu/ https://mirrors.huaweicloud.com/ascend/repos/pypi"
@@ -80,12 +83,8 @@ RUN ssh-keygen -t ed25519 -C "guozr-ds" -f ~/.ssh/id_ed25519 -N "" && \
     echo "=== SSH Public Key (add to GitHub) ===" && \
     cat ~/.ssh/id_ed25519.pub
 
-RUN pip install ruff python-lsp-server
+RUN pip install ruff basedpyright
 
-
-# 安装 Claude 和 OpenCode CLI 工具 - 独立层，便于管理第三方工具
-RUN curl -fsSL https://claude.ai/install.sh | bash
-RUN curl -fsSL https://opencode.ai/install | bash
 
 # 安装 nvm、Node.js 和 Yarn
 ENV NVM_DIR="/root/.nvm"
@@ -95,7 +94,9 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | b
     nvm alias default 24 && \
     nvm use default && \
     corepack enable yarn && \
-    yarn global add @google/gemini-cli
+    yarn global add @google/gemini-cli \
+    yarn global add @anthropic-ai/claude-code \
+    yarn global add opencode-ai
 
 # 安装 aisbench benchmark
 RUN mkdir -p $HOME/ASCEND-REPO && \
