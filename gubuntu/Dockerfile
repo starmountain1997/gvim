@@ -86,3 +86,34 @@ RUN pip install ruff python-lsp-server
 # 安装 Claude 和 OpenCode CLI 工具 - 独立层，便于管理第三方工具
 RUN curl -fsSL https://claude.ai/install.sh | bash
 RUN curl -fsSL https://opencode.ai/install | bash
+
+# 安装 nvm、Node.js 和 Yarn
+ENV NVM_DIR="$HOME/.nvm"
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash && \
+    . "$NVM_DIR/nvm.sh" && \
+    nvm install 24 && \
+    nvm alias default 24 && \
+    nvm use default && \
+    corepack enable yarn
+
+RUN yarn global add @google/gemini-cli
+
+# 安装 aisbench benchmark
+RUN mkdir -p $HOME/ASCEND-REPO && \
+    git clone https://gitee.com/aisbench/benchmark.git -b v3.0-20250930-master $HOME/ASCEND-REPO/benchmark && \
+    cd $HOME/ASCEND-REPO/benchmark && pip3 install -e ./ --use-pep517
+
+# 安装 msmodelslim
+RUN git clone https://gitcode.com/Ascend/msmodelslim.git $HOME/ASCEND-REPO/msmodelslim && \
+    cd $HOME/ASCEND-REPO/msmodelslim && bash install.sh
+
+# 安装 vllm
+RUN git clone https://github.com/vllm-project/vllm.git $HOME/ASCEND-REPO/vllm && \
+    cd $HOME/ASCEND-REPO/vllm && \
+    git checkout 4034c3d32e30d01639459edd3ab486f56993876d && \
+    VLLM_TARGET_DEVICE=empty pip install -v -e .
+
+# 安装 vllm-ascend
+RUN git clone https://github.com/vllm-project/vllm-ascend.git $HOME/ASCEND-REPO/vllm-ascend && \
+    cd $HOME/ASCEND-REPO/vllm-ascend && pip install -v -e .
+
