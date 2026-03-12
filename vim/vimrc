@@ -59,6 +59,32 @@ Plug 'prabirshrestha/asyncomplete-lsp.vim'
 " --- 代码调试 ---
 Plug 'puremourning/vimspector'
 
+" --- 基于 basedpyright 的 Python LSP 配置 ---
+" 手动配置基于 basedpyright 的 LSP，优先级高于 vim-lsp-settings 自动配置的 python-lsp-server
+" 使用方法：先安装 basedpyright (pip install basedpyright)，然后在 Python 文件中手动触发 LSP 启动
+let g:lsp_settings = {
+    \ 'basedpyright': {
+        \ 'cmd': ['basedpyright-langserver', '--stdio'],
+        \ 'initializationOptions': {
+            \ 'python': {
+                \ 'analysis': {
+                    \ 'typeCheckingMode': 'basic',
+                    \ 'autoImportCompletions': v:true,
+                \ }
+            \ }
+        \ },
+        \ 'settings': {
+            \ 'python': {
+                \ 'analysis': {
+                    \ 'typeCheckingMode': 'basic',
+                \ }
+            \ }
+        \ }
+    \ }
+\ }
+" 设置 basedpyright 为 Python 文件的默认 LSP
+let g:lsp_settings_filetype_python = ['basedpyright']
+
 
 
 call plug#end()

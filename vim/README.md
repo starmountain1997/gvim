@@ -7,9 +7,9 @@ git clone https://github.com/starmountain1997/gvim.git && (cd gvim/vim && sh ins
 ```
 一些环境下可能无法验证curl，请编辑 `~/.curlrc`，增加 `insecure` 禁用 curl 的 ssl 验证。
 
-对于 Python 用户，请安装 `pyright` 或者 `python-lsp-server` 作为 lsp 服务器。
+对于 Python 用户，推荐安装 `basedpyright` 作为 LSP 服务器（功能比 pyright 更强大）。
 
-注意，`pyright` 依赖 `node` 环境。
+注意，`basedpyright` 依赖 `node` 环境。也可以使用 `python-lsp-server` 作为备选。
 
 ## 启用的插件
 
