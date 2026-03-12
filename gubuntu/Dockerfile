@@ -41,15 +41,6 @@ RUN git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.
 RUN sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/' $HOME/.zshrc && \
     sed -i 's/ZSH_THEME=\"robbyrussell\"/ZSH_THEME=\"random\"/' $HOME/.zshrc
 
-# 添加本地 bin 目录到 PATH 并配置环境变量 - 统一管理以保证加载顺序
-RUN echo 'export PATH="$HOME/.local/bin:$PATH"' >> $HOME/.zshrc && \
-    echo 'if [ -f /usr/local/Ascend/ascend-toolkit/set_env.sh ]; then' >> $HOME/.zshrc && \
-    echo '  # 使用 zsh 的 bash 模拟模式加载 Ascend 脚本，防止 command not found' >> $HOME/.zshrc && \
-    echo '  [[ -n "$ZSH_VERSION" ]] && emulate bash -c "source /usr/local/Ascend/ascend-toolkit/set_env.sh" || source /usr/local/Ascend/ascend-toolkit/set_env.sh' >> $HOME/.zshrc && \
-    echo 'fi' >> $HOME/.zshrc && \
-    echo 'if [ -f /usr/local/Ascend/nnal/atb/set_env.sh ]; then' >> $HOME/.zshrc && \
-    echo '  [[ -n "$ZSH_VERSION" ]] && emulate bash -c "source /usr/local/Ascend/nnal/atb/set_env.sh" || source /usr/local/Ascend/nnal/atb/set_env.sh' >> $HOME/.zshrc && \
-    echo 'fi' >> $HOME/.zshrc
 
 # 添加代理别名 - 独立层，便于修改代理设置
 RUN echo "alias set_proxy=\"export http_proxy=http://127.0.0.1:${PROXY_PORT} && export https_proxy=http://127.0.0.1:${PROXY_PORT} && export HTTP_PROXY=http://127.0.0.1:${PROXY_PORT} && export HTTPS_PROXY=http://127.0.0.1:${PROXY_PORT} && git config --global http.proxy http://127.0.0.1:${PROXY_PORT} && git config --global https.proxy http://127.0.0.1:${PROXY_PORT}\"" >> $HOME/.zshrc && \
@@ -104,7 +95,9 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | b
     yarn config set registry https://registry.npmmirror.com && \
     yarn global add @google/gemini-cli \
     yarn global add @anthropic-ai/claude-code \
-    yarn global add opencode-ai
+    yarn global add opencode-ai && \
+    echo "export PATH=\"$(dirname $(which node)):$(yarn global bin):\$PATH\"" >> /root/.zshrc && \
+    echo "export PATH=\"$(dirname $(which node)):$(yarn global bin):\$PATH\"" >> /root/.bashrc
 
 # 安装 aisbench benchmark
 RUN mkdir -p $HOME/ASCEND-REPO && \
