@@ -8,21 +8,25 @@ ENV HTTP_PROXY=http://127.0.0.1:${PROXY_PORT}
 ENV HTTPS_PROXY=http://127.0.0.1:${PROXY_PORT}
 ENV LANG=zh_CN.UTF-8
 ENV TZ=Asia/Shanghai
+# 显式设置基础 PATH，防止脚本加载时丢失核心路径
+ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${PATH}"
 
 # 配置 TUNA Jammy ports 源
 RUN sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports|g' /etc/apt/sources.list && \
     sed -i 's|http://archive.ubuntu.com/ubuntu|https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports|g' /etc/apt/sources.list
 
 # 将代理设置传递给构建过程和容器运行时
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         zsh \
         curl \
         git \
         ncat \
         openssh-client \
         locales \
+        tzdata \
     && localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.UTF-8 \
     && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && echo "Asia/Shanghai" > /etc/timezone \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -37,16 +41,19 @@ RUN git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.
 RUN sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/' $HOME/.zshrc && \
     sed -i 's/ZSH_THEME=\"robbyrussell\"/ZSH_THEME=\"random\"/' $HOME/.zshrc
 
-# 添加环境变量配置 - 独立层，便于修改环境配置
-RUN echo "source /usr/local/Ascend/ascend-toolkit/set_env.sh" >> $HOME/.zshrc && \
-    echo "source /usr/local/Ascend/nnal/atb/set_env.sh" >> $HOME/.zshrc
+# 添加本地 bin 目录到 PATH 并配置环境变量 - 统一管理以保证加载顺序
+RUN echo 'export PATH="$HOME/.local/bin:$PATH"' >> $HOME/.zshrc && \
+    echo 'if [ -f /usr/local/Ascend/ascend-toolkit/set_env.sh ]; then' >> $HOME/.zshrc && \
+    echo '  # 使用 zsh 的 bash 模拟模式加载 Ascend 脚本，防止 command not found' >> $HOME/.zshrc && \
+    echo '  [[ -n "$ZSH_VERSION" ]] && emulate bash -c "source /usr/local/Ascend/ascend-toolkit/set_env.sh" || source /usr/local/Ascend/ascend-toolkit/set_env.sh' >> $HOME/.zshrc && \
+    echo 'fi' >> $HOME/.zshrc && \
+    echo 'if [ -f /usr/local/Ascend/nnal/atb/set_env.sh ]; then' >> $HOME/.zshrc && \
+    echo '  [[ -n "$ZSH_VERSION" ]] && emulate bash -c "source /usr/local/Ascend/nnal/atb/set_env.sh" || source /usr/local/Ascend/nnal/atb/set_env.sh' >> $HOME/.zshrc && \
+    echo 'fi' >> $HOME/.zshrc
 
 # 添加代理别名 - 独立层，便于修改代理设置
 RUN echo "alias set_proxy=\"export http_proxy=http://127.0.0.1:${PROXY_PORT} && export https_proxy=http://127.0.0.1:${PROXY_PORT} && export HTTP_PROXY=http://127.0.0.1:${PROXY_PORT} && export HTTPS_PROXY=http://127.0.0.1:${PROXY_PORT} && git config --global http.proxy http://127.0.0.1:${PROXY_PORT} && git config --global https.proxy http://127.0.0.1:${PROXY_PORT}\"" >> $HOME/.zshrc && \
     echo "alias unset_proxy=\"unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY && git config --global --unset http.proxy && git config --global --unset https.proxy\"" >> $HOME/.zshrc
-
-# 添加本地 bin 目录到 PATH
-RUN echo 'export PATH="$HOME/.local/bin:$PATH"' >> $HOME/.zshrc
 
 # 升级 pip 并配置镜像源 - Python 相关独立层
 RUN pip install --upgrade pip
