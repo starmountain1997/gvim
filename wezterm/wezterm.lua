@@ -66,16 +66,13 @@ config.default_cwd = wezterm.home_dir
 -- 窗口装饰设置
 config.window_decorations = "RESIZE"
 
--- SSH 域配置：默认连接到 arch-gaming
+-- SSH 域配置（可选，需要手动选择连接）
 config.ssh_domains = {
     {
         name = 'arch-gaming',
         remote_address = 'arch-gaming',
     },
 }
-
--- 设置默认域为 SSH
-config.default_domain = 'arch-gaming'
 
 -- 设置环境变量
 config.set_environment_variables = {
