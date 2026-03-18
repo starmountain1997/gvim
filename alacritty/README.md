@@ -27,5 +27,6 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -Command ./install_alacritty.p
 ## 使用
 
 安装脚本会自动将配置文件复制到系统配置目录：
+
 - Linux/macOS: `~/.config/alacritty/alacritty.toml`
 - Windows: `%APPDATA%\alacritty\alacritty.toml`

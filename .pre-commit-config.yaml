@@ -1,0 +1,13 @@
+repos:
+  - repo: local
+    hooks:
+      - id: pangu
+        name: pangu
+        entry: pangu
+        language: system
+        types: [markdown]
+      - id: mdformat
+        name: mdformat
+        entry: mdformat
+        language: system
+        types: [markdown]
