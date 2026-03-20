@@ -11,3 +11,15 @@ repos:
         entry: mdformat
         language: system
         types: [markdown]
+      - id: stylua
+        name: stylua
+        entry: stylua
+        language: system
+        types: [lua]
+        pass_filenames: false
+        args: ["--config-path", "pyproject.toml"]
+      - id: luacheck
+        name: luacheck
+        entry: luacheck
+        language: system
+        types: [lua]
