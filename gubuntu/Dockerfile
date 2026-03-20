@@ -11,6 +11,10 @@ ENV TZ=Asia/Shanghai
 # 显式设置基础 PATH，防止脚本加载时丢失核心路径
 ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${PATH}"
 
+# 创建 Python 3.11 符号链接
+RUN ln -sf /usr/local/python3.11.14/bin/python3.11 /usr/bin/python3 && \
+    ln -sf /usr/local/python3.11.14/bin/python3.11 /bin/python3
+
 # 配置 TUNA Jammy ports 源
 RUN sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports|g' /etc/apt/sources.list && \
     sed -i 's|http://archive.ubuntu.com/ubuntu|https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports|g' /etc/apt/sources.list

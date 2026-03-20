@@ -67,6 +67,27 @@
 - 快捷键: `<CR>` 确认选中的补全项
 - 配置文件: `nvim/lua/plugins/cmp.lua`
 
+### 7. toggleterm.nvim
+
+- 功能: 终端管理器，支持浮窗终端
+- 布局: 浮窗模式，圆角边框
+- 快捷键: `<C-\>` 切换终端（在 normal/insert/terminal 模式下均有效）
+- 多终端: 数字前缀 + `<C-\>` 切换不同编号的终端（如 `2<C-\>`）
+- 配置文件: `nvim/lua/plugins/toggleterm.lua`
+
+### 8. gitsigns.nvim
+
+- 功能: Git 变更标记，在符号列显示增删改状态
+- 显示内容:
+  - `┃` 新增行
+  - `┃` 修改行
+  - `_` 删除行（底部）
+  - `‾` 删除行（顶部）
+  - `~` 修改后删除行
+  - `┆` 未追踪文件的行
+- 触发时机: 打开文件时自动附加，仅对 Git 仓库内的文件生效
+- 配置文件: `nvim/lua/plugins/gitsigns.lua`
+
 ## 诊断配置
 
 - **浮窗显示**: 光标停留约 1 秒后自动弹出圆角浮窗显示当前行诊断详情
@@ -114,5 +135,7 @@ nvim/
         ├── render-markdown.lua # Markdown 渲染配置
         ├── nvim-tree.lua       # 文件浏览器配置
         ├── lsp.lua             # LSP 和 Inlay Hints 配置
-        └── cmp.lua             # 代码补全配置
+        ├── cmp.lua             # 代码补全配置
+        ├── toggleterm.lua      # 终端管理配置
+        └── gitsigns.lua        # Git 变更标记配置
 ```
