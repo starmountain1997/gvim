@@ -5,6 +5,7 @@ return {
 	config = function()
 		require("conform").setup({
 			formatters_by_ft = {
+				python = { "ruff_organize_imports", "ruff_format" },
 				markdown = { "prettier" },
 				["markdown.mdx"] = { "prettier" },
 				-- You can add other filetypes here as needed

@@ -24,6 +24,7 @@ return {
 					capabilities = capabilities,
 					settings = {
 						basedpyright = {
+							disableOrganizeImports = true,
 							analysis = {
 								inlayHints = {
 									variableTypes = true,
@@ -36,7 +37,16 @@ return {
 					},
 				},
 			},
-			{ "ruff", { capabilities = capabilities } },
+			{
+				"ruff",
+				{
+					capabilities = capabilities,
+					on_attach = function(client)
+						-- Let basedpyright handle hover
+						client.server_capabilities.hoverProvider = false
+					end,
+				},
+			},
 		}
 
 		-- Enable all configured LSP servers

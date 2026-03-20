@@ -7,14 +7,15 @@
 ### 1. nvim-treesitter
 
 - 功能: 语法高亮和代码解析
-- 支持的语言: markdown, markdown_inline, lua, javascript, typescript, json, yaml
+- 支持的语言: python, markdown, markdown_inline, lua, javascript, typescript, json, yaml
 - 配置文件: `nvim/lua/plugins/treesitter.lua`
 
 ### 2. conform.nvim
 
 - 功能: 代码格式化工具
-- 格式化器: 使用 Prettier
-- 支持的文件类型: markdown, markdown.mdx, javascript, typescript, json, yaml
+- 格式化器: ruff (Python), Prettier (其他)
+- 支持的文件类型: python, markdown, markdown.mdx, javascript, typescript, json, yaml
+- Python 格式化: `ruff_organize_imports` + `ruff_format`（自动整理 import + 格式化）
 - 自动格式化: 在保存 Markdown 文件时自动格式化
 - 快捷键: `<leader>ff` - 手动格式化当前缓冲区
 - 配置文件: `nvim/lua/plugins/conform.lua`
@@ -35,8 +36,8 @@
 
 - 功能: LSP (Language Server Protocol) 支持和 Inlay Hints
 - Python LSP 服务器:
-  - **basedpyright**: 提供类型检查、代码补全、inlay hints
-  - **ruff**: 提供代码检查和格式化
+  - **basedpyright**: 类型检查、代码补全、hover、inlay hints；禁用 organize imports（由 ruff 负责）
+  - **ruff**: 代码检查（linting）；禁用 hover（由 basedpyright 负责，避免冲突）
 - Inlay Hints 功能:
   - 变量类型提示 (`variableTypes`)
   - 函数返回类型提示 (`functionReturnTypes`)
