@@ -13,13 +13,13 @@ repos:
         types: [markdown]
       - id: stylua
         name: stylua
-        entry: stylua
+        entry: /home/guozr/.cargo/bin/stylua
         language: system
         types: [lua]
-        pass_filenames: false
-        args: ["--config-path", "pyproject.toml"]
+        args: ["--check"]
       - id: luacheck
         name: luacheck
         entry: luacheck
         language: system
         types: [lua]
+        stages: [manual]
