@@ -332,26 +332,29 @@ let g:vimspector_enable_mappings = 'HUMAN'
 " 确保在退出或关闭缓冲区时正确处理终端窗口，避免终端进程悬停
 augroup TermCloseOnQuit
   autocmd!
-  " 当终端缓冲区被删除时，确保进程被正确终止
-  autocmd BufWinLeave term://* if &buftype == 'terminal' | call s:kill_terminal() | endif
+  " 当终端缓冲区被关闭时，确保进程被正确终止
+  autocmd BufWinLeave * if &buftype == 'terminal' | call s:kill_terminal() | endif
   " 当Vim退出时，确保所有终端进程被正确清理
   autocmd VimLeavePre * call s:cleanup_terminals()
 augroup END
 
-" 终止当前终端进程
+" 终止当前终端进程（使用 Vim 8 的 term_getjob() 和 job_stop()）
 function! s:kill_terminal()
-  if exists('b:terminal_job_id')
-    silent! call jobstop(b:terminal_job_id)
+  let l:job = term_getjob(bufnr('%'))
+  if l:job != v:null
+    silent! call job_stop(l:job)
   endif
 endfunction
 
 " 安全清理终端函数：只清理终端缓冲区，不影响其他文件
 function! s:cleanup_terminals()
   for buf in getbufinfo()
-    if buf.name =~# '^term://'
-      " 终止终端进程
-      if getbufvar(buf.bufnr, 'terminal_job_id', 0) != 0
-        silent! call jobstop(getbufvar(buf.bufnr, 'terminal_job_id'))
+    " 通过 buftype 判断是否为终端缓冲区
+    if getbufvar(buf.bufnr, '&buftype') ==# 'terminal'
+      " Vim 8：通过 term_getjob() 获取 job 并终止
+      let l:job = term_getjob(buf.bufnr)
+      if l:job != v:null
+        silent! call job_stop(l:job)
       endif
       " 删除缓冲区
       silent! execute 'bdelete!' buf.bufnr
