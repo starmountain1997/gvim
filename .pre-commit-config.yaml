@@ -11,8 +11,3 @@ repos:
         entry: mdformat
         language: system
         types: [markdown]
-      - id: stylua
-        name: stylua
-        entry: stylua
-        language: system
-        types: [lua]
