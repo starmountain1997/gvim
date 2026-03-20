@@ -10,6 +10,7 @@ return {
 				if client and client.server_capabilities.inlayHintProvider then
 					vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
 				end
+				vim.keymap.set("n", "gr", vim.lsp.buf.references, { buffer = args.buf, desc = "Go to references" })
 			end,
 		})
 

@@ -14,6 +14,14 @@ vim.opt.wrap = false
 vim.opt.cursorline = true
 vim.opt.termguicolors = true
 
+-- Show diagnostics in a floating window on cursor hold
+vim.diagnostic.config({ float = { border = "rounded" } })
+vim.api.nvim_create_autocmd("CursorHold", {
+	callback = function()
+		vim.diagnostic.open_float(nil, { focus = false })
+	end,
+})
+
 -- Lazy.nvim configuration
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then

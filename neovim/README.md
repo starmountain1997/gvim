@@ -43,6 +43,7 @@
   - 函数返回类型提示 (`functionReturnTypes`)
   - 调用参数名称提示 (`callArgumentNames`)
 - 自动启用: 在支持的 LSP 服务器连接时自动启用 inlay hints
+- 快捷键: `gr` 查看所有引用（结果显示在 quickfix 列表）
 - 配置文件: `nvim/lua/plugins/lsp.lua`
 - 依赖安装:
   ```bash
@@ -65,6 +66,10 @@
 - 行为: 补全菜单自动选中第一项，按回车确认
 - 快捷键: `<CR>` 确认选中的补全项
 - 配置文件: `nvim/lua/plugins/cmp.lua`
+
+## 诊断配置
+
+- **浮窗显示**: 光标停留约 1 秒后自动弹出圆角浮窗显示当前行诊断详情
 
 ## 基础配置
 
