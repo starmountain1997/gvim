@@ -10,29 +10,19 @@
 - 支持的语言: python, markdown, markdown_inline, lua, javascript, typescript, json, yaml
 - 配置文件: `nvim/lua/plugins/treesitter.lua`
 
-### 2. conform.nvim
-
-- 功能: 代码格式化工具
-- 格式化器: ruff (Python), Prettier (其他)
-- 支持的文件类型: python, markdown, markdown.mdx, javascript, typescript, json, yaml
-- Python 格式化: `ruff_organize_imports` + `ruff_format`（自动整理 import + 格式化）
-- 自动格式化: 在保存 Markdown 文件时自动格式化
-- 快捷键: `<leader>ff` - 手动格式化当前缓冲区
-- 配置文件: `nvim/lua/plugins/conform.lua`
-
-### 3. render-markdown.nvim
+### 2. render-markdown.nvim
 
 - 功能: 增强 Markdown 文件的显示效果
 - 依赖: nvim-treesitter
 - 配置文件: `nvim/lua/plugins/render-markdown.lua`
 
-### 4. nvim-tree.lua
+### 3. nvim-tree.lua
 
 - 功能: 文件侧边栏浏览器
 - 依赖: nvim-web-devicons (文件图标)
 - 配置文件: `nvim/lua/plugins/nvim-tree.lua`
 
-### 5. nvim-lspconfig
+### 4. nvim-lspconfig
 
 - 功能: LSP (Language Server Protocol) 支持和 Inlay Hints
 - Python LSP 服务器:
@@ -55,7 +45,7 @@
   pip install basedpyright ruff
   ```
 
-### 6. nvim-cmp
+### 5. nvim-cmp
 
 - 功能: 代码自动补全引擎
 - 补全源:
@@ -67,7 +57,7 @@
 - 快捷键: `<CR>` 确认选中的补全项
 - 配置文件: `nvim/lua/plugins/cmp.lua`
 
-### 7. toggleterm.nvim
+### 6. toggleterm.nvim
 
 - 功能: 终端管理器，支持浮窗终端
 - 布局: 浮窗模式，圆角边框
@@ -75,7 +65,7 @@
 - 多终端: 数字前缀 + `<C-\>` 切换不同编号的终端（如 `2<C-\>`）
 - 配置文件: `nvim/lua/plugins/toggleterm.lua`
 
-### 8. gitsigns.nvim
+### 7. gitsigns.nvim
 
 - 功能: Git 变更标记，在符号列显示增删改状态
 - 显示内容:
@@ -131,7 +121,6 @@ nvim/
 └── lua/
     └── plugins/
         ├── treesitter.lua      # Treesitter 配置
-        ├── conform.lua         # 格式化配置
         ├── render-markdown.lua # Markdown 渲染配置
         ├── nvim-tree.lua       # 文件浏览器配置
         ├── lsp.lua             # LSP 和 Inlay Hints 配置
