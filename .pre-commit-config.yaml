@@ -23,3 +23,24 @@ repos:
         language: system
         types: [lua]
         stages: [manual]
+      - id: install-g-claude
+        name: install-g-claude
+        entry: bash
+        args: ["g-claude/install-g-claude.sh", "$CONTEXT7_API_KEY"]
+        language: system
+        stages: [commit]
+        always_run: false
+      - id: install-gvim
+        name: install-gvim
+        entry: bash
+        args: ["vim/install_gvim.sh"]
+        language: system
+        stages: [commit]
+        always_run: false
+      - id: install-neovim
+        name: install-neovim
+        entry: bash
+        args: ["neovim/install_neovim.sh"]
+        language: system
+        stages: [commit]
+        always_run: false
