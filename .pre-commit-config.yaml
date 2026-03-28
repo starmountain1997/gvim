@@ -1,16 +1,22 @@
 repos:
+  - repo: https://github.com/hougesen/mdsf
+    rev: main
+    hooks:
+      - id: mdsf-format
   - repo: local
     hooks:
       - id: pangu
         name: pangu
-        entry: pangu
+        entry: scripts/pangu-in-place.sh
         language: system
         types: [markdown]
+        pass_filenames: true
       - id: mdformat
         name: mdformat
         entry: mdformat
-        language: system
+        language: python
         types: [markdown]
+        additional_dependencies: [mdformat-frontmatter]
       - id: stylua
         name: stylua
         entry: stylua
@@ -30,3 +36,4 @@ repos:
         language: system
         stages: [commit]
         always_run: false
+
