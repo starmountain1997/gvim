@@ -5,12 +5,6 @@ repos:
       - id: mdsf-format
   - repo: local
     hooks:
-      - id: pangu
-        name: pangu
-        entry: scripts/pangu-in-place.sh
-        language: system
-        types: [markdown]
-        pass_filenames: true
       - id: mdformat
         name: mdformat
         entry: mdformat
