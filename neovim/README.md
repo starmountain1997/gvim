@@ -40,7 +40,7 @@
   # 使用 uv 安装 (推荐)
   uv tool install basedpyright
   uv tool install ruff
-
+  
   # 或使用 pip
   pip install basedpyright ruff
   ```
