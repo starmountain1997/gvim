@@ -113,6 +113,16 @@
 
 1. 插件会在首次启动时自动安装
 
+### 8. diffview.nvim
+
+- 功能: Git diff 查看器，支持文件历史和合并冲突解决
+- 依赖: nvim-web-devicons (文件图标)
+- 常用命令:
+  - `:DiffviewOpen` 查看工作区改动
+  - `:DiffviewFileHistory` 查看文件提交历史
+  - `:DiffviewClose` 关闭 diff 视图
+- 配置文件: `nvim/lua/plugins/diffview.lua`
+
 ## 目录结构
 
 ```
@@ -126,5 +136,6 @@ nvim/
         ├── lsp.lua             # LSP 和 Inlay Hints 配置
         ├── cmp.lua             # 代码补全配置
         ├── toggleterm.lua      # 终端管理配置
-        └── gitsigns.lua        # Git 变更标记配置
+        ├── gitsigns.lua        # Git 变更标记配置
+        └── diffview.lua        # Git diff 查看器配置
 ```
