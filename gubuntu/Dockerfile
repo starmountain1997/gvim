@@ -87,16 +87,12 @@ RUN ssh-keygen -t ed25519 -C "guozr-ds" -f ~/.ssh/id_ed25519 -N "" && \
 
 RUN pip install ruff basedpyright
 
-# 安装 Neovim 0.12.0 (AppImage)
-RUN wget https://github.com/neovim/neovim/releases/download/v0.12.0/nvim-linux-arm64.appimage -O /tmp/nvim.appimage && \
-    chmod +x /tmp/nvim.appimage && \
-    mkdir -p /tmp/nvim-extract && \
-    cd /tmp/nvim-extract && \
-    ar x /tmp/nvim.appimage && \
-    if [ -f squashfs-root ]; then mv squashfs-root /opt/nvim; fi && \
-    cd /opt/nvim && chmod +x usr/bin/nvim && \
-    ln -sf /opt/nvim/usr/bin/nvim /usr/local/bin/nvim && \
-    cd /tmp && rm -rf nvim-extract nvim.appimage
+# 安装 Neovim 0.12.0
+RUN wget https://github.com/neovim/neovim/releases/download/v0.12.0/nvim-linux-arm64.tar.gz -O /tmp/nvim.tar.gz && \
+    tar -xzf /tmp/nvim.tar.gz -C /opt && \
+    mv /opt/nvim-* /opt/nvim && \
+    ln -sf /opt/nvim/bin/nvim /usr/local/bin/nvim && \
+    rm /tmp/nvim.tar.gz
 
 # 安装 nvm、Node.js 和 Yarn
 ENV NVM_DIR="/root/.nvm"
