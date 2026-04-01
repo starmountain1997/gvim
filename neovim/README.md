@@ -40,7 +40,7 @@
   # 使用 uv 安装 (推荐)
   uv tool install basedpyright
   uv tool install ruff
-  
+
   # 或使用 pip
   pip install basedpyright ruff
   ```
@@ -117,6 +117,10 @@
 
 - 功能: Git diff 查看器，支持文件历史和合并冲突解决
 - 依赖: nvim-web-devicons (文件图标)
+- 快捷键:
+  - `<leader>do` 打开 diffview 查看工作区改动
+  - `<leader>dh` 打开文件提交历史
+  - `<leader>dc` 关闭 diffview
 - 常用命令:
   - `:DiffviewOpen` 查看工作区改动
   - `:DiffviewFileHistory` 查看文件提交历史
