@@ -25,9 +25,10 @@ repos:
         stages: [manual]
       - id: install-g-claude
         name: install-g-claude
-        entry: bash
-        args: ["g-claude/install-g-claude.sh", "$CONTEXT7_API_KEY"]
-        language: system
+        entry: python3
+        args: ["g-claude/install-g-claude.py", "$CONTEXT7_API_KEY"]
+        language: python
         stages: [commit]
         always_run: false
+        pass_filenames: false
 
