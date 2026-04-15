@@ -1,15 +1,5 @@
 $schema: https://raw.githubusercontent.com/hougesen/mdsf/main/schemas/v0.12.0/mdsf.schema.json
 languages:
-  c: clang-format
-  cpp: clang-format
-  csharp: csharpier
-  go:
-  - - gci
-    - goimports-reviser
-    - goimports
-  - - gofumpt
-    - gofmt
-  java: google-java-format
   javascript: prettier
   json: prettier
   python:
@@ -21,19 +11,10 @@ languages:
     - yapf
     - autopep8
     - pyink
-  ruby:
-  - - rubocop
-    - rufo
-    - rubyfmt
-    - standardrb
   rust: rustfmt
   shell:
   - - shfmt
     - beautysh
-  sql:
-  - - sql-formatter
-    - sqlfluff:format
-    - sqlfmt
   toml: taplo
   typescript: prettier
   yaml: prettier
