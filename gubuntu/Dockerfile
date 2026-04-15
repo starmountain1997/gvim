@@ -129,3 +129,7 @@ RUN git clone https://github.com/vllm-project/vllm-ascend.git $HOME/ASCEND-REPO/
     cd $HOME/ASCEND-REPO/vllm-ascend && \
     git remote rename origin upstream && \
     git remote add origin git@github.com:starmountain1997/vllm-ascend.git
+
+RUN git clone https://gitcode.com/Ascend/msmodeling.git $HOME/ASCEND-REPO/msmodeling && \
+    cd $HOME/ASCEND-REPO/msmodeling && \
+    pip install -r requirements.txt
