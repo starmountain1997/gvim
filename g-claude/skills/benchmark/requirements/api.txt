@@ -1,0 +1,2 @@
+# vllm api
+openai>=2.0.0
