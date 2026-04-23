@@ -115,7 +115,7 @@ RUN mkdir -p $HOME/ASCEND-REPO && \
     cd $HOME/ASCEND-REPO/benchmark && pip3 install -e ./ --use-pep517
 
 # 安装 msmodelslim
-RUN git clone https://gitcode.com/Ascend/msmodelslim.git $HOME/ASCEND-REPO/msmodelslim && \
+RUN git clone https://gitcode.com/libarry/msmodelslim_9 -b qwen36 $HOME/ASCEND-REPO/msmodelslim && \
     cd $HOME/ASCEND-REPO/msmodelslim && bash install.sh
 
 # 安装 vllm
