@@ -121,11 +121,11 @@ RUN git clone https://gitcode.com/libarry/msmodelslim_9 -b qwen36 $HOME/ASCEND-R
 # 安装 vllm
 RUN git clone https://github.com/vllm-project/vllm.git $HOME/ASCEND-REPO/vllm && \
     cd $HOME/ASCEND-REPO/vllm && \
-    git checkout v0.19.0 && \
+    git checkout v0.18.0 && \
     VLLM_TARGET_DEVICE=empty pip install -v -e .
 
 # 安装 vllm-ascend
-RUN git clone https://github.com/vllm-project/vllm-ascend.git $HOME/ASCEND-REPO/vllm-ascend && \
+RUN git clone https://github.com/vllm-project/vllm-ascend.git -b releases/v0.18.0 $HOME/ASCEND-REPO/vllm-ascend && \
     cd $HOME/ASCEND-REPO/vllm-ascend && \
     git remote rename origin upstream && \
     git remote add origin git@github.com:starmountain1997/vllm-ascend.git && \
