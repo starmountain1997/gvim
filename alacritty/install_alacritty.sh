@@ -15,13 +15,11 @@ echo -e "\033[0;33m提示: 请确保已安装 'FiraCode Nerd Font Mono' 字体\0
 echo -e "\033[0;33m下载地址: https://www.nerdfonts.com/font-downloads\033[0m"
 echo -e "\033[0;33m使用主题: $THEME_NAME\033[0m"
 
-# 检查并初始化 submodule（如未拉取）
+# 始终先拉取 submodule
 SCRIPT_DIR="$(dirname "$0")"
 if [[ -d "$SCRIPT_DIR/alacritty-theme/.git" ]]; then
-    if [[ ! -f "$SCRIPT_DIR/alacritty-theme/themes/dracula.toml" ]]; then
-        echo -e "\033[0;33m正在初始化 submodule...\\033[0m"
-        git submodule update --init --recursive
-    fi
+    echo -e "\033[0;33m正在拉取 submodule...\033[0m"
+    git submodule update --init --recursive
 fi
 
 # 路径定义
