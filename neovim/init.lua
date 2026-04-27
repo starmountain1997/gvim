@@ -5,6 +5,18 @@ vim.opt.cursorline = true
 -- LSP
 vim.lsp.enable({ "basedpyright", "ruff" })
 
+vim.diagnostic.config({
+    float = { border = "rounded", source = true },
+})
+
+vim.api.nvim_create_autocmd("CursorHold", {
+    callback = function()
+        vim.diagnostic.open_float(nil, { focus = false })
+    end,
+})
+
+vim.o.updatetime = 500
+
 vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
         local client = vim.lsp.get_client_by_id(args.data.client_id)
