@@ -3,6 +3,14 @@ repos:
     rev: main
     hooks:
       - id: mdsf-format
+  - repo: https://github.com/JohnnyMorganz/StyLua
+    rev: v2.4.1
+    hooks:
+      - id: stylua-github
+  - repo: https://github.com/mpfl/luacheck
+    rev: v0.88
+    hooks:
+      - id: luacheck
   - repo: local
     hooks:
       - id: mdformat
@@ -11,18 +19,6 @@ repos:
         language: python
         types: [markdown]
         additional_dependencies: [mdformat-frontmatter]
-      - id: stylua
-        name: stylua
-        entry: stylua
-        language: system
-        types: [lua]
-        args: ["--check"]
-      - id: luacheck
-        name: luacheck
-        entry: luacheck
-        language: system
-        types: [lua]
-        stages: [manual]
       - id: install-g-claude
         name: install-g-claude
         entry: python3
