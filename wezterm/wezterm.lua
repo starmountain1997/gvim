@@ -21,9 +21,9 @@ config.window_close_confirmation = "NeverPrompt"
 
 -- 字体渲染设置（核心视觉元素）
 config.font = wezterm.font({
-	-- family = 'Sarasa Term Slab SC',
-	family = "Fira Code",
-	style = "Normal",
+    -- family = 'Sarasa Term Slab SC',
+    family = "Fira Code",
+    style = "Normal",
 })
 config.font_size = 12.0
 
@@ -40,24 +40,24 @@ config.window_background_opacity = 0.75
 
 -- 键绑定设置
 config.keys = {
-	-- Ctrl+C 复制（替代默认的中断信号）
-	{
-		key = "c",
-		mods = "CTRL",
-		action = wezterm.action.CopyTo("Clipboard"),
-	},
-	-- Ctrl+V 粘贴
-	{
-		key = "v",
-		mods = "CTRL",
-		action = wezterm.action.PasteFrom("Clipboard"),
-	},
-	-- Ctrl+Shift+C 发送中断信号（替代原来的 Ctrl+C）
-	{
-		key = "c",
-		mods = "CTRL|SHIFT",
-		action = wezterm.action.SendKey({ key = "c", mods = "CTRL" }),
-	},
+    -- Ctrl+C 复制（替代默认的中断信号）
+    {
+        key = "c",
+        mods = "CTRL",
+        action = wezterm.action.CopyTo("Clipboard"),
+    },
+    -- Ctrl+V 粘贴
+    {
+        key = "v",
+        mods = "CTRL",
+        action = wezterm.action.PasteFrom("Clipboard"),
+    },
+    -- Ctrl+Shift+C 发送中断信号（替代原来的 Ctrl+C）
+    {
+        key = "c",
+        mods = "CTRL|SHIFT",
+        action = wezterm.action.SendKey({ key = "c", mods = "CTRL" }),
+    },
 }
 
 -- Linux: 使用本地 home 目录
@@ -68,18 +68,18 @@ config.window_decorations = "RESIZE"
 
 -- SSH 域配置（可选，需要手动选择连接）
 config.ssh_domains = {
-	{
-		name = "arch-gaming",
-		remote_address = "arch-gaming",
-	},
+    {
+        name = "arch-gaming",
+        remote_address = "arch-gaming",
+    },
 }
 
 -- 设置环境变量
 config.set_environment_variables = {
-	PATH = wezterm.home_dir .. "/.local/bin:" .. os.getenv("PATH"),
-	-- Fix for NVIDIA Wayland DRM syncobj protocol error
-	-- See: https://github.com/wezterm/wezterm/issues/6998
-	__NV_DISABLE_EXPLICIT_SYNC = "1",
+    PATH = wezterm.home_dir .. "/.local/bin:" .. os.getenv("PATH"),
+    -- Fix for NVIDIA Wayland DRM syncobj protocol error
+    -- See: https://github.com/wezterm/wezterm/issues/6998
+    __NV_DISABLE_EXPLICIT_SYNC = "1",
 }
 
 -- 返回配置（最后执行）
