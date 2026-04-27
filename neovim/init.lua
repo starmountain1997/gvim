@@ -20,23 +20,9 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-  { "nvim-tree/nvim-web-devicons", opts = {} },
-  {
-    "nvim-tree/nvim-tree.lua",
-    config = function()
-      require("nvim-tree").setup({
-        filters = {
-          custom = { "__pycache__", "%.egg-info" },
-        },
-      })
-    end,
+  spec = {
+    { import = "plugins" },
   },
-  {
-    "MeanderingProgrammer/render-markdown.nvim",
-    ft = { "markdown" },
-    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
-  },
-}, {
   performance = {
     rtp = {
       disabled_plugins = {
