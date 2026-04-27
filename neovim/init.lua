@@ -6,12 +6,14 @@ vim.opt.cursorline = true
 vim.lsp.enable({ "basedpyright", "ruff" })
 
 vim.diagnostic.config({
-    float = { border = "rounded", source = true },
+    float = { border = "rounded", source = true, header = "", prefix = "" },
+    virtual_text = { source = "if_many" },
+    severity_sort = true,
 })
 
 vim.api.nvim_create_autocmd("CursorHold", {
     callback = function()
-        vim.diagnostic.open_float(nil, { focus = false })
+        vim.diagnostic.open_float(nil, { scope = "cursor", focus = false })
     end,
 })
 
