@@ -14,6 +14,7 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Plugins
 require("lazy").setup({
+    { import = "plugins" },
     -- Git signs
     {
         "lewis6991/gitsigns.nvim",
