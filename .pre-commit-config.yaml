@@ -6,11 +6,7 @@ repos:
   - repo: https://github.com/JohnnyMorganz/StyLua
     rev: v2.4.1
     hooks:
-      - id: stylua-github
-  - repo: https://github.com/mpfl/luacheck
-    rev: v0.88
-    hooks:
-      - id: luacheck
+      - id: stylua
   - repo: local
     hooks:
       - id: mdformat
@@ -22,7 +18,7 @@ repos:
       - id: install-g-claude
         name: install-g-claude
         entry: python3
-        args: ["g-claude/install-g-claude.py", "$CONTEXT7_API_KEY"]
+        args: ["../g-claude/scripts/install-g-claude.py", "$CONTEXT7_API_KEY"]
         language: python
         stages: [commit]
         always_run: false
