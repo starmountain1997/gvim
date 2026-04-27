@@ -1,3 +1,7 @@
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.cursorline = true
+
 -- Lazy.nvim bootstrap
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
