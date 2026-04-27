@@ -128,9 +128,11 @@ RUN git clone https://github.com/vllm-project/vllm.git $HOME/ASCEND-REPO/vllm &&
 RUN git clone https://github.com/vllm-project/vllm-ascend.git -b releases/v0.18.0 $HOME/ASCEND-REPO/vllm-ascend && \
     cd $HOME/ASCEND-REPO/vllm-ascend && \
     git remote rename origin upstream && \
-    git remote add origin git@github.com:starmountain1997/vllm-ascend.git && \
-    pip install -v -e .
+    git remote add origin git@github.com:starmountain1997/vllm-ascend.git
 
 RUN git clone https://gitcode.com/Ascend/msmodeling.git $HOME/ASCEND-REPO/msmodeling && \
     cd $HOME/ASCEND-REPO/msmodeling && \
     pip install -r requirements.txt
+
+curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh
+
