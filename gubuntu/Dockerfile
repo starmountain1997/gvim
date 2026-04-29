@@ -138,4 +138,10 @@ RUN git clone https://gitcode.com/Ascend/msmodeling.git $HOME/ASCEND-REPO/msmode
 RUN curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh
 RUN curl -fsSL https://raw.githubusercontent.com/starmountain1997/g-claude/main/scripts/install-g-claude.py | python3 -
 
+# 安装 rust
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
+    . "$HOME/.cargo/env" && \
+    cargo install --locked zellij
+
+
 
