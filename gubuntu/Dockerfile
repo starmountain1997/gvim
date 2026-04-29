@@ -22,6 +22,7 @@ RUN sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://mirrors.tuna.tsinghua
 # 将代理设置传递给构建过程和容器运行时
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         zsh \
+	    tmux \
         curl \
         git \
         ncat \
@@ -134,5 +135,7 @@ RUN git clone https://gitcode.com/Ascend/msmodeling.git $HOME/ASCEND-REPO/msmode
     cd $HOME/ASCEND-REPO/msmodeling && \
     pip install -r requirements.txt
 
-curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh
+RUN curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh
+RUN curl -fsSL https://raw.githubusercontent.com/starmountain1997/g-claude/main/scripts/install-g-claude.py | python3 -
+
 
