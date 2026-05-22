@@ -13,7 +13,7 @@
 
 ```bash
 docker build -t vllm-ascend .
-docker compose -p quant up -d --build --force-recreate
+docker compose -p agent up -d --build --force-recreate
 docker compose -p agent build --no-cache && docker compose -p agent up -d --force-recreate
 ```
 
