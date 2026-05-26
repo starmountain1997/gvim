@@ -1,0 +1,9 @@
+services:
+  derper:
+    image: ghcr.io/yangchuansheng/ip_derper
+    container_name: derper
+    restart: always
+    ports:
+      - "59443:443"
+      - "3478:3478"
+      - "3478:3478/udp"
