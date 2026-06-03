@@ -59,3 +59,20 @@ return {
 - `:Gitsigns toggle_numhl` — 显示/隐藏行号高亮
 - `:Gitsigns toggle_current_line_blame` — 显示/隐藏当前行 blame
 - `]c` / `[c` — 跳转到上一个/下一个改动块
+
+### [nvim-tree.lua](https://github.com/nvim-tree/nvim-tree.lua)
+
+**快捷键**
+
+| 快捷键 | 说明 |
+|--------|------|
+| `<leader>e` | 打开/关闭文件树 |
+
+**基本用法**
+
+- `a` — 新建文件（以 `/` 结尾则创建目录）
+- `d` — 删除文件/目录
+- `r` — 重命名
+- `R` — 刷新树
+- `x` / `<C-]>` — 水平分割 / 垂直分割打开
+- `H` — 切换显示隐藏文件（dotfiles）
