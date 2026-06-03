@@ -1,4 +1,5 @@
 {
+  "auto-pairs": { "branch": "master", "commit": "39f06b873a8449af8ff6a3eee716d3da14d63a76" },
   "blink.cmp": { "branch": "main", "commit": "b943982a29f100a4d17b3d2d09dc06b5a0d0f398" },
   "blink.lib": { "branch": "main", "commit": "c09dd66e9ad97e1a7777f3fa5f0504ca2e877231" },
   "gitsigns.nvim": { "branch": "main", "commit": "dd3f588bacbeb041be6facf1742e42097f62165d" },

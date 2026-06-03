@@ -28,6 +28,11 @@
 | [render-markdown.nvim](https://github.com/MeanderingProgrammer/render-markdown.nvim) | Markdown 预览渲染 |
 | [neoscroll.nvim](https://github.com/karb94/neoscroll.nvim) | 平滑滚动 |
 | [smear-cursor.nvim](https://github.com/sphamba/smear-cursor.nvim) | 光标平滑动画 |
+| [auto-pairs](https://github.com/jiangmiao/auto-pairs) | 自动配对括号/引号 |
+| [vim-obsession](https://github.com/tpope/vim-obsession) | 会话管理（自动保存/恢复） |
+| [lualine.nvim](https://github.com/nvim-lualine/lualine.nvim) | 状态栏 |
+| [tokyonight.nvim](https://github.com/folke/tokyonight.nvim) | 主题配色 |
+| [better-whitespace.nvim](https://github.com/ntpeters/vim-better-whitespace) | 尾随空白高亮 |
 
 ## LSP 服务器
 
@@ -104,3 +109,20 @@
 
 - 仅在 Markdown 文件中启用 (`ft = "markdown"`)
 - 依赖 treesitter 和 web-devicons
+
+### [auto-pairs](https://github.com/jiangmiao/auto-pairs)
+
+自动补全配对符号：`(` → `()`, `{` → `{}`, `"` → `""` 等，无需额外配置即用。
+
+### [vim-obsession](https://github.com/tpope/vim-obsession)
+
+**配置要点**
+
+- 启动 Neovim 时自动开始记录 (`VimEnter` 执行 `:Obsess`)
+- Session 文件保存在当前目录 `Session.vim`
+
+**基本用法**
+
+- `:Obsess` — 开始记录 session
+- `:Obsess!` — 停止记录并删除 `Session.vim`
+- `nvim . && :source Session.vim` — 恢复上次会话窗口布局
