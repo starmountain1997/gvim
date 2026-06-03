@@ -25,7 +25,37 @@ vim.api.nvim_create_autocmd("LspAttach", {
         local opts = { buffer = args.buf }
         vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
         vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-        vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+        -- go to references, excluding build/ (and other generated dirs)
+        vim.keymap.set("n", "gr", function()
+            local params = vim.lsp.util.make_position_params()
+            params.context = { includeDeclaration = true }
+            local buf = vim.api.nvim_get_current_buf()
+            vim.lsp.buf_request_all(buf, vim.lsp.protocol.Methods.textDocument_references, params, function(results)
+                local locations = {}
+                for _, result in pairs(results or {}) do
+                    if result.result then
+                        for _, loc in ipairs(result.result) do
+                            local path = vim.uri_to_fname(loc.uri)
+                            -- exclude results from generated/build directories
+                            if
+                                not path:match("/build/")
+                                and not path:match("/node_modules/")
+                                and not path:match("/__pycache__/")
+                            then
+                                table.insert(locations, loc)
+                            end
+                        end
+                    end
+                end
+                if #locations == 0 then
+                    vim.notify("No references found", vim.log.levels.INFO)
+                    return
+                end
+                local items = vim.lsp.util.locations_to_items(locations)
+                vim.fn.setqflist({}, " ", { title = "LSP References", items = items })
+                vim.cmd("copen")
+            end)
+        end, opts)
         -- Format on save via ruff only (avoids basedpyright conflict)
         if client and client.name == "ruff" then
             vim.api.nvim_create_autocmd("BufWritePre", {
