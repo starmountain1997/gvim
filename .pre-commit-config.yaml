@@ -1,18 +1,20 @@
 repos:
-  - repo: https://github.com/hougesen/mdsf
-    rev: main
-    hooks:
-      - id: mdsf-format
-  - repo: https://github.com/JohnnyMorganz/StyLua
-    rev: v2.4.1
-    hooks:
-      - id: stylua
   - repo: local
     hooks:
+      - id: mdsf
+        name: mdsf
+        entry: mdsf
+        language: system
+        types: [text]
+        args: [format]
+      - id: stylua
+        name: stylua
+        entry: stylua
+        language: system
+        types: [lua]
       - id: mdformat
         name: mdformat
         entry: mdformat
-        language: python
+        language: system
         types: [markdown]
-        additional_dependencies: [mdformat-frontmatter]
 
