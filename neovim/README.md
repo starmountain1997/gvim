@@ -16,42 +16,35 @@
 :source $MYVIMRC
 ```
 
+## 插件列表
+
+| 插件 | 说明 |
+|------|------|
+| [lazy.nvim](https://github.com/folke/lazy.nvim) | 插件管理器 |
+| [gitsigns.nvim](https://github.com/lewis6991/gitsigns.nvim) | Git 状态标记（增/删/改） |
+| [nvim-tree.lua](https://github.com/nvim-tree/nvim-tree.lua) | 文件树侧边栏 |
+| [nvim-web-devicons](https://github.com/nvim-tree/nvim-web-devicons) | 文件图标（nvim-tree / render-markdown 依赖） |
+| [blink.cmp](https://github.com/saghen/blink.cmp) | 代码补全引擎（LSP / 路径 / 缓冲区） |
+| [render-markdown.nvim](https://github.com/MeanderingProgrammer/render-markdown.nvim) | Markdown 预览渲染 |
+| [neoscroll.nvim](https://github.com/karb94/neoscroll.nvim) | 平滑滚动 |
+| [smear-cursor.nvim](https://github.com/sphamba/smear-cursor.nvim) | 光标平滑动画 |
+
+## LSP 服务器
+
+| 服务器 | 说明 | 适用文件 |
+|--------|------|----------|
+| [ruff](https://github.com/astral-sh/ruff) | Python 格式化 / 静态检查 | `python` |
+| [ty](https://github.com/DetachHead/ty) | Python 类型检查（basedpyright 替代） | `python` |
+
 ## 插件配置
 
 ### [gitsigns.nvim](https://github.com/lewis6991/gitsigns.nvim)
 
-**安装方式**
+**配置要点**
 
-```lua
--- init.lua
-return {
-  "lewis6991/gitsigns.nvim",
-  config = function()
-    require("gitsigns").setup({
-      signs = {
-        add          = { text = '┃' },
-        change       = { text = '┃' },
-        delete       = { text = '_' },
-        topdelete    = { text = '‾' },
-        changedelete = { text = '~' },
-        untracked    = { text = '┆' },
-      },
-      signcolumn = true,
-      numhl = false,
-      linehl = false,
-      word_diff = false,
-      watch_gitdir = {
-        follow_files = true,
-      },
-      auto_attach = true,
-      attach_to_untracked = false,
-      current_line_blame = false,
-      update_debounce = 100,
-      max_file_length = 40000,
-    })
-  end,
-}
-```
+- 自定义 sign 符号（`┃` 表示增/改，`_` 表示删）
+- 未追踪文件不显示标记 (`attach_to_untracked = false`)
+- 默认关闭行内 blame (`current_line_blame = false`)
 
 **基本用法**
 
@@ -76,3 +69,38 @@ return {
 - `R` — 刷新树
 - `x` / `<C-]>` — 水平分割 / 垂直分割打开
 - `H` — 切换显示隐藏文件（dotfiles）
+
+### [blink.cmp](https://github.com/saghen/blink.cmp)
+
+**配置要点**
+
+- 使用 Rust 实现的模糊匹配引擎 (`fuzzy.implementation = "rust"`)
+- 补全来源：LSP → 路径 → 缓冲区 (`lsp`, `path`, `buffer`)
+- `<CR>` 接受补全或回退到默认行为
+
+### [neoscroll.nvim](https://github.com/karb94/neoscroll.nvim)
+
+**快捷键**（平滑滚动）
+
+| 快捷键 | 说明 |
+|--------|------|
+| `<C-u>` | 向上半屏滚动 |
+| `<C-d>` | 向下半屏滚动 |
+| `<C-b>` | 向上一屏滚动 |
+| `<C-f>` | 向下一屏滚动 |
+
+### [smear-cursor.nvim](https://github.com/sphamba/smear-cursor.nvim)
+
+**配置要点**
+
+- `stiffness = 0.6` — 光标主体刚度
+- `trailing_stiffness = 0.45` — 拖尾刚度
+- `damping = 0.85` — 阻尼系数
+- 懒加载 (`event = "VeryLazy"`)
+
+### [render-markdown.nvim](https://github.com/MeanderingProgrammer/render-markdown.nvim)
+
+**配置要点**
+
+- 仅在 Markdown 文件中启用 (`ft = "markdown"`)
+- 依赖 treesitter 和 web-devicons
