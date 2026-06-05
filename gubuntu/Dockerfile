@@ -6,6 +6,8 @@ ENV http_proxy=http://127.0.0.1:${PROXY_PORT}
 ENV https_proxy=http://127.0.0.1:${PROXY_PORT}
 ENV HTTP_PROXY=http://127.0.0.1:${PROXY_PORT}
 ENV HTTPS_PROXY=http://127.0.0.1:${PROXY_PORT}
+ENV no_proxy=localhost,127.0.0.1,mirrors.aliyun.com,mirrors.huaweicloud.com,mirrors.tuna.tsinghua.edu.cn,download.pytorch.org
+ENV NO_PROXY=localhost,127.0.0.1,mirrors.aliyun.com,mirrors.huaweicloud.com,mirrors.tuna.tsinghua.edu.cn,download.pytorch.org
 ENV LANG=zh_CN.UTF-8
 ENV TZ=Asia/Shanghai
 # 显式设置基础 PATH，防止脚本加载时丢失核心路径
@@ -62,7 +64,7 @@ RUN pip uninstall -y vllm vllm-ascend
 
 # 配置 pip 镜像源 - 网络相关独立配置
 RUN pip config set global.index-url https://mirrors.aliyun.com/pypi/simple && \
-    pip config set global.extra-index-url "https://download.pytorch.org/whl/cpu/ https://mirrors.huaweicloud.com/ascend/repos/pypi"
+    pip config set global.extra-index-url https://mirrors.huaweicloud.com/ascend/repos/pypi
 
 # 配置 Git 用户信息 - 配置独立层
 RUN git config --global user.name "guozr" && \
