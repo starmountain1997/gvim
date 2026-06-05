@@ -17,9 +17,9 @@ ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${PATH}"
 RUN ln -sf /usr/local/python3.11.14/bin/python3.11 /usr/bin/python3 && \
     ln -sf /usr/local/python3.11.14/bin/python3.11 /bin/python3
 
-# 配置 TUNA Jammy ports 源
-RUN sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports|g' /etc/apt/sources.list && \
-    sed -i 's|http://archive.ubuntu.com/ubuntu|https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports|g' /etc/apt/sources.list
+# 配置 Aliyun Jammy ports 源（TUNA 镜像 403，改用阿里云）
+RUN sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://mirrors.aliyun.com/ubuntu-ports|g' /etc/apt/sources.list && \
+    sed -i 's|http://archive.ubuntu.com/ubuntu|https://mirrors.aliyun.com/ubuntu-ports|g' /etc/apt/sources.list
 
 # 将代理设置传递给构建过程和容器运行时
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
