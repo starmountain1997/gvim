@@ -9,8 +9,8 @@ uv run python -m sglang.launch_server \
     --model-path $MODEL_NAME \
     --host 0.0.0.0 \
     --port 8000 \
-    --mem-fraction-static 0.6 \
-    --context-length 2048 \
+    --mem-fraction-static 0.7 \
+    --context-length 1024 \
     --served-model-name qwen \
     --tool-call-parser qwen3_coder \
     --chat-template ./qwen3_nonthinking.jinja

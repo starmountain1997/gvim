@@ -122,10 +122,7 @@ RUN git clone https://gitcode.com/Ascend/msmodelslim.git $HOME/ASCEND-REPO/msmod
     cd $HOME/ASCEND-REPO/msmodelslim && bash install.sh
 
 # 安装 vllm
-RUN git clone https://github.com/vllm-project/vllm.git $HOME/ASCEND-REPO/vllm && \
-    cd $HOME/ASCEND-REPO/vllm && \
-    git checkout v0.20.2 && \
-    VLLM_TARGET_DEVICE=empty pip install -v -e .
+RUN pip install vllm==0.20.2
 
 # 安装 vllm-ascend
 RUN git clone https://github.com/vllm-project/vllm-ascend.git $HOME/ASCEND-REPO/vllm-ascend && \
