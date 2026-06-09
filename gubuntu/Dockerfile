@@ -1,4 +1,5 @@
-FROM swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:8.5.1-910b-ubuntu22.04-py3.11 
+# FROM quay.io/ascend/cann:9.0.0-910b-ubuntu22.04-py3.11
+FROM quay.io/ascend/vllm-ascend:v0.20.2rc1
 
 ARG PROXY_PORT=6152
 ENV PROXY_PORT=${PROXY_PORT}
@@ -122,15 +123,15 @@ RUN git clone https://gitcode.com/Ascend/msmodelslim.git $HOME/ASCEND-REPO/msmod
     cd $HOME/ASCEND-REPO/msmodelslim && bash install.sh
 
 # 安装 vllm
-RUN git clone --depth 1 --branch v0.20.2 https://github.com/vllm-project/vllm $HOME/ASCEND-REPO/vllm && \
-    cd $HOME/ASCEND-REPO/vllm && \
-    VLLM_TARGET_DEVICE=empty pip install -e .
+# RUN git clone --depth 1 --branch v0.20.2 https://github.com/vllm-project/vllm $HOME/ASCEND-REPO/vllm && \
+#     cd $HOME/ASCEND-REPO/vllm && \
+#     VLLM_TARGET_DEVICE=empty pip install -e .
 
 # 安装 vllm-ascend
-RUN git clone --depth 1 --branch v0.20.2rc1 https://github.com/vllm-project/vllm-ascend.git $HOME/ASCEND-REPO/vllm-ascend && \
-    cd $HOME/ASCEND-REPO/vllm-ascend && \
-    git submodule update --init --recursive && \
-    pip install -e .
+# RUN git clone --depth 1 --branch v0.20.2rc1 https://github.com/vllm-project/vllm-ascend.git $HOME/ASCEND-REPO/vllm-ascend && \
+#     cd $HOME/ASCEND-REPO/vllm-ascend && \
+#     git submodule update --init --recursive && \
+#     pip install -e .
 
 RUN git clone https://gitcode.com/Ascend/msmodeling.git $HOME/ASCEND-REPO/msmodeling && \
     cd $HOME/ASCEND-REPO/msmodeling && \
