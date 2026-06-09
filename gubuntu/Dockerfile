@@ -58,10 +58,10 @@ RUN echo "alias set_proxy=\"export http_proxy=http://127.0.0.1:${PROXY_PORT} && 
 RUN pip install --upgrade pip
 
 # 卸载不需要的包 - 独立层，便于控制依赖
-RUN pip uninstall -y vllm vllm-ascend
+# RUN pip uninstall -y vllm vllm-ascend
 
 # 多次运行
-RUN pip uninstall -y vllm vllm-ascend
+# RUN pip uninstall -y vllm vllm-ascend
 
 # 配置 pip 镜像源 - 网络相关独立配置
 RUN pip config set global.index-url https://mirrors.aliyun.com/pypi/simple && \
@@ -89,7 +89,7 @@ RUN ssh-keygen -t ed25519 -C "guozr-ds" -f ~/.ssh/id_ed25519 -N "" && \
     echo "=== SSH Public Key (add to GitHub) ===" && \
     cat ~/.ssh/id_ed25519.pub
 
-RUN pip install ruff basedpyright
+RUN pip install ruff ty
 
 # 安装 Neovim 0.12.0
 RUN wget https://github.com/neovim/neovim/releases/download/v0.12.0/nvim-linux-arm64.tar.gz -O /tmp/nvim.tar.gz && \
