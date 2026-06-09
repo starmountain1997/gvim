@@ -110,6 +110,9 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | b
     yarn global add @anthropic-ai/claude-code && \
     yarn global add opencode-ai && \
     yarn global add opkg && \
+    ln -sf "$(which node)" /usr/local/bin/node && \
+    ln -sf "$(which npm)" /usr/local/bin/npm && \
+    ln -sf "$(which yarn)" /usr/local/bin/yarn && \
     echo "export PATH=\"$(dirname $(which node)):$(yarn global bin):\$PATH\"" >> /root/.zshrc && \
     echo "export PATH=\"$(dirname $(which node)):$(yarn global bin):\$PATH\"" >> /root/.bashrc
 
