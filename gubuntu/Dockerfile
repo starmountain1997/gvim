@@ -122,7 +122,6 @@ RUN git clone https://gitcode.com/Ascend/msmodelslim.git $HOME/ASCEND-REPO/msmod
     cd $HOME/ASCEND-REPO/msmodelslim && bash install.sh
 
 # 安装 vllm
-RUN pip install vllm==0.20.2
 RUN git clone --depth 1 --branch v0.20.2 https://github.com/vllm-project/vllm $HOME/ASCEND-REPO/vllm 
 RUN cd $HOME/ASCEND-REPO/vllm 
 RUN VLLM_TARGET_DEVICE=empty pip install -e .
@@ -144,6 +143,3 @@ RUN curl -fsSL https://raw.githubusercontent.com/starmountain1997/g-claude/main/
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
     . "$HOME/.cargo/env" && \
     cargo install --locked zellij
-
-
-
