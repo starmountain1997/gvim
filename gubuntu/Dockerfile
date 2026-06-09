@@ -123,12 +123,15 @@ RUN git clone https://gitcode.com/Ascend/msmodelslim.git $HOME/ASCEND-REPO/msmod
 
 # 安装 vllm
 RUN pip install vllm==0.20.2
+RUN git clone --depth 1 --branch v0.20.2 https://github.com/vllm-project/vllm $HOME/ASCEND-REPO/vllm 
+RUN cd $HOME/ASCEND-REPO/vllm 
+RUN VLLM_TARGET_DEVICE=empty pip install -e .
 
 # 安装 vllm-ascend
-RUN git clone https://github.com/vllm-project/vllm-ascend.git $HOME/ASCEND-REPO/vllm-ascend && \
-    cd $HOME/ASCEND-REPO/vllm-ascend && \
-    git remote rename origin upstream && \
-    git remote add origin git@github.com:starmountain1997/vllm-ascend.git
+RUN git clone --depth 1 --branch v0.20.2rc1 https://github.com/vllm-project/vllm-ascend.git $HOME/ASCEND-REPO/vllm-ascend
+RUN cd $HOME/ASCEND-REPO/vllm-ascend
+RUN git submodule update --init --recursive
+RUN pip install -e .
 
 RUN git clone https://gitcode.com/Ascend/msmodeling.git $HOME/ASCEND-REPO/msmodeling && \
     cd $HOME/ASCEND-REPO/msmodeling && \
