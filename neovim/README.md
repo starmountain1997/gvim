@@ -33,6 +33,7 @@
 | [lualine.nvim](https://github.com/nvim-lualine/lualine.nvim) | 状态栏 |
 | [tokyonight.nvim](https://github.com/folke/tokyonight.nvim) | 主题配色 |
 | [better-whitespace.nvim](https://github.com/ntpeters/vim-better-whitespace) | 尾随空白高亮 |
+| [vim-illuminate](https://github.com/RRethy/vim-illuminate) | 光标单词高亮（LSP / Treesitter / 正则） |
 
 ## LSP 服务器
 
@@ -126,3 +127,16 @@
 - `:Obsess` — 开始记录 session
 - `:Obsess!` — 停止记录并删除 `Session.vim`
 - `nvim . && :source Session.vim` — 恢复上次会话窗口布局
+
+### [vim-illuminate](https://github.com/RRethy/vim-illuminate)
+
+**配置要点**
+
+- 三级提供器：LSP → Treesitter → 正则匹配
+- 延迟 100ms 高亮，避免频繁闪烁
+- 大文件（>5000 行）自动禁用光标下高亮
+- 禁用文件类型：NvimTree、lazy、mason、help 等非编辑 buffer
+
+**基本用法**
+
+- 光标悬停在单词上自动高亮所有同词
