@@ -9,6 +9,7 @@ vim.diagnostic.config({
     float = { border = "rounded", source = true, header = "", prefix = "" },
     virtual_text = { source = "if_many" },
     severity_sort = true,
+    update_in_insert = true,
 })
 
 vim.api.nvim_create_autocmd("CursorHold", {
