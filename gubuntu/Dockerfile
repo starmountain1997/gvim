@@ -54,18 +54,13 @@ RUN sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highligh
 RUN echo "alias set_proxy=\"export http_proxy=http://${PROXY_HOST}:${PROXY_PORT} && export https_proxy=http://${PROXY_HOST}:${PROXY_PORT} && export HTTP_PROXY=http://${PROXY_HOST}:${PROXY_PORT} && export HTTPS_PROXY=http://${PROXY_HOST}:${PROXY_PORT} && git config --global http.proxy http://${PROXY_HOST}:${PROXY_PORT} && git config --global https.proxy http://${PROXY_HOST}:${PROXY_PORT}\"" >> $HOME/.zshrc && \
     echo "alias unset_proxy=\"unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY && git config --global --unset http.proxy && git config --global --unset https.proxy\"" >> $HOME/.zshrc
 
-# 升级 pip 并配置镜像源 - Python 相关独立层
-RUN pip install --upgrade pip
+# 安装 uv - Python 包管理器
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+ENV PATH="/root/.local/bin:${PATH}"
 
-# 卸载不需要的包 - 独立层，便于控制依赖
-# RUN pip uninstall -y vllm vllm-ascend
-
-# 多次运行
-# RUN pip uninstall -y vllm vllm-ascend
-
-# 配置 pip 镜像源 - 网络相关独立配置
-RUN pip config set global.index-url https://mirrors.aliyun.com/pypi/simple && \
-    pip config set global.extra-index-url https://mirrors.huaweicloud.com/ascend/repos/pypi
+# 配置 uv 镜像源
+ENV UV_INDEX_URL=https://mirrors.aliyun.com/pypi/simple
+ENV UV_EXTRA_INDEX_URL=https://mirrors.huaweicloud.com/ascend/repos/pypi
 
 # 配置 Git 用户信息 - 配置独立层
 RUN git config --global user.name "guozr" && \
@@ -89,7 +84,7 @@ RUN ssh-keygen -t ed25519 -C "guozr-ds" -f ~/.ssh/id_ed25519 -N "" && \
     echo "=== SSH Public Key (add to GitHub) ===" && \
     cat ~/.ssh/id_ed25519.pub
 
-RUN pip install ruff ty
+RUN uv pip install ruff ty --system
 
 # 安装 Neovim 0.12.0
 RUN wget https://github.com/neovim/neovim/releases/download/v0.12.0/nvim-linux-arm64.tar.gz -O /tmp/nvim.tar.gz && \
@@ -111,7 +106,7 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | b
 # 安装 aisbench benchmark
 RUN mkdir -p $HOME/ASCEND-REPO && \
     git clone https://github.com/AISBench/benchmark.git $HOME/ASCEND-REPO/benchmark && \
-    cd $HOME/ASCEND-REPO/benchmark && pip3 install -e ./ --use-pep517
+    cd $HOME/ASCEND-REPO/benchmark && uv pip install -e ./ --system
 
 # 安装 msmodelslim
 RUN git clone https://gitcode.com/Ascend/msmodelslim.git $HOME/ASCEND-REPO/msmodelslim && \
@@ -130,7 +125,7 @@ RUN git clone https://gitcode.com/Ascend/msmodelslim.git $HOME/ASCEND-REPO/msmod
 
 RUN git clone https://gitcode.com/Ascend/msmodeling.git $HOME/ASCEND-REPO/msmodeling && \
     cd $HOME/ASCEND-REPO/msmodeling && \
-    pip install -r requirements.txt
+    uv pip install -r requirements.txt --system
 
 RUN curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh
 RUN curl -fsSL https://raw.githubusercontent.com/starmountain1997/g-claude/main/scripts/install-g-claude.py | python3 -
