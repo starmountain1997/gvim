@@ -1,6 +1,6 @@
 FROM quay.nju.edu.cn/ascend/vllm-ascend:v0.21.0rc1
 
-ARG PROXY_HOST=host.docker.internal
+ARG PROXY_HOST=127.0.0.1
 ARG PROXY_PORT=6152
 ENV PROXY_PORT=${PROXY_PORT}
 ENV http_proxy=http://${PROXY_HOST}:${PROXY_PORT}
