@@ -112,16 +112,19 @@ RUN mkdir -p $HOME/ASCEND-REPO && \
 RUN git clone https://gitcode.com/Ascend/msmodelslim.git $HOME/ASCEND-REPO/msmodelslim && \
     cd $HOME/ASCEND-REPO/msmodelslim && bash install.sh
 
+# 卸载基础镜像自带的 vllm/vllm-ascend，用 uv 重新管理
+RUN uv pip uninstall -y vllm vllm-ascend --system || true
+
 # 安装 vllm
-# RUN git clone --depth 1 --branch v0.20.2 https://github.com/vllm-project/vllm $HOME/ASCEND-REPO/vllm && \
-#     cd $HOME/ASCEND-REPO/vllm && \
-#     VLLM_TARGET_DEVICE=empty pip install -e .
+RUN git clone --depth 1 --branch v0.21.0 https://github.com/vllm-project/vllm $HOME/ASCEND-REPO/vllm && \
+    cd $HOME/ASCEND-REPO/vllm && \
+    VLLM_TARGET_DEVICE=empty uv pip install -e . --system
 
 # 安装 vllm-ascend
-# RUN git clone --depth 1 --branch v0.20.2rc1 https://github.com/vllm-project/vllm-ascend.git $HOME/ASCEND-REPO/vllm-ascend && \
-#     cd $HOME/ASCEND-REPO/vllm-ascend && \
-#     git submodule update --init --recursive && \
-#     pip install -e .
+RUN git clone --depth 1 --branch v0.21.0rc1 https://github.com/vllm-project/vllm-ascend.git $HOME/ASCEND-REPO/vllm-ascend && \
+    cd $HOME/ASCEND-REPO/vllm-ascend && \
+    git submodule update --init --recursive && \
+    uv pip install -e . --system
 
 RUN git clone https://gitcode.com/Ascend/msmodeling.git $HOME/ASCEND-REPO/msmodeling && \
     cd $HOME/ASCEND-REPO/msmodeling && \
