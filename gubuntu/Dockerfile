@@ -1,11 +1,12 @@
 FROM quay.nju.edu.cn/ascend/vllm-ascend:v0.21.0rc1
 
+ARG PROXY_HOST=host.docker.internal
 ARG PROXY_PORT=6152
 ENV PROXY_PORT=${PROXY_PORT}
-ENV http_proxy=http://127.0.0.1:${PROXY_PORT}
-ENV https_proxy=http://127.0.0.1:${PROXY_PORT}
-ENV HTTP_PROXY=http://127.0.0.1:${PROXY_PORT}
-ENV HTTPS_PROXY=http://127.0.0.1:${PROXY_PORT}
+ENV http_proxy=http://${PROXY_HOST}:${PROXY_PORT}
+ENV https_proxy=http://${PROXY_HOST}:${PROXY_PORT}
+ENV HTTP_PROXY=http://${PROXY_HOST}:${PROXY_PORT}
+ENV HTTPS_PROXY=http://${PROXY_HOST}:${PROXY_PORT}
 ENV no_proxy=localhost,127.0.0.1,mirrors.aliyun.com,mirrors.huaweicloud.com,mirrors.tuna.tsinghua.edu.cn,download.pytorch.org
 ENV NO_PROXY=localhost,127.0.0.1,mirrors.aliyun.com,mirrors.huaweicloud.com,mirrors.tuna.tsinghua.edu.cn,download.pytorch.org
 ENV LANG=zh_CN.UTF-8
@@ -50,7 +51,7 @@ RUN sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highligh
 
 
 # 添加代理别名 - 独立层，便于修改代理设置
-RUN echo "alias set_proxy=\"export http_proxy=http://127.0.0.1:${PROXY_PORT} && export https_proxy=http://127.0.0.1:${PROXY_PORT} && export HTTP_PROXY=http://127.0.0.1:${PROXY_PORT} && export HTTPS_PROXY=http://127.0.0.1:${PROXY_PORT} && git config --global http.proxy http://127.0.0.1:${PROXY_PORT} && git config --global https.proxy http://127.0.0.1:${PROXY_PORT}\"" >> $HOME/.zshrc && \
+RUN echo "alias set_proxy=\"export http_proxy=http://${PROXY_HOST}:${PROXY_PORT} && export https_proxy=http://${PROXY_HOST}:${PROXY_PORT} && export HTTP_PROXY=http://${PROXY_HOST}:${PROXY_PORT} && export HTTPS_PROXY=http://${PROXY_HOST}:${PROXY_PORT} && git config --global http.proxy http://${PROXY_HOST}:${PROXY_PORT} && git config --global https.proxy http://${PROXY_HOST}:${PROXY_PORT}\"" >> $HOME/.zshrc && \
     echo "alias unset_proxy=\"unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY && git config --global --unset http.proxy && git config --global --unset https.proxy\"" >> $HOME/.zshrc
 
 # 升级 pip 并配置镜像源 - Python 相关独立层
@@ -69,8 +70,8 @@ RUN pip config set global.index-url https://mirrors.aliyun.com/pypi/simple && \
 # 配置 Git 用户信息 - 配置独立层
 RUN git config --global user.name "guozr" && \
     git config --global user.email "guozr1997@hotmail.com" && \
-    git config --global http.proxy http://127.0.0.1:${PROXY_PORT} && \
-    git config --global https.proxy http://127.0.0.1:${PROXY_PORT} && \
+    git config --global http.proxy http://${PROXY_HOST}:${PROXY_PORT} && \
+    git config --global https.proxy http://${PROXY_HOST}:${PROXY_PORT} && \
     git config --global pull.rebase true
 
 # 配置 SSH - 使用代理访问 GitHub
@@ -78,7 +79,7 @@ RUN mkdir -p ~/.ssh && \
     echo "Host github.com" >> ~/.ssh/config && \
     echo "    Hostname github.com" >> ~/.ssh/config && \
     echo "    User git" >> ~/.ssh/config && \
-    echo "    ProxyCommand ncat --proxy-type http --proxy 127.0.0.1:${PROXY_PORT} %h %p" >> ~/.ssh/config && \
+    echo "    ProxyCommand ncat --proxy-type http --proxy ${PROXY_HOST}:${PROXY_PORT} %h %p" >> ~/.ssh/config && \
     chmod 600 ~/.ssh/config
 
 # 生成 SSH 密钥对（ed25519 类型，更安全且更快）
