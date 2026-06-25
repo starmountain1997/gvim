@@ -113,8 +113,7 @@ RUN mkdir -p $HOME/ascend-repo && \
     cd /workspace/benchmark && uv pip install -e .
 
 # 安装 msmodelslim
-RUN git clone https://gitcode.com/Ascend/msmodelslim.git /workspace/msmodelslim && \
-    cd /workspace/msmodelslim && bash install.sh
+RUN git clone https://gitcode.com/Ascend/msmodelslim.git /workspace/msmodelslim
 
 # 安装 vllm
 RUN git clone --depth 1 --branch v0.21.0 https://github.com/vllm-project/vllm /workspace/vllm && \
