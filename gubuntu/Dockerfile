@@ -2,13 +2,15 @@ FROM quay.nju.edu.cn/ascend/vllm-ascend:v0.21.0rc1
 
 ARG PROXY_HOST=127.0.0.1
 ARG PROXY_PORT=6152
+ARG NO_PROXY_HOSTS="localhost,127.0.0.1,gitcode.com,mirrors.aliyun.com,mirrors.huaweicloud.com,mirrors.tuna.tsinghua.edu.cn,download.pytorch.org"
 ENV PROXY_PORT=${PROXY_PORT}
+ENV NO_PROXY_HOSTS=${NO_PROXY_HOSTS}
 ENV http_proxy=http://${PROXY_HOST}:${PROXY_PORT}
 ENV https_proxy=http://${PROXY_HOST}:${PROXY_PORT}
 ENV HTTP_PROXY=http://${PROXY_HOST}:${PROXY_PORT}
 ENV HTTPS_PROXY=http://${PROXY_HOST}:${PROXY_PORT}
-ENV no_proxy=localhost,127.0.0.1,gitcode.com,mirrors.aliyun.com,mirrors.huaweicloud.com,mirrors.tuna.tsinghua.edu.cn,download.pytorch.org
-ENV NO_PROXY=localhost,127.0.0.1,gitcode.com,mirrors.aliyun.com,mirrors.huaweicloud.com,mirrors.tuna.tsinghua.edu.cn,download.pytorch.org
+ENV no_proxy=${NO_PROXY_HOSTS}
+ENV NO_PROXY=${NO_PROXY_HOSTS}
 ENV LANG=zh_CN.UTF-8
 ENV TZ=Asia/Shanghai
 # 显式设置基础 PATH，防止脚本加载时丢失核心路径
@@ -47,8 +49,8 @@ RUN sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highligh
 
 
 # 添加代理别名 - 独立层，便于修改代理设置
-RUN echo "alias set_proxy=\"export http_proxy=http://${PROXY_HOST}:${PROXY_PORT} && export https_proxy=http://${PROXY_HOST}:${PROXY_PORT} && export HTTP_PROXY=http://${PROXY_HOST}:${PROXY_PORT} && export HTTPS_PROXY=http://${PROXY_HOST}:${PROXY_PORT} && git config --global http.proxy http://${PROXY_HOST}:${PROXY_PORT} && git config --global https.proxy http://${PROXY_HOST}:${PROXY_PORT}\"" >> $HOME/.zshrc && \
-    echo "alias unset_proxy=\"unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY && git config --global --unset http.proxy && git config --global --unset https.proxy\"" >> $HOME/.zshrc
+RUN echo "alias set_proxy=\"export http_proxy=http://${PROXY_HOST}:${PROXY_PORT} && export https_proxy=http://${PROXY_HOST}:${PROXY_PORT} && export HTTP_PROXY=http://${PROXY_HOST}:${PROXY_PORT} && export HTTPS_PROXY=http://${PROXY_HOST}:${PROXY_PORT} && export no_proxy=${NO_PROXY_HOSTS} && export NO_PROXY=${NO_PROXY_HOSTS} && git config --global http.proxy http://${PROXY_HOST}:${PROXY_PORT} && git config --global https.proxy http://${PROXY_HOST}:${PROXY_PORT}\"" >> $HOME/.zshrc && \
+    echo "alias unset_proxy=\"unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY no_proxy NO_PROXY && git config --global --unset http.proxy && git config --global --unset https.proxy\"" >> $HOME/.zshrc
 
 # 安装 uv - Python 包管理器
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
