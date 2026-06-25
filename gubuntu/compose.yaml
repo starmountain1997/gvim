@@ -1,0 +1,7 @@
+services:
+  gubuntu:
+    image: gubuntu
+    privileged: true
+    network_mode: host
+    stdin_open: true
+    tty: true

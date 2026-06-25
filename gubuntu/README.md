@@ -19,8 +19,16 @@ docker build --network host --build-arg PROXY_HOST=192.168.1.100 --build-arg PRO
 
 ## 运行
 
+### docker run
+
 ```bash
 docker run -it --privileged --network host gubuntu zsh
+```
+
+### docker compose
+
+```bash
+docker compose -p quant up -d
 ```
 
 ## 代理配置
