@@ -1,5 +1,4 @@
-# FROM quay.io/ascend/cann:9.0.0-910b-ubuntu22.04-py3.11
-FROM quay.io/ascend/vllm-ascend:v0.20.2rc1
+FROM quay.nju.edu.cn/ascend/vllm-ascend:v0.21.0rc1
 
 ARG PROXY_PORT=6152
 ENV PROXY_PORT=${PROXY_PORT}
