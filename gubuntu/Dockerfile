@@ -124,16 +124,12 @@ RUN git clone --depth 1 --branch v0.21.0 https://github.com/vllm-project/vllm $H
 # 安装 vllm-ascend
 RUN git clone --depth 1 --branch v0.21.0rc1 https://github.com/vllm-project/vllm-ascend.git $HOME/ASCEND-REPO/vllm-ascend && \
     cd $HOME/ASCEND-REPO/vllm-ascend && \
-    git submodule update --init --recursive && \
-    uv pip install -e .
+    git submodule update --init --recursive
 
 # 安装 msmodeling
 RUN git clone https://gitcode.com/Ascend/msmodeling.git $HOME/ASCEND-REPO/msmodeling && \
     cd $HOME/ASCEND-REPO/msmodeling && \
     uv pip install -r requirements.txt
-
-RUN curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh
-RUN curl -fsSL https://raw.githubusercontent.com/starmountain1997/g-claude/main/scripts/install-g-claude.py | python3 -
 
 # 安装 rust
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
