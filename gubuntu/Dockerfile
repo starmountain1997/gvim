@@ -1,4 +1,4 @@
-FROM quay.nju.edu.cn/ascend/vllm-ascend:v0.21.0rc1
+FROM quay.nju.edu.cn/ascend/cann:9.0.0-910b-ubuntu22.04-py3.12
 
 ARG PROXY_HOST=127.0.0.1
 ARG PROXY_PORT=6152
@@ -102,35 +102,33 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | b
     yarn config set registry https://registry.npmmirror.com 
 
 # 创建 uv 虚拟环境，所有 Python 包统一管理
-RUN uv venv $HOME/ASCEND-REPO/.venv --python 3.11
-ENV VIRTUAL_ENV="$HOME/ASCEND-REPO/.venv"
+RUN mkdir -p /workspace && cd /workspace && uv init && uv venv /workspace/.venv --python 3.12
+ENV VIRTUAL_ENV="/workspace/.venv"
 ENV PATH="$VIRTUAL_ENV/bin:${PATH}"
 
-# 卸载基础镜像自带的 vllm/vllm-ascend
-RUN uv pip uninstall -y vllm vllm-ascend --system || true
 
 # 安装 aisbench benchmark
-RUN mkdir -p $HOME/ASCEND-REPO && \
-    git clone https://github.com/AISBench/benchmark.git $HOME/ASCEND-REPO/benchmark && \
-    cd $HOME/ASCEND-REPO/benchmark && uv pip install -e .
+RUN mkdir -p $HOME/ascend-repo && \
+    git clone https://github.com/AISBench/benchmark.git /workspace/benchmark && \
+    cd /workspace/benchmark && uv pip install -e .
 
 # 安装 msmodelslim
-RUN git clone https://gitcode.com/Ascend/msmodelslim.git $HOME/ASCEND-REPO/msmodelslim && \
-    cd $HOME/ASCEND-REPO/msmodelslim && bash install.sh
+RUN git clone https://gitcode.com/Ascend/msmodelslim.git /workspace/msmodelslim && \
+    cd /workspace/msmodelslim && bash install.sh
 
 # 安装 vllm
-RUN git clone --depth 1 --branch v0.21.0 https://github.com/vllm-project/vllm $HOME/ASCEND-REPO/vllm && \
-    cd $HOME/ASCEND-REPO/vllm && \
+RUN git clone --depth 1 --branch v0.21.0 https://github.com/vllm-project/vllm /workspace/vllm && \
+    cd /workspace/vllm && \
     VLLM_TARGET_DEVICE=empty uv pip install -e .
 
 # 安装 vllm-ascend
-RUN git clone --depth 1 --branch v0.21.0rc1 https://github.com/vllm-project/vllm-ascend.git $HOME/ASCEND-REPO/vllm-ascend && \
-    cd $HOME/ASCEND-REPO/vllm-ascend && \
+RUN git clone --depth 1 --branch v0.21.0rc1 https://github.com/vllm-project/vllm-ascend.git /workspace/vllm-ascend && \
+    cd /workspace/vllm-ascend && \
     git submodule update --init --recursive
 
 # 安装 msmodeling
-RUN git clone https://gitcode.com/Ascend/msmodeling.git $HOME/ASCEND-REPO/msmodeling && \
-    cd $HOME/ASCEND-REPO/msmodeling && \
+RUN git clone https://gitcode.com/Ascend/msmodeling.git /workspace/msmodeling && \
+    cd /workspace/msmodeling && \
     uv pip install -r requirements.txt
 
 # 安装 rust（配置清华镜像源）
