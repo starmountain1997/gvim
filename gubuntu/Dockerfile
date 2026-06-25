@@ -14,10 +14,6 @@ ENV TZ=Asia/Shanghai
 # 显式设置基础 PATH，防止脚本加载时丢失核心路径
 ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${PATH}"
 
-# 创建 Python 3.11 符号链接
-RUN ln -sf /usr/local/python3.11.14/bin/python3.11 /usr/bin/python3 && \
-    ln -sf /usr/local/python3.11.14/bin/python3.11 /bin/python3
-
 # 配置 Aliyun Jammy ports 源（TUNA 镜像 403，改用阿里云）
 RUN sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://mirrors.aliyun.com/ubuntu-ports|g' /etc/apt/sources.list && \
     sed -i 's|http://archive.ubuntu.com/ubuntu|https://mirrors.aliyun.com/ubuntu-ports|g' /etc/apt/sources.list
@@ -103,32 +99,38 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | b
     corepack enable yarn && \
     yarn config set registry https://registry.npmmirror.com 
 
+# 创建 uv 虚拟环境，所有 Python 包统一管理
+RUN uv venv $HOME/ASCEND-REPO/.venv --python 3.11
+ENV VIRTUAL_ENV="$HOME/ASCEND-REPO/.venv"
+ENV PATH="$VIRTUAL_ENV/bin:${PATH}"
+
+# 卸载基础镜像自带的 vllm/vllm-ascend
+RUN uv pip uninstall -y vllm vllm-ascend --system || true
+
 # 安装 aisbench benchmark
 RUN mkdir -p $HOME/ASCEND-REPO && \
     git clone https://github.com/AISBench/benchmark.git $HOME/ASCEND-REPO/benchmark && \
-    cd $HOME/ASCEND-REPO/benchmark && uv pip install -e ./ --system
+    cd $HOME/ASCEND-REPO/benchmark && uv pip install -e .
 
 # 安装 msmodelslim
 RUN git clone https://gitcode.com/Ascend/msmodelslim.git $HOME/ASCEND-REPO/msmodelslim && \
     cd $HOME/ASCEND-REPO/msmodelslim && bash install.sh
 
-# 卸载基础镜像自带的 vllm/vllm-ascend，用 uv 重新管理
-RUN uv pip uninstall -y vllm vllm-ascend --system || true
-
 # 安装 vllm
 RUN git clone --depth 1 --branch v0.21.0 https://github.com/vllm-project/vllm $HOME/ASCEND-REPO/vllm && \
     cd $HOME/ASCEND-REPO/vllm && \
-    VLLM_TARGET_DEVICE=empty uv pip install -e . --system
+    VLLM_TARGET_DEVICE=empty uv pip install -e .
 
 # 安装 vllm-ascend
 RUN git clone --depth 1 --branch v0.21.0rc1 https://github.com/vllm-project/vllm-ascend.git $HOME/ASCEND-REPO/vllm-ascend && \
     cd $HOME/ASCEND-REPO/vllm-ascend && \
     git submodule update --init --recursive && \
-    uv pip install -e . --system
+    uv pip install -e .
 
+# 安装 msmodeling
 RUN git clone https://gitcode.com/Ascend/msmodeling.git $HOME/ASCEND-REPO/msmodeling && \
     cd $HOME/ASCEND-REPO/msmodeling && \
-    uv pip install -r requirements.txt --system
+    uv pip install -r requirements.txt
 
 RUN curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh
 RUN curl -fsSL https://raw.githubusercontent.com/starmountain1997/g-claude/main/scripts/install-g-claude.py | python3 -
