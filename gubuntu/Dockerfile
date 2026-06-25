@@ -138,6 +138,4 @@ RUN mkdir -p $HOME/.cargo && \
     echo '' >> $HOME/.cargo/config.toml && \
     echo '[source.mirror]' >> $HOME/.cargo/config.toml && \
     echo 'registry = "sparse+https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"' >> $HOME/.cargo/config.toml
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
-    . "$HOME/.cargo/env" && \
-    cargo install --locked zellij
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
