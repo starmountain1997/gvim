@@ -131,7 +131,13 @@ RUN git clone https://gitcode.com/Ascend/msmodeling.git $HOME/ASCEND-REPO/msmode
     cd $HOME/ASCEND-REPO/msmodeling && \
     uv pip install -r requirements.txt
 
-# 安装 rust
+# 安装 rust（配置清华镜像源）
+RUN mkdir -p $HOME/.cargo && \
+    echo '[source.crates-io]' > $HOME/.cargo/config.toml && \
+    echo 'replace-with = "mirror"' >> $HOME/.cargo/config.toml && \
+    echo '' >> $HOME/.cargo/config.toml && \
+    echo '[source.mirror]' >> $HOME/.cargo/config.toml && \
+    echo 'registry = "sparse+https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"' >> $HOME/.cargo/config.toml
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
     . "$HOME/.cargo/env" && \
     cargo install --locked zellij
