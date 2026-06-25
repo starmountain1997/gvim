@@ -7,8 +7,8 @@ ENV http_proxy=http://${PROXY_HOST}:${PROXY_PORT}
 ENV https_proxy=http://${PROXY_HOST}:${PROXY_PORT}
 ENV HTTP_PROXY=http://${PROXY_HOST}:${PROXY_PORT}
 ENV HTTPS_PROXY=http://${PROXY_HOST}:${PROXY_PORT}
-ENV no_proxy=localhost,127.0.0.1,mirrors.aliyun.com,mirrors.huaweicloud.com,mirrors.tuna.tsinghua.edu.cn,download.pytorch.org
-ENV NO_PROXY=localhost,127.0.0.1,mirrors.aliyun.com,mirrors.huaweicloud.com,mirrors.tuna.tsinghua.edu.cn,download.pytorch.org
+ENV no_proxy=localhost,127.0.0.1,gitcode.com,mirrors.aliyun.com,mirrors.huaweicloud.com,mirrors.tuna.tsinghua.edu.cn,download.pytorch.org
+ENV NO_PROXY=localhost,127.0.0.1,gitcode.com,mirrors.aliyun.com,mirrors.huaweicloud.com,mirrors.tuna.tsinghua.edu.cn,download.pytorch.org
 ENV LANG=zh_CN.UTF-8
 ENV TZ=Asia/Shanghai
 # 显式设置基础 PATH，防止脚本加载时丢失核心路径
