@@ -84,7 +84,7 @@ RUN ssh-keygen -t ed25519 -C "guozr-ds" -f ~/.ssh/id_ed25519 -N "" && \
     echo "=== SSH Public Key (add to GitHub) ===" && \
     cat ~/.ssh/id_ed25519.pub
 
-RUN uv pip install ruff ty --system
+RUN uv tool install ruff && uv tool install ty
 
 # 安装 Neovim 0.12.0
 RUN wget https://github.com/neovim/neovim/releases/download/v0.12.0/nvim-linux-arm64.tar.gz -O /tmp/nvim.tar.gz && \
