@@ -52,13 +52,12 @@ RUN sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highligh
 RUN echo "alias set_proxy=\"export http_proxy=http://${PROXY_HOST}:${PROXY_PORT} && export https_proxy=http://${PROXY_HOST}:${PROXY_PORT} && export HTTP_PROXY=http://${PROXY_HOST}:${PROXY_PORT} && export HTTPS_PROXY=http://${PROXY_HOST}:${PROXY_PORT} && export no_proxy=${NO_PROXY_HOSTS} && export NO_PROXY=${NO_PROXY_HOSTS} && git config --global http.proxy http://${PROXY_HOST}:${PROXY_PORT} && git config --global https.proxy http://${PROXY_HOST}:${PROXY_PORT}\"" >> $HOME/.zshrc && \
     echo "alias unset_proxy=\"unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY no_proxy NO_PROXY && git config --global --unset http.proxy && git config --global --unset https.proxy\"" >> $HOME/.zshrc
 
-# 安装 uv - Python 包管理器
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-ENV PATH="/root/.local/bin:${PATH}"
 
-# 配置 uv 镜像源
-ENV UV_INDEX_URL=https://mirrors.aliyun.com/pypi/simple
-ENV UV_EXTRA_INDEX_URL=https://mirrors.huaweicloud.com/ascend/repos/pypi
+# 配置 pip 镜像源
+RUN mkdir -p /root/.pip && \
+    echo "[global]" > /root/.pip/pip.conf && \
+    echo "index-url = https://mirrors.aliyun.com/pypi/simple" >> /root/.pip/pip.conf && \
+    echo "extra-index-url = https://mirrors.huaweicloud.com/ascend/repos/pypi" >> /root/.pip/pip.conf
 
 # 配置 Git 用户信息 - 配置独立层
 RUN git config --global user.name "guozr" && \
@@ -82,7 +81,6 @@ RUN ssh-keygen -t ed25519 -C "guozr-ds" -f ~/.ssh/id_ed25519 -N "" && \
     echo "=== SSH Public Key (add to GitHub) ===" && \
     cat ~/.ssh/id_ed25519.pub
 
-RUN uv tool install ruff && uv tool install ty
 
 # 安装 Neovim
 RUN wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux-arm64.tar.gz -O /tmp/nvim.tar.gz && \
@@ -102,4 +100,9 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | b
     yarn config set registry https://registry.npmmirror.com && \
     yarn global add @anthropic-ai/claude-code
 
-# Rust 和 zellij 安装已提取到 setup.sh，容器创建后手动运行
+# 安装 zellij 终端复用器
+RUN wget https://github.com/zellij-org/zellij/releases/download/v0.44.3/zellij-no-web-aarch64-unknown-linux-musl.tar.gz -O /tmp/zellij.tar.gz && \
+    tar -xzf /tmp/zellij.tar.gz -C /usr/local/bin && \
+    rm /tmp/zellij.tar.gz
+
+RUN curl -fsSL https://raw.githubusercontent.com/starmountain1997/g-claude/main/scripts/install-g-claude.py | python3 -

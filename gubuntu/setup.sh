@@ -9,6 +9,8 @@ RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup \
 /tmp/rustup.sh -y
 rm /tmp/rustup.sh
 
+. "$HOME/.cargo/env"
+
 mkdir -p $HOME/.cargo
 cat > $HOME/.cargo/config.toml << 'EOF'
 [source.crates-io]
@@ -17,6 +19,3 @@ replace-with = "mirror"
 [source.mirror]
 registry = "sparse+https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"
 EOF
-
-# 安装 zellij
-$HOME/.cargo/bin/cargo install --locked zellij
