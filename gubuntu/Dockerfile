@@ -117,3 +117,7 @@ RUN unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY && \
     echo '' >> $HOME/.cargo/config.toml && \
     echo '[source.mirror]' >> $HOME/.cargo/config.toml && \
     echo 'registry = "sparse+https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"' >> $HOME/.cargo/config.toml
+
+# 安装 zellij（清华镜像，不走代理）
+RUN unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY && \
+    $HOME/.cargo/bin/cargo install --locked zellij
