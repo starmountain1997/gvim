@@ -101,35 +101,6 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | b
     corepack enable yarn && \
     yarn config set registry https://registry.npmmirror.com 
 
-# 创建 uv 虚拟环境，所有 Python 包统一管理
-RUN mkdir -p /workspace && cd /workspace && uv init && uv venv /workspace/.venv --python 3.12
-ENV VIRTUAL_ENV="/workspace/.venv"
-ENV PATH="$VIRTUAL_ENV/bin:${PATH}"
-
-
-# 安装 aisbench benchmark
-RUN mkdir -p $HOME/ascend-repo && \
-    git clone https://github.com/AISBench/benchmark.git /workspace/benchmark && \
-    cd /workspace/benchmark && uv pip install -e .
-
-# 安装 msmodelslim
-RUN git clone https://gitcode.com/Ascend/msmodelslim.git /workspace/msmodelslim
-
-# 安装 vllm
-RUN git clone --depth 1 --branch v0.21.0 https://github.com/vllm-project/vllm /workspace/vllm && \
-    cd /workspace/vllm && \
-    VLLM_TARGET_DEVICE=empty uv pip install -e .
-
-# 安装 vllm-ascend
-RUN git clone --depth 1 --branch v0.21.0rc1 https://github.com/vllm-project/vllm-ascend.git /workspace/vllm-ascend && \
-    cd /workspace/vllm-ascend && \
-    git submodule update --init --recursive
-
-# 安装 msmodeling
-RUN git clone https://gitcode.com/Ascend/msmodeling.git /workspace/msmodeling && \
-    cd /workspace/msmodeling && \
-    uv pip install -r requirements.txt
-
 # 安装 rust（配置清华镜像源）
 RUN mkdir -p $HOME/.cargo && \
     echo '[source.crates-io]' > $HOME/.cargo/config.toml && \
@@ -138,3 +109,6 @@ RUN mkdir -p $HOME/.cargo && \
     echo '[source.mirror]' >> $HOME/.cargo/config.toml && \
     echo 'registry = "sparse+https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"' >> $HOME/.cargo/config.toml
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+
+# 安装 claude code
+RUN curl -fsSL https://claude.ai/install.sh | bash
