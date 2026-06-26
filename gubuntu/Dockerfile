@@ -98,8 +98,8 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | b
     nvm install 26 && \
     nvm alias default 26 && \
     nvm use default && \
-    corepack enable yarn && \
-    yarn config set registry https://registry.npmmirror.com  \
+    npm install -g yarn && \
+    yarn config set registry https://registry.npmmirror.com && \
     yarn global add @anthropic-ai/claude-code
 
 
