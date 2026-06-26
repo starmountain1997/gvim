@@ -96,7 +96,7 @@ ENV NVM_DIR="/root/.nvm"
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash && \
     . "$NVM_DIR/nvm.sh" && \
     nvm install 26 && \
-    nvm alias default 24 && \
+    nvm alias default 26 && \
     nvm use default && \
     corepack enable yarn && \
     yarn config set registry https://registry.npmmirror.com  \
