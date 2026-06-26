@@ -103,9 +103,14 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | b
     yarn global add @anthropic-ai/claude-code
 
 
-# 安装 rust（配置清华镜像源）
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-RUN mkdir -p $HOME/.cargo && \
+# 安装 rust（清华镜像源加速安装 + crates.io 镜像）
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o /tmp/rustup.sh && \
+    chmod +x /tmp/rustup.sh && \
+    RUSTUP_UPDATE_ROOT=https://mirrors.tuna.tsinghua.edu.cn/rustup/rustup \
+    RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup \
+    /tmp/rustup.sh -y && \
+    rm /tmp/rustup.sh && \
+    mkdir -p $HOME/.cargo && \
     echo '[source.crates-io]' > $HOME/.cargo/config.toml && \
     echo 'replace-with = "mirror"' >> $HOME/.cargo/config.toml && \
     echo '' >> $HOME/.cargo/config.toml && \
