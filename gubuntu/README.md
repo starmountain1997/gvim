@@ -28,7 +28,7 @@ docker run -it --privileged --network host gubuntu zsh
 ### docker compose
 
 ```bash
-docker compose -p quant up -d
+docker compose -p guozr up -d
 ```
 
 ## 代理配置
