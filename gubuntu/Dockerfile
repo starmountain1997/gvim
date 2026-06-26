@@ -84,8 +84,8 @@ RUN ssh-keygen -t ed25519 -C "guozr-ds" -f ~/.ssh/id_ed25519 -N "" && \
 
 RUN uv tool install ruff && uv tool install ty
 
-# 安装 Neovim 0.12.0
-RUN wget https://github.com/neovim/neovim/releases/download/v0.12.0/nvim-linux-arm64.tar.gz -O /tmp/nvim.tar.gz && \
+# 安装 Neovim
+RUN wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux-arm64.tar.gz -O /tmp/nvim.tar.gz && \
     tar -xzf /tmp/nvim.tar.gz -C /opt && \
     mv /opt/nvim-* /opt/nvim && \
     ln -sf /opt/nvim/bin/nvim /usr/local/bin/nvim && \
@@ -95,20 +95,19 @@ RUN wget https://github.com/neovim/neovim/releases/download/v0.12.0/nvim-linux-a
 ENV NVM_DIR="/root/.nvm"
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash && \
     . "$NVM_DIR/nvm.sh" && \
-    nvm install 24 && \
+    nvm install 26 && \
     nvm alias default 24 && \
     nvm use default && \
     corepack enable yarn && \
-    yarn config set registry https://registry.npmmirror.com 
+    yarn config set registry https://registry.npmmirror.com  \
+    yarn global add @anthropic-ai/claude-code
+
 
 # 安装 rust（配置清华镜像源）
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 RUN mkdir -p $HOME/.cargo && \
     echo '[source.crates-io]' > $HOME/.cargo/config.toml && \
     echo 'replace-with = "mirror"' >> $HOME/.cargo/config.toml && \
     echo '' >> $HOME/.cargo/config.toml && \
     echo '[source.mirror]' >> $HOME/.cargo/config.toml && \
     echo 'registry = "sparse+https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"' >> $HOME/.cargo/config.toml
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-
-# 安装 claude code
-RUN curl -fsSL https://claude.ai/install.sh | bash
