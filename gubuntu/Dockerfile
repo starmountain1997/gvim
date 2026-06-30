@@ -109,3 +109,4 @@ RUN curl -fsSL https://raw.githubusercontent.com/starmountain1997/g-claude/main/
 
 # 安装 uv
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+RUN echo "export UV_DEFAULT_INDEX=\"https://mirrors.aliyun.com/pypi/simple\""  >> $HOME/.zshrc
