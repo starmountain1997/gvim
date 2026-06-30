@@ -2,6 +2,7 @@
 set -e
 
 # 安装 rust（清华镜像源加速）
+# . "$HOME/.cargo/env"
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o /tmp/rustup.sh
 chmod +x /tmp/rustup.sh
 RUSTUP_UPDATE_ROOT=https://mirrors.tuna.tsinghua.edu.cn/rustup/rustup \
