@@ -107,7 +107,5 @@ RUN wget https://github.com/zellij-org/zellij/releases/download/v0.44.3/zellij-n
 
 RUN curl -fsSL https://raw.githubusercontent.com/starmountain1997/g-claude/main/scripts/install-g-claude.py | python3 -
 
-RUN pip install vllm==0.21.0
-RUN pip install \
-    --extra-index-url https://mirrors.huaweicloud.com/ascend/repos/pypi \
-    vllm-ascend==0.21.0rc1
+# 安装 uv
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
