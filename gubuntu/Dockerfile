@@ -2,7 +2,7 @@ FROM quay.nju.edu.cn/ascend/cann:9.0.0-910b-ubuntu22.04-py3.12
 
 ARG PROXY_HOST=127.0.0.1
 ARG PROXY_PORT=6152
-ARG NO_PROXY_HOSTS="localhost,127.0.0.1,gitcode.com,mirrors.aliyun.com,mirrors.huaweicloud.com,mirrors.tuna.tsinghua.edu.cn,npmmirror.com,modelscope.cn,hf-mirror.com"
+ARG NO_PROXY_HOSTS="localhost,127.0.0.1,gitcode.com,mirrors.aliyun.com,mirrors.huaweicloud.com,mirrors.tuna.tsinghua.edu.cn,npmmirror.com,modelscope.cn,hf-mirror.com,deepseek.com"
 ENV PROXY_PORT=${PROXY_PORT}
 ENV NO_PROXY_HOSTS=${NO_PROXY_HOSTS}
 ENV http_proxy=http://${PROXY_HOST}:${PROXY_PORT}
@@ -134,3 +134,6 @@ RUN mkdir -p $HOME/.cargo && \
 
 # 为 zsh 设置 Cargo 环境变量
 RUN echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> $HOME/.zshrc
+
+# 安装 rtk
+RUN . "$HOME/.cargo/env" && cargo install --git https://github.com/rtk-ai/rtk
