@@ -126,13 +126,11 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o /tmp/rustup.sh 
 
 # 配置 crates.io 清华镜像
 RUN mkdir -p $HOME/.cargo && \
-    cat > $HOME/.cargo/config.toml << 'EOF'
-[source.crates-io]
-replace-with = "mirror"
-
-[source.mirror]
-registry = "sparse+https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"
-EOF
+    echo "[source.crates-io]" > $HOME/.cargo/config.toml && \
+    echo "replace-with = \"mirror\"" >> $HOME/.cargo/config.toml && \
+    echo "" >> $HOME/.cargo/config.toml && \
+    echo "[source.mirror]" >> $HOME/.cargo/config.toml && \
+    echo "registry = \"sparse+https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/\"" >> $HOME/.cargo/config.toml
 
 # 为 zsh 设置 Cargo 环境变量
 RUN echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> $HOME/.zshrc
