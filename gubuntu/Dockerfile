@@ -105,8 +105,34 @@ RUN wget https://github.com/zellij-org/zellij/releases/download/v0.44.3/zellij-n
     tar -xzf /tmp/zellij.tar.gz -C /usr/local/bin && \
     rm /tmp/zellij.tar.gz
 
+# 安装 lazygit
+RUN wget https://github.com/jesseduffield/lazygit/releases/download/v0.62.2/lazygit_0.62.2_linux_arm64.tar.gz -O /tmp/lazygit.tar.gz && \
+    tar -xzf /tmp/lazygit.tar.gz -C /usr/local/bin && \
+    rm /tmp/lazygit.tar.gz
+
 RUN curl -fsSL https://raw.githubusercontent.com/starmountain1997/g-claude/main/scripts/install-g-claude.py | python3 -
 
 # 安装 uv
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 RUN echo "export UV_DEFAULT_INDEX=\"https://mirrors.aliyun.com/pypi/simple\""  >> $HOME/.zshrc
+
+# 安装 Rust（清华镜像源加速）
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o /tmp/rustup.sh && \
+    chmod +x /tmp/rustup.sh && \
+    RUSTUP_UPDATE_ROOT=https://mirrors.tuna.tsinghua.edu.cn/rustup/rustup \
+    RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup \
+    /tmp/rustup.sh -y && \
+    rm /tmp/rustup.sh
+
+# 配置 crates.io 清华镜像
+RUN mkdir -p $HOME/.cargo && \
+    cat > $HOME/.cargo/config.toml << 'EOF'
+[source.crates-io]
+replace-with = "mirror"
+
+[source.mirror]
+registry = "sparse+https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"
+EOF
+
+# 为 zsh 设置 Cargo 环境变量
+RUN echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> $HOME/.zshrc
