@@ -3,7 +3,7 @@ vim.opt.relativenumber = true
 vim.opt.cursorline = true
 
 -- LSP
-vim.lsp.enable({ "ruff", "ty" })
+vim.lsp.enable({ "ruff", "ty", "yamlls" })
 
 vim.diagnostic.config({
     float = { border = "rounded", source = true, header = "", prefix = "" },
@@ -57,12 +57,20 @@ vim.api.nvim_create_autocmd("LspAttach", {
                 vim.cmd("copen")
             end)
         end, opts)
-        -- Format on save via ruff only (avoids basedpyright conflict)
+        -- Format on save: ruff for Python, yamlls for YAML
         if client and client.name == "ruff" then
             vim.api.nvim_create_autocmd("BufWritePre", {
                 buffer = args.buf,
                 callback = function()
                     vim.lsp.buf.format({ name = "ruff" })
+                end,
+            })
+        end
+        if client and client.name == "yamlls" then
+            vim.api.nvim_create_autocmd("BufWritePre", {
+                buffer = args.buf,
+                callback = function()
+                    vim.lsp.buf.format({ name = "yamlls" })
                 end,
             })
         end
