@@ -7,7 +7,7 @@ services:
     network_mode: host
     stdin_open: true
     tty: true
-    command: zsh
+    command: bash
     restart: unless-stopped
     shm_size: 128g
 
