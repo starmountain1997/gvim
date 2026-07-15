@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  g-vllm-ascend:
+    image: quay.nju.edu.cn/ascend/cann:9.0.0-910b-ubuntu22.04-py3.12
+    privileged: true
+    network_mode: host
+    stdin_open: true
+    tty: true
+    command: zsh
+    restart: unless-stopped
+    shm_size: 128g
+
+    devices:
+      - "/dev/davinci0:/dev/davinci0"
+      - "/dev/davinci1:/dev/davinci1"
+      - "/dev/davinci2:/dev/davinci2"
+      - "/dev/davinci3:/dev/davinci3"
+      - "/dev/davinci4:/dev/davinci4"
+      - "/dev/davinci5:/dev/davinci5"
+      - "/dev/davinci6:/dev/davinci6"
+      - "/dev/davinci7:/dev/davinci7"
+      - "/dev/davinci_manager:/dev/davinci_manager"
+      - "/dev/devmm_svm:/dev/devmm_svm"
+      - "/dev/hisi_hdc:/dev/hisi_hdc"
+
+    working_dir: /home/guozr
+
+    volumes:
+      - /usr/local/Ascend/driver:/usr/local/Ascend/driver
+      - /usr/local/dcmi:/usr/local/dcmi
+      - /usr/local/bin/npu-smi:/usr/local/bin/npu-smi
+      - /etc/ascend_install.info:/etc/ascend_install.info
+      - /usr/local/sbin:/usr/local/sbin
+      - /home:/home
+      - /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime
