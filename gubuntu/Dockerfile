@@ -98,7 +98,8 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | b
     nvm use default && \
     npm install -g yarn && \
     yarn config set registry https://registry.npmmirror.com && \
-    yarn global add @anthropic-ai/claude-code
+    yarn global add @anthropic-ai/claude-code \
+    yarn global add @openai/codex
 
 # 安装 zellij 终端复用器
 RUN wget https://github.com/zellij-org/zellij/releases/download/v0.44.3/zellij-no-web-aarch64-unknown-linux-musl.tar.gz -O /tmp/zellij.tar.gz && \
