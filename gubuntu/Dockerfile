@@ -1,4 +1,4 @@
-FROM quay.nju.edu.cn/ascend/cann:9.0.0-910b-ubuntu22.04-py3.12
+FROM quay.nju.edu.cn/ascend/vllm-ascend:v0.22.1rc1
 
 ARG PROXY_HOST=127.0.0.1
 ARG PROXY_PORT=6152
@@ -101,16 +101,6 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | b
     yarn global add @anthropic-ai/claude-code \
     yarn global add @openai/codex
 
-# 安装 zellij 终端复用器
-RUN wget https://github.com/zellij-org/zellij/releases/download/v0.44.3/zellij-no-web-aarch64-unknown-linux-musl.tar.gz -O /tmp/zellij.tar.gz && \
-    tar -xzf /tmp/zellij.tar.gz -C /usr/local/bin && \
-    rm /tmp/zellij.tar.gz
-
-# 安装 lazygit
-RUN wget https://github.com/jesseduffield/lazygit/releases/download/v0.62.2/lazygit_0.62.2_linux_arm64.tar.gz -O /tmp/lazygit.tar.gz && \
-    tar -xzf /tmp/lazygit.tar.gz -C /usr/local/bin && \
-    rm /tmp/lazygit.tar.gz
-
 RUN curl -fsSL https://raw.githubusercontent.com/starmountain1997/g-claude/main/scripts/install-g-claude.py | python3 -
 
 # 安装 uv
@@ -133,8 +123,8 @@ RUN mkdir -p $HOME/.cargo && \
     echo "[source.mirror]" >> $HOME/.cargo/config.toml && \
     echo "registry = \"sparse+https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/\"" >> $HOME/.cargo/config.toml
 
+# 安装 zellij（终端复用器/工作区管理）
+RUN . "$HOME/.cargo/env" && cargo install --locked zellij
+
 # 为 zsh 设置 Cargo 环境变量
 RUN echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> $HOME/.zshrc
-
-# 安装 rtk
-RUN . "$HOME/.cargo/env" && cargo install --git https://github.com/rtk-ai/rtk
