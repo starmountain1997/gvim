@@ -58,13 +58,21 @@ config.keys = {
         mods = "CTRL|SHIFT",
         action = wezterm.action.SendKey({ key = "c", mods = "CTRL" }),
     },
+    -- 关闭当前 tab 时不再弹出确认框
+    {
+        key = "w",
+        mods = "CTRL|SHIFT",
+        action = wezterm.action.CloseCurrentTab({ confirm = false }),
+    },
 }
 
 -- Linux: 使用本地 home 目录
 config.default_cwd = wezterm.home_dir
 
--- 窗口装饰设置
-config.window_decorations = "RESIZE"
+-- 将窗口按钮集成到标签栏，避免“系统标题栏 + 标签栏”占用两行
+config.window_decorations = "INTEGRATED_BUTTONS | RESIZE"
+config.integrated_title_buttons = { "Hide", "Maximize", "Close" }
+config.integrated_title_button_alignment = "Right"
 
 -- SSH 域配置（可选，需要手动选择连接）
 config.ssh_domains = {
