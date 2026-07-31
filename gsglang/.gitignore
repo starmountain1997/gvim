@@ -1,0 +1,8 @@
+# Ascend compiler artifacts
+kernel_meta/
+
+# quantization run logs
+*.log
+
+# benchmark output
+optimized_result.json

@@ -1,0 +1,93 @@
+# Qwen3.6-35B-A3B W4A8 (VLM MoE)
+# Based on verified qwen3_5_moe family configs (qwen3.5_moe_w4a8.yaml, qwen3_6_27B_w8a8.yaml)
+apiversion: multimodal_vlm_modelslim_v1
+
+metadata:
+  config_id: Qwen3_6_35B_A3B_w4a8
+  score: 90
+  verified_model_types:
+    - Qwen3.6-35B-A3B
+  label:
+    w_bit: 4
+    a_bit: 8
+    is_sparse: False
+    kv_cache: False
+
+default_w8a8_dynamic: &default_w8a8_dynamic
+  act:
+    scope: "per_token"
+    dtype: "int8"
+    symmetric: True
+    method: "minmax"
+  weight:
+    scope: "per_channel"
+    dtype: "int8"
+    symmetric: True
+    method: "minmax"
+
+default_w4a8_dynamic: &default_w4a8_dynamic
+  act:
+    scope: "per_token"
+    dtype: "int8"
+    symmetric: True
+    method: "minmax"
+  weight:
+    scope: "per_channel"
+    dtype: "int4"
+    symmetric: True
+    method: "ssz"
+
+spec:
+  process:
+    # Step 1: Outlier suppression on LM backbone (standard for MoE W4A8)
+    - type: "flex_smooth_quant"
+      enable_subgraph_type:
+        - "norm-linear"
+        - "ov"
+      include:
+        - "*language_model*"
+      exclude:
+        - "mtp*"
+
+    # Step 2: Mixed quantization group
+    - type: "group"
+      configs:
+        # Attention: W8A8 (preserve accuracy; o_proj stays FP16 per family config)
+        - type: "linear_quant"
+          qconfig: *default_w8a8_dynamic
+          include:
+            - "*self_attn*"
+          exclude:
+            - "*self_attn.o_proj*"
+            - "mtp*"
+
+        # Vision encoder blocks: W8A8 (linear_fc2 stays FP16 per family config)
+        - type: "linear_quant"
+          qconfig: *default_w8a8_dynamic
+          include:
+            - "*visual.blocks*"
+          exclude:
+            - "*linear_fc2*"
+
+        # Linear attention QKV/Z projections: W8A8 (Qwen3.6 verified pattern)
+        - type: "linear_quant"
+          qconfig: *default_w8a8_dynamic
+          include:
+            - "*linear_attn.in_proj_qkv*"
+            - "*linear_attn.in_proj_z*"
+          exclude:
+            - "mtp*"
+
+        # MoE experts: W4A8 per_channel + ssz (max memory savings)
+        - type: "linear_quant"
+          qconfig: *default_w4a8_dynamic
+          include:
+            - "*mlp.experts*"
+          exclude:
+            - "mtp*"
+
+  save:
+    - type: "ascendv1_saver"
+      part_file_size: 4
+  dataset: "calibImages"  # Short name: auto-searches in lab_calib/
+  default_text: "Describe this image in detail."
