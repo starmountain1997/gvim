@@ -2,7 +2,7 @@ FROM quay.nju.edu.cn/ascend/vllm-ascend:v0.22.1rc1
 
 ARG PROXY_HOST=127.0.0.1
 ARG PROXY_PORT=6152
-ARG NO_PROXY_HOSTS="localhost,127.0.0.1,gitcode.com,mirrors.aliyun.com,mirrors.huaweicloud.com,mirrors.tuna.tsinghua.edu.cn,npmmirror.com,modelscope.cn,hf-mirror.com,deepseek.com"
+ARG NO_PROXY_HOSTS="localhost,127.0.0.1,gitcode.com,gitee.com,mirrors.aliyun.com,mirrors.huaweicloud.com,mirrors.tuna.tsinghua.edu.cn,npmmirror.com,modelscope.cn,hf-mirror.com,deepseek.com"
 ENV PROXY_PORT=${PROXY_PORT}
 ENV NO_PROXY_HOSTS=${NO_PROXY_HOSTS}
 ENV http_proxy=http://${PROXY_HOST}:${PROXY_PORT}
