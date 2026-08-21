@@ -108,8 +108,11 @@ RUN curl -fsSL https://raw.githubusercontent.com/starmountain1997/g-claude/main/
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 RUN echo "export UV_DEFAULT_INDEX=\"https://mirrors.aliyun.com/pypi/simple\""  >> $HOME/.zshrc
 
-# 安装 msmodelslim
-RUN uv tool install msmodelslim
+# 安装 msmodelslim（源码编译）
+RUN git clone https://github.com/AISBench/benchmark.git /tmp/benchmark && \
+    cd /tmp/benchmark && \
+    pip3 install -e ./ --use-pep517 && \
+    rm -rf /tmp/benchmark
 
 # 安装 Rust（清华镜像源加速）
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o /tmp/rustup.sh && \
