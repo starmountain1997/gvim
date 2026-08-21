@@ -21,9 +21,9 @@ RUN useradd -m -s /bin/bash guozr && \
     echo "guozr:0919" | chpasswd && \
     usermod -aG sudo guozr
 
-# 配置 Aliyun Jammy ports 源（TUNA 镜像 403，改用阿里云）
-RUN sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://mirrors.aliyun.com/ubuntu-ports|g' /etc/apt/sources.list && \
-    sed -i 's|http://archive.ubuntu.com/ubuntu|https://mirrors.aliyun.com/ubuntu-ports|g' /etc/apt/sources.list
+# 配置 TUNA Ubuntu ARM64 源
+RUN sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports|g' /etc/apt/sources.list && \
+    sed -i 's|http://archive.ubuntu.com/ubuntu|https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports|g' /etc/apt/sources.list
 
 # 将代理设置传递给构建过程和容器运行时
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
