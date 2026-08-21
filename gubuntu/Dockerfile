@@ -42,8 +42,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-ins
     && rm -rf /var/lib/apt/lists/*
 
 # 安装 Oh My Zsh - 独立层，便于调试
-RUN git clone --depth 1 https://mirrors.tuna.tsinghua.edu.cn/ohmyzsh.git ${HOME}/.oh-my-zsh && \
-    cp ${HOME}/.oh-my-zsh/templates/zshrc.zsh-template ${HOME}/.zshrc
+RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
 # 安装 Zsh 插件 - 独立层，可以单独更新
 RUN git clone https://gitee.com/starmountain1997/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions && \
