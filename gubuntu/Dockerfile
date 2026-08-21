@@ -21,9 +21,9 @@ RUN useradd -m -s /bin/bash guozr && \
     echo "guozr:0919" | chpasswd && \
     usermod -aG sudo guozr
 
-# 配置 TUNA Ubuntu ARM64 源
-RUN sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports|g' /etc/apt/sources.list && \
-    sed -i 's|http://archive.ubuntu.com/ubuntu|https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports|g' /etc/apt/sources.list
+# 配置 Aliyun Jammy ports 源（TUNA 镜像 403，改用阿里云）
+RUN sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://mirrors.aliyun.com/ubuntu-ports|g' /etc/apt/sources.list && \
+    sed -i 's|http://archive.ubuntu.com/ubuntu|https://mirrors.aliyun.com/ubuntu-ports|g' /etc/apt/sources.list
 
 # 将代理设置传递给构建过程和容器运行时
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -108,11 +108,6 @@ RUN curl -fsSL https://raw.githubusercontent.com/starmountain1997/g-claude/main/
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 RUN echo "export UV_DEFAULT_INDEX=\"https://mirrors.aliyun.com/pypi/simple\""  >> $HOME/.zshrc
 
-# 安装 msmodelslim（源码编译）
-RUN git clone https://github.com/AISBench/benchmark.git /tmp/benchmark && \
-    cd /tmp/benchmark && \
-    pip3 install -e ./ --use-pep517 && \
-    rm -rf /tmp/benchmark
 
 # 安装 Rust（清华镜像源加速）
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o /tmp/rustup.sh && \
