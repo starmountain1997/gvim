@@ -16,6 +16,11 @@ ENV TZ=Asia/Shanghai
 # 显式设置基础 PATH，防止脚本加载时丢失核心路径
 ENV PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${PATH}"
 
+# 创建用户 guozr 并赋予 sudo 权限
+RUN useradd -m -s /bin/bash guozr && \
+    echo "guozr:0919" | chpasswd && \
+    usermod -aG sudo guozr
+
 # 配置 Aliyun Jammy ports 源（TUNA 镜像 403，改用阿里云）
 RUN sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://mirrors.aliyun.com/ubuntu-ports|g' /etc/apt/sources.list && \
     sed -i 's|http://archive.ubuntu.com/ubuntu|https://mirrors.aliyun.com/ubuntu-ports|g' /etc/apt/sources.list
