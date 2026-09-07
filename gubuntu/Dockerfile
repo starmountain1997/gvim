@@ -1,4 +1,4 @@
-FROM quay.nju.edu.cn/ascend/vllm-ascend:v0.23.0-a3
+FROM quay.io/ascend/vllm-ascend:glm-5.3-flash-a3
 
 
 ARG PROXY_HOST=127.0.0.1
