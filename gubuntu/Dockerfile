@@ -3,7 +3,7 @@ FROM quay.io/ascend/vllm-ascend:glm-5.3-flash-a3
 
 ARG PROXY_HOST=127.0.0.1
 ARG PROXY_PORT=6152
-ARG NO_PROXY_HOSTS="localhost,127.0.0.1,gitcode.com,gitee.com,mirrors.aliyun.com,mirrors.huaweicloud.com,mirrors.tuna.tsinghua.edu.cn,npmmirror.com,modelscope.cn,hf-mirror.com,deepseek.com"
+ARG NO_PROXY_HOSTS="localhost,127.0.0.1,gitcode.com,gitee.com,mirrors.tuna.tsinghua.edu.cn,pypi.tuna.tsinghua.edu.cn,mirrors.huaweicloud.com,npmmirror.com,modelscope.cn,hf-mirror.com,deepseek.com"
 ENV PROXY_PORT=${PROXY_PORT}
 ENV NO_PROXY_HOSTS=${NO_PROXY_HOSTS}
 ENV http_proxy=http://${PROXY_HOST}:${PROXY_PORT}
@@ -22,12 +22,12 @@ RUN useradd -m -s /bin/bash guozr && \
     echo "guozr:0919" | chpasswd && \
     usermod -aG sudo guozr
 
-# 配置 Aliyun Ubuntu 源（arm64 使用 /ubuntu-ports/ 路径，直接写入确保生效）
+# 配置清华 Ubuntu 源（arm64 使用 /ubuntu-ports/ 路径，直接写入确保生效）
 RUN printf '%s\n' \
-    'deb https://mirrors.aliyun.com/ubuntu-ports jammy main restricted universe multiverse' \
-    'deb https://mirrors.aliyun.com/ubuntu-ports jammy-updates main restricted universe multiverse' \
-    'deb https://mirrors.aliyun.com/ubuntu-ports jammy-security main restricted universe multiverse' \
-    'deb https://mirrors.aliyun.com/ubuntu-ports jammy-backports main restricted universe multiverse' \
+    'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports jammy main restricted universe multiverse' \
+    'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports jammy-updates main restricted universe multiverse' \
+    'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports jammy-security main restricted universe multiverse' \
+    'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports jammy-backports main restricted universe multiverse' \
     > /etc/apt/sources.list
 
 # 将代理设置传递给构建过程和容器运行时
@@ -65,7 +65,7 @@ RUN echo "alias set_proxy=\"export http_proxy=http://${PROXY_HOST}:${PROXY_PORT}
 # 配置 pip 镜像源
 RUN mkdir -p /root/.pip && \
     echo "[global]" > /root/.pip/pip.conf && \
-    echo "index-url = https://mirrors.aliyun.com/pypi/simple" >> /root/.pip/pip.conf && \
+    echo "index-url = https://pypi.tuna.tsinghua.edu.cn/simple" >> /root/.pip/pip.conf && \
     echo "extra-index-url = https://mirrors.huaweicloud.com/ascend/repos/pypi" >> /root/.pip/pip.conf
 
 # 配置 Git 用户信息 - 配置独立层
@@ -114,7 +114,7 @@ RUN curl -fsSL https://raw.githubusercontent.com/starmountain1997/g-claude/main/
 
 # 安装 uv
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-RUN echo "export UV_DEFAULT_INDEX=\"https://mirrors.aliyun.com/pypi/simple\""  >> $HOME/.zshrc
+RUN echo "export UV_DEFAULT_INDEX=\"https://pypi.tuna.tsinghua.edu.cn/simple\""  >> $HOME/.zshrc
 
 
 # 安装 Rust（清华镜像源加速）
