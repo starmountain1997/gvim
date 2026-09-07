@@ -22,12 +22,12 @@ RUN useradd -m -s /bin/bash guozr && \
     echo "guozr:0919" | chpasswd && \
     usermod -aG sudo guozr
 
-# 配置清华 Ubuntu 源（arm64 使用 /ubuntu-ports/ 路径，直接写入确保生效）
+# 清华 TUNA 源：TUNA 不镜像 -security，需走官方 ports.ubuntu.com（见 tuna 帮助页）；其余走 tuna
 RUN printf '%s\n' \
-    'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports jammy main restricted universe multiverse' \
-    'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports jammy-updates main restricted universe multiverse' \
-    'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports jammy-security main restricted universe multiverse' \
-    'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports jammy-backports main restricted universe multiverse' \
+    'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ jammy main restricted universe multiverse' \
+    'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ jammy-updates main restricted universe multiverse' \
+    'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ jammy-backports main restricted universe multiverse' \
+    'deb http://ports.ubuntu.com/ubuntu-ports/ jammy-security main restricted universe multiverse' \
     > /etc/apt/sources.list
 
 # 将代理设置传递给构建过程和容器运行时
