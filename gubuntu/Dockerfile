@@ -22,15 +22,23 @@ RUN useradd -m -s /bin/bash guozr && \
     echo "guozr:0919" | chpasswd && \
     usermod -aG sudo guozr
 
-# 配置 Aliyun Ubuntu 源（arm64 使用 /ubuntu-ports/ 路径）
-RUN sed -i 's|http://archive.ubuntu.com/ubuntu|https://mirrors.aliyun.com/ubuntu-ports|g' /etc/apt/sources.list && \
-    sed -i 's|http://security.ubuntu.com/ubuntu|https://mirrors.aliyun.com/ubuntu-ports|g' /etc/apt/sources.list && \
-    sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://mirrors.aliyun.com/ubuntu-ports|g' /etc/apt/sources.list
+# 配置 Aliyun Ubuntu 源（arm64 使用 /ubuntu-ports/ 路径，直接写入确保生效）
+RUN cat > /etc/apt/sources.list << 'EOF'
+deb https://mirrors.aliyun.com/ubuntu-ports jammy main restricted universe multiverse
+deb-src https://mirrors.aliyun.com/ubuntu-ports jammy main restricted universe multiverse
+deb https://mirrors.aliyun.com/ubuntu-ports jammy-updates main restricted universe multiverse
+deb-src https://mirrors.aliyun.com/ubuntu-ports jammy-updates main restricted universe multiverse
+deb https://mirrors.aliyun.com/ubuntu-ports jammy-security main restricted universe multiverse
+deb-src https://mirrors.aliyun.com/ubuntu-ports jammy-security main restricted universe multiverse
+deb https://mirrors.aliyun.com/ubuntu-ports jammy-backports main restricted universe multiverse
+deb-src https://mirrors.aliyun.com/ubuntu-ports jammy-backports main restricted universe multiverse
+EOF
 
 # 将代理设置传递给构建过程和容器运行时
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+RUN unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY no_proxy NO_PROXY; \
+    apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         zsh \
-	    tmux \
+        tmux \
         curl \
         git \
         ncat \
