@@ -23,16 +23,12 @@ RUN useradd -m -s /bin/bash guozr && \
     usermod -aG sudo guozr
 
 # 配置 Aliyun Ubuntu 源（arm64 使用 /ubuntu-ports/ 路径，直接写入确保生效）
-RUN cat > /etc/apt/sources.list << 'EOF'
-deb https://mirrors.aliyun.com/ubuntu-ports jammy main restricted universe multiverse
-deb-src https://mirrors.aliyun.com/ubuntu-ports jammy main restricted universe multiverse
-deb https://mirrors.aliyun.com/ubuntu-ports jammy-updates main restricted universe multiverse
-deb-src https://mirrors.aliyun.com/ubuntu-ports jammy-updates main restricted universe multiverse
-deb https://mirrors.aliyun.com/ubuntu-ports jammy-security main restricted universe multiverse
-deb-src https://mirrors.aliyun.com/ubuntu-ports jammy-security main restricted universe multiverse
-deb https://mirrors.aliyun.com/ubuntu-ports jammy-backports main restricted universe multiverse
-deb-src https://mirrors.aliyun.com/ubuntu-ports jammy-backports main restricted universe multiverse
-EOF
+RUN printf '%s\n' \
+    'deb https://mirrors.aliyun.com/ubuntu-ports jammy main restricted universe multiverse' \
+    'deb https://mirrors.aliyun.com/ubuntu-ports jammy-updates main restricted universe multiverse' \
+    'deb https://mirrors.aliyun.com/ubuntu-ports jammy-security main restricted universe multiverse' \
+    'deb https://mirrors.aliyun.com/ubuntu-ports jammy-backports main restricted universe multiverse' \
+    > /etc/apt/sources.list
 
 # 将代理设置传递给构建过程和容器运行时
 RUN unset http_proxy https_proxy HTTP_PROXY HTTPS_PROXY no_proxy NO_PROXY; \
