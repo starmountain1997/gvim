@@ -22,11 +22,11 @@ RUN useradd -m -s /bin/bash guozr && \
     echo "guozr:0919" | chpasswd && \
     usermod -aG sudo guozr
 
-# 清华 TUNA 源：TUNA 不镜像 -security，需走官方 ports.ubuntu.com（见 tuna 帮助页）；其余走 tuna
+# 官方 ports.ubuntu.com 源（TUNA 对本 pod egress IP 返回 403，无法用镜像）
 RUN printf '%s\n' \
-    'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ jammy main restricted universe multiverse' \
-    'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ jammy-updates main restricted universe multiverse' \
-    'deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ jammy-backports main restricted universe multiverse' \
+    'deb http://ports.ubuntu.com/ubuntu-ports/ jammy main restricted universe multiverse' \
+    'deb http://ports.ubuntu.com/ubuntu-ports/ jammy-updates main restricted universe multiverse' \
+    'deb http://ports.ubuntu.com/ubuntu-ports/ jammy-backports main restricted universe multiverse' \
     'deb http://ports.ubuntu.com/ubuntu-ports/ jammy-security main restricted universe multiverse' \
     > /etc/apt/sources.list
 
