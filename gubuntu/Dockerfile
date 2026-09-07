@@ -1,4 +1,4 @@
-FROM quay.nju.edu.cn/ascend/vllm-ascend:v0.22.1rc1
+FROM quay.nju.edu.cn/ascend/vllm-ascend:v0.23.0-a3
 
 ARG PROXY_HOST=127.0.0.1
 ARG PROXY_PORT=6152
