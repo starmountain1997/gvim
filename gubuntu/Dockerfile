@@ -1,4 +1,5 @@
-FROM quay.nju.edu.cn/ascend/vllm-ascend:v0.23.0-a3
+FROM quay.nju.edu.cn/ascend/glm-5.3-flash-a3
+
 
 ARG PROXY_HOST=127.0.0.1
 ARG PROXY_PORT=6152
@@ -21,10 +22,10 @@ RUN useradd -m -s /bin/bash guozr && \
     echo "guozr:0919" | chpasswd && \
     usermod -aG sudo guozr
 
-# 配置 Aliyun Ubuntu 源（基础镜像是 amd64，需用 /ubuntu/ 而非 ARM 的 /ubuntu-ports/）
-RUN sed -i 's|http://archive.ubuntu.com/ubuntu|https://mirrors.aliyun.com/ubuntu|g' /etc/apt/sources.list && \
-    sed -i 's|http://security.ubuntu.com/ubuntu|https://mirrors.aliyun.com/ubuntu|g' /etc/apt/sources.list && \
-    sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://mirrors.aliyun.com/ubuntu|g' /etc/apt/sources.list
+# 配置 Aliyun Ubuntu 源（arm64 使用 /ubuntu-ports/ 路径）
+RUN sed -i 's|http://archive.ubuntu.com/ubuntu|https://mirrors.aliyun.com/ubuntu-ports|g' /etc/apt/sources.list && \
+    sed -i 's|http://security.ubuntu.com/ubuntu|https://mirrors.aliyun.com/ubuntu-ports|g' /etc/apt/sources.list && \
+    sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://mirrors.aliyun.com/ubuntu-ports|g' /etc/apt/sources.list
 
 # 将代理设置传递给构建过程和容器运行时
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
