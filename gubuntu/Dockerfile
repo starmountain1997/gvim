@@ -21,9 +21,10 @@ RUN useradd -m -s /bin/bash guozr && \
     echo "guozr:0919" | chpasswd && \
     usermod -aG sudo guozr
 
-# 配置 Aliyun Jammy ports 源（TUNA 镜像 403，改用阿里云）
-RUN sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://mirrors.aliyun.com/ubuntu-ports|g' /etc/apt/sources.list && \
-    sed -i 's|http://archive.ubuntu.com/ubuntu|https://mirrors.aliyun.com/ubuntu-ports|g' /etc/apt/sources.list
+# 配置 Aliyun Ubuntu 源（基础镜像是 amd64，需用 /ubuntu/ 而非 ARM 的 /ubuntu-ports/）
+RUN sed -i 's|http://archive.ubuntu.com/ubuntu|https://mirrors.aliyun.com/ubuntu|g' /etc/apt/sources.list && \
+    sed -i 's|http://security.ubuntu.com/ubuntu|https://mirrors.aliyun.com/ubuntu|g' /etc/apt/sources.list && \
+    sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://mirrors.aliyun.com/ubuntu|g' /etc/apt/sources.list
 
 # 将代理设置传递给构建过程和容器运行时
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -100,7 +101,9 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | b
     nvm use default && \
     npm install -g yarn && \
     yarn config set registry https://registry.npmmirror.com && \
-    yarn global add @anthropic-ai/claude-code
+    yarn global add @anthropic-ai/claude-code && \
+    yarn global add --ignore-scripts @earendil-works/pi-coding-agent && \
+    yarn global add @juanibiapina/pi-powerbar pi-hashline-edit-pro @narumitw/pi-goal pi-mcp-adapter @ff-labs/pi-fff pi-rtk-optimizer
 
 RUN curl -fsSL https://raw.githubusercontent.com/starmountain1997/g-claude/main/scripts/install-g-claude.py | python3 -
 
@@ -130,3 +133,6 @@ RUN . "$HOME/.cargo/env" && cargo install --locked zellij
 
 # 为 zsh 设置 Cargo 环境变量
 RUN echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> $HOME/.zshrc
+
+# 安装 rtk（Rust 工具包）
+RUN . "$HOME/.cargo/env" && cargo install --git https://github.com/rtk-ai/rtk

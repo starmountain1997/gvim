@@ -1,18 +1,13 @@
-#!/bin/bash
-set -euo pipefail
+# 设置环境变量，使 vLLM 从 ModelScope 下载模型
+export VLLM_USE_MODELSCOPE=True
+export MODEL_NAME="Tencent-Hunyuan/Hy-MT2-1.8B"
 
-MODEL_NAME="Tencent-Hunyuan/Hy-MT2-1.8B"
-MODEL_DIR="${MODEL_DIR:-$HOME/.cache/modelscope/models/Tencent-Hunyuan--Hy-MT2-1.8B/snapshots/master}"
-
-if [[ ! -f "$MODEL_DIR/model.safetensors" ]]; then
-    ms download "$MODEL_NAME" --local-dir "$MODEL_DIR"
-fi
-
-sglang serve \
-    --model-path "$MODEL_DIR" \
+# vLLM 启动服务
+vllm serve \
+    --model "$MODEL_NAME" \
     --trust-remote-code \
     --host 0.0.0.0 \
     --port 8000 \
-    --mem-fraction-static 0.7 \
-    --context-length 1024 \
+    --gpu-memory-utilization 0.7 \
+    --max-model-len 8192 \
     --served-model-name hy-mt2
