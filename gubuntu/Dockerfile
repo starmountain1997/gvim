@@ -96,7 +96,20 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | b
     pi install npm:@narumitw/pi-subagents && \
     pi install npm:pi-mcp-adapter && \
     pi install npm:@ff-labs/pi-fff && \
-    pi install npm:pi-cache-optimizer
+    pi install npm:pi-cache-optimizer && \
+    pi install git:github.com/DietrichGebert/ponytail
+# 安装技能（g-claude marketplace：commit-as-prompt / rust-idiomatic）
+RUN git clone --depth=1 https://github.com/starmountain1997/g-claude.git /tmp/g-claude && \
+    mkdir -p /root/.agents/skills && \
+    cp -r /tmp/g-claude/plugins/commit-as-prompt/skills/commit-as-prompt /root/.agents/skills/ && \
+    cp -r /tmp/g-claude/plugins/rust-idiomatic/skills/rust-idiomatic /root/.agents/skills/ && \
+    rm -rf /tmp/g-claude
+
+# 安装 humanizer 技能
+RUN git clone --depth=1 https://github.com/asinkLuno/humanizer /tmp/humanizer && \
+    mkdir -p /root/.agents/skills/humanizer && \
+    cp /tmp/humanizer/SKILL.md /root/.agents/skills/humanizer/ && \
+    rm -rf /tmp/humanizer
 
 
 # 安装 uv
