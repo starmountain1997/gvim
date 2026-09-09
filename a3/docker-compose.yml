@@ -15,7 +15,7 @@ name: dsv4-vision-a3
 
 services:
   vision:
-    image: quay.io/ascend/vllm-ascend:deepseekv4-flash-vision-exp-a3
+    image: quay.nju.edu.cn/ascend/vllm-ascend:deepseekv4-flash-vision-exp-a3
     privileged: true
     network_mode: host
     shm_size: 512g
