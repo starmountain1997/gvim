@@ -97,7 +97,10 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | b
     pi install npm:pi-mcp-adapter && \
     pi install npm:@ff-labs/pi-fff && \
     pi install npm:pi-cache-optimizer && \
-    pi install git:github.com/DietrichGebert/ponytail
+    pi install git:github.com/DietrichGebert/ponytail && \
+    pi install npm:pi-web-access && \
+    npm install -g agent-browser && \
+    pi install npm:pi-agent-browser-native
 # 安装技能（g-claude marketplace：commit-as-prompt / rust-idiomatic）
 RUN git clone --depth=1 https://github.com/starmountain1997/g-claude.git /tmp/g-claude && \
     mkdir -p /root/.agents/skills && \
@@ -105,11 +108,18 @@ RUN git clone --depth=1 https://github.com/starmountain1997/g-claude.git /tmp/g-
     cp -r /tmp/g-claude/plugins/rust-idiomatic/skills/rust-idiomatic /root/.agents/skills/ && \
     rm -rf /tmp/g-claude
 
-# 安装 humanizer 技能
-RUN git clone --depth=1 https://github.com/asinkLuno/humanizer /tmp/humanizer && \
+# 安装 humanizer 技能 (blader/humanizer)
+RUN git clone --depth=1 https://github.com/blader/humanizer /tmp/humanizer && \
     mkdir -p /root/.agents/skills/humanizer && \
     cp /tmp/humanizer/SKILL.md /root/.agents/skills/humanizer/ && \
     rm -rf /tmp/humanizer
+
+# 安装 frontend-design 技能 (anthropics/claude-code)
+RUN git clone --depth=1 --filter=blob:none --sparse https://github.com/anthropics/claude-code.git /tmp/claude-code && \
+    cd /tmp/claude-code && git sparse-checkout set plugins/frontend-design && \
+    mkdir -p /root/.agents/skills/frontend-design && \
+    cp plugins/frontend-design/skills/frontend-design/SKILL.md /root/.agents/skills/frontend-design/ && \
+    cd / && rm -rf /tmp/claude-code
 
 
 # 安装 uv
