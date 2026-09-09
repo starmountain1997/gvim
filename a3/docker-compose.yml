@@ -1,0 +1,84 @@
+# DeepSeek-V4-Flash-Vision-Exp (w8a8-QuaRot) on one Atlas 800 A3
+#
+# Official full-node config (docs/source/tutorials/models/DeepSeek-V4-Flash-Vision.md):
+# DP4 x TP4 x EP16 = all 16 logical NPUs (davinci0-15, 8 x 128GB physical).
+# Weights are ~316GB, so do NOT split the node; context can be trimmed via
+# --max-model-len only if runtime memory pressure appears.
+#
+#   cp .env.example .env   # set VISION_MODEL_PATH (host path == container path)
+#   docker compose up -d
+#
+# Host must expose: /dev/davinci0-15, /dev/davinci_manager, /dev/devmm_svm,
+# /dev/hisi_hdc and the /usr/local/Ascend/driver mounts below.
+
+name: dsv4-vision-a3
+
+services:
+  vision:
+    image: quay.io/ascend/vllm-ascend:deepseekv4-flash-vision-exp-a3
+    privileged: true
+    network_mode: host
+    shm_size: 512g
+    restart: unless-stopped
+    devices:
+      - /dev/davinci0:/dev/davinci0
+      - /dev/davinci1:/dev/davinci1
+      - /dev/davinci2:/dev/davinci2
+      - /dev/davinci3:/dev/davinci3
+      - /dev/davinci4:/dev/davinci4
+      - /dev/davinci5:/dev/davinci5
+      - /dev/davinci6:/dev/davinci6
+      - /dev/davinci7:/dev/davinci7
+      - /dev/davinci8:/dev/davinci8
+      - /dev/davinci9:/dev/davinci9
+      - /dev/davinci10:/dev/davinci10
+      - /dev/davinci11:/dev/davinci11
+      - /dev/davinci12:/dev/davinci12
+      - /dev/davinci13:/dev/davinci13
+      - /dev/davinci14:/dev/davinci14
+      - /dev/davinci15:/dev/davinci15
+      - /dev/davinci_manager:/dev/davinci_manager
+      - /dev/devmm_svm:/dev/devmm_svm
+      - /dev/hisi_hdc:/dev/hisi_hdc
+    volumes:
+      - /usr/local/dcmi:/usr/local/dcmi
+      - /usr/local/Ascend/driver/tools/hccn_tool:/usr/local/Ascend/driver/tools/hccn_tool
+      - /usr/local/bin/npu-smi:/usr/local/bin/npu-smi
+      - /usr/local/Ascend/driver/lib64:/usr/local/Ascend/driver/lib64
+      - /usr/local/Ascend/driver/version.info:/usr/local/Ascend/driver/version.info
+      - /etc/ascend_install.info:/etc/ascend_install.info
+      - /etc/hccn.conf:/etc/hccn.conf
+      - ${VISION_MODEL_PATH}:${VISION_MODEL_PATH}
+    environment:
+      ASCEND_RT_VISIBLE_DEVICES: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15"
+      HCCL_BUFFSIZE: "1024"
+    entrypoint: ["vllm", "serve"]
+    command:
+      - ${VISION_MODEL_PATH}
+      - --served-model-name
+      - dsv4-vision
+      - --max-model-len
+      - "130000"
+      - --max-num-batched-tokens
+      - "4096"
+      - --max-num-seqs
+      - "32"
+      - --gpu-memory-utilization
+      - "0.9"
+      - --data-parallel-size
+      - "4"
+      - --tensor-parallel-size
+      - "4"
+      - --enable-expert-parallel
+      - --tokenizer-mode
+      - deepseek_v4
+      - --quantization
+      - ascend
+      - --model-loader-extra-config
+      - '{"enable_multithread_load": true, "num_threads": 32}'
+      - --block-size
+      - "32"
+      - --compilation-config
+      - '{"cudagraph_mode": "FULL_DECODE_ONLY"}'
+      - --port
+      - "8900"
