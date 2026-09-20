@@ -49,6 +49,7 @@ services:
       - /etc/ascend_install.info:/etc/ascend_install.info
       - /etc/hccn.conf:/etc/hccn.conf
       - ${VISION_MODEL_PATH}:${VISION_MODEL_PATH}
+      - /home/guozr/gvim/a3/causal_conv1d_npu.py:/vllm-workspace/vllm-ascend/vllm_ascend/ops/triton/mamba/causal_conv1d.py:ro
     environment:
       ASCEND_RT_VISIBLE_DEVICES: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15"
       HCCL_BUFFSIZE: "1024"
@@ -85,3 +86,5 @@ services:
       - '{"cudagraph_mode": "FULL_DECODE_ONLY"}'
       - --port
       - "8900"
+      - --speculative-config
+      - '{"method": "dspark", "model": "${VISION_MODEL_PATH}", "num_speculative_tokens": 6}'
