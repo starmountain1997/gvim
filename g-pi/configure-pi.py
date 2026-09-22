@@ -26,8 +26,13 @@ AGENTS_MD = PI_DIR / "AGENTS.md"
 SETTINGS_JSON = PI_DIR / "settings.json"
 
 # Skills cloned from GitHub (override with PI_DEFAULT_SKILLS="a/b c/d")
-DEFAULT_SKILLS = ["blader/humanizer"]
-
+# Skills cloned from GitHub (override with PI_DEFAULT_SKILLS="a/b c/d").
+# "owner/repo" installs every SKILL.md in the repo; "owner/repo:subdir"
+# installs only the skill in that subdirectory.
+DEFAULT_SKILLS = [
+    "blader/humanizer",
+    "mattpocock/skills:skills/productivity/grill-me",
+]
 # pi packages (override with PI_DEFAULT_PACKAGES="npm:a git:b")
 DEFAULT_PACKAGES = [
     "npm:@narumitw/pi-subagents",
@@ -35,6 +40,8 @@ DEFAULT_PACKAGES = [
     "npm:@ff-labs/pi-fff",
     "npm:pi-agent-browser-native",
     "npm:pi-agent-web-access",
+    "npm:pi-blackhole",
+    "npm:pi-powerline-footer",
     "git:github.com/DietrichGebert/ponytail",
 ]
 
@@ -135,7 +142,12 @@ def parse_frontmatter(skill_md):
 
 
 def install_skill_repo(repo, force):
-    """Clone `repo` via gh and install every SKILL.md found, into SKILLS_DIR."""
+    """Clone `repo` via gh and install every SKILL.md found, into SKILLS_DIR.
+
+    "owner/repo" installs all skills; "owner/repo:subdir" only the skill
+    whose directory is `subdir`.
+    """
+    repo, _, subdir = repo.partition(":")
     with tempfile.TemporaryDirectory(prefix="pi-skill.") as tmp:
         workdir = Path(tmp) / "repo"
         log(f"skill: cloning {repo} (shallow) via gh ...")
@@ -150,6 +162,11 @@ def install_skill_repo(repo, force):
             return 1
 
         skill_files = sorted(workdir.rglob("SKILL.md"))
+        if subdir:
+            skill_files = [
+                f for f in skill_files
+                if f.parent.relative_to(workdir).as_posix() == subdir.rstrip("/")
+            ]
         if not skill_files:
             warn(f"skill: no SKILL.md found in {repo}.")
             return 1
