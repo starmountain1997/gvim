@@ -47,4 +47,10 @@ cp "$SCRIPT_DIR/alacritty.toml" "$CONFIG_DIR/alacritty.toml"
 sed -i.bak "s/dracula.toml/${THEME_NAME}.toml/" "$CONFIG_DIR/alacritty.toml"
 rm -f "$CONFIG_DIR/alacritty.toml.bak"
 
+
+# 部署 zellij 配置（macOS 复制粘贴修复）
+ZELLIJ_DIR="$HOME/.config/zellij"
+mkdir -p "$ZELLIJ_DIR"
+cp "$SCRIPT_DIR/zellij/config.kdl" "$ZELLIJ_DIR/config.kdl"
+echo -e "\033[0;32mZellij 配置完成: $ZELLIJ_DIR/config.kdl\033[0m"
 echo -e "\033[0;32mAlacritty 配置完成，主题: ${THEME_NAME}\033[0m"

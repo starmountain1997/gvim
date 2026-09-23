@@ -1,0 +1,4 @@
+// 剪贴板：macOS 用 pbcopy，选中即复制
+copy_command "pbcopy"
+copy_clipboard "system"
+copy_on_select true
