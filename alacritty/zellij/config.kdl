@@ -1,4 +1,4 @@
-// 剪贴板：macOS 用 pbcopy，选中即复制
-copy_command "pbcopy"
+// 剪贴板：不设 copy_command，zellij 回退为 OSC 52，
+// 本地（alacritty osc52=OnlyCopy）和 SSH 远程都能写入终端所在机器的剪贴板
 copy_clipboard "system"
 copy_on_select true
