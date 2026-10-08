@@ -47,10 +47,10 @@ RUN sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highligh
     sed -i 's/ZSH_THEME=\"robbyrussell\"/ZSH_THEME=\"random\"/' $HOME/.zshrc
 
 # 配置 pip 镜像源
-RUN mkdir -p /root/.pip && \
-    echo "[global]" > /root/.pip/pip.conf && \
-    echo "index-url = https://pypi.tuna.tsinghua.edu.cn/simple" >> /root/.pip/pip.conf && \
-    echo "extra-index-url = https://mirrors.huaweicloud.com/ascend/repos/pypi" >> /root/.pip/pip.conf
+RUN mkdir -p $HOME/.pip && \
+    echo "[global]" > $HOME/.pip/pip.conf && \
+    echo "index-url = https://pypi.tuna.tsinghua.edu.cn/simple" >> $HOME/.pip/pip.conf && \
+    echo "extra-index-url = https://mirrors.huaweicloud.com/ascend/repos/pypi" >> $HOME/.pip/pip.conf
 
 # 配置 Git 用户信息 - 配置独立层
 RUN git config --global user.name "guozr" && \
@@ -79,9 +79,8 @@ RUN wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux-ar
     rm /tmp/nvim.tar.gz
 
 # 安装 nvm、Node.js、Yarn、pi 及扩展
-ENV NVM_DIR="/root/.nvm"
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash && \
-    . "$NVM_DIR/nvm.sh" && \
+    . "$HOME/.nvm/nvm.sh" && \
     nvm install 26 && \
     nvm alias default 26 && \
     nvm use default && \
@@ -103,22 +102,22 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | b
     pi install npm:pi-agent-browser-native
 # 安装技能（g-claude marketplace：commit-as-prompt / rust-idiomatic）
 RUN git clone --depth=1 https://github.com/starmountain1997/g-claude.git /tmp/g-claude && \
-    mkdir -p /root/.agents/skills && \
-    cp -r /tmp/g-claude/plugins/commit-as-prompt/skills/commit-as-prompt /root/.agents/skills/ && \
-    cp -r /tmp/g-claude/plugins/rust-idiomatic/skills/rust-idiomatic /root/.agents/skills/ && \
+    mkdir -p $HOME/.agents/skills && \
+    cp -r /tmp/g-claude/plugins/commit-as-prompt/skills/commit-as-prompt $HOME/.agents/skills/ && \
+    cp -r /tmp/g-claude/plugins/rust-idiomatic/skills/rust-idiomatic $HOME/.agents/skills/ && \
     rm -rf /tmp/g-claude
 
 # 安装 humanizer 技能 (blader/humanizer)
 RUN git clone --depth=1 https://github.com/blader/humanizer /tmp/humanizer && \
-    mkdir -p /root/.agents/skills/humanizer && \
-    cp /tmp/humanizer/SKILL.md /root/.agents/skills/humanizer/ && \
+    mkdir -p $HOME/.agents/skills/humanizer && \
+    cp /tmp/humanizer/SKILL.md $HOME/.agents/skills/humanizer/ && \
     rm -rf /tmp/humanizer
 
 # 安装 frontend-design 技能 (anthropics/claude-code)
 RUN git clone --depth=1 --filter=blob:none --sparse https://github.com/anthropics/claude-code.git /tmp/claude-code && \
     cd /tmp/claude-code && git sparse-checkout set plugins/frontend-design && \
-    mkdir -p /root/.agents/skills/frontend-design && \
-    cp plugins/frontend-design/skills/frontend-design/SKILL.md /root/.agents/skills/frontend-design/ && \
+    mkdir -p $HOME/.agents/skills/frontend-design && \
+    cp plugins/frontend-design/skills/frontend-design/SKILL.md $HOME/.agents/skills/frontend-design/ && \
     cd / && rm -rf /tmp/claude-code
 
 
