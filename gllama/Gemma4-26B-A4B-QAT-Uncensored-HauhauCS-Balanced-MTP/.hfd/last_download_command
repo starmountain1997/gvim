@@ -1,0 +1,1 @@
+REPO_ID=HauhauCS/Gemma4-26B-A4B-QAT-Uncensored-HauhauCS-Balanced-MTP TOOL=aria2c INCLUDE= EXCLUDE= DATASET=0 HF_USERNAME= HF_TOKEN= HF_ENDPOINT=https://hf-mirror.com REVISION=main
