@@ -11,7 +11,6 @@ llama serve \
   -fa on \
   --mmproj ./mmproj-Gemma4-26B-A4B-QAT-Uncensored-HauhauCS-Balanced-BF16.gguf \
   --host 0.0.0.0 --port 8080 \
-  --alias "gemma4-26b-a4b" \
   --jinja \
   --temp 0.6 \
   --top-k 64 \
